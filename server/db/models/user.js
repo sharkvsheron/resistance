@@ -3,6 +3,31 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const User = db.define('user', {
+  role:{
+    type:{
+
+    }
+  },
+  socketId:{
+    type:{
+
+    }
+  },
+  gameId:{
+    type:{
+
+    }
+  },
+  isNominated:{
+    type:{
+
+    }
+  },
+  isNominator:{
+    type:{
+
+    }
+  },
   email: {
     type: Sequelize.STRING,
     unique: true,

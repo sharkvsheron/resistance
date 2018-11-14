@@ -1,4 +1,11 @@
 const User = require('./user')
+const Game = require('./game')
+const GameType = require('./gameType')
+const MissionType = require('./missionType')
+const MissionThrow = require('./missionThrow')
+const Nomination = require('./nomination')
+const Role = require('./role')
+const Vote = require('./vote')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -14,5 +21,19 @@ const User = require('./user')
  * instead of: const User = require('../db/models/user')
  */
 module.exports = {
-  User
+  User,Game,GameType,MissionType,MissionThrow,Role,Vote
 }
+
+Game.hasMany(Nomination)
+Game.hasMany(Nomination)
+Game.belongs(GameType)
+
+Nomination.belongsTo(Game)
+Nomination.belongsTo(MissionType)
+Nomination.hasOne(User)
+
+User.belongsTo(Game)
+User.belongsTo(Role)
+
+Vote.belongsTo(Nomination)
+Vote.belongsTo(User)
