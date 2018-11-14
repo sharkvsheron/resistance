@@ -1,34 +1,9 @@
 const db = require('../db')
+const Sequelize = require('sequelize')
 
+const Game = db.define('game', {})
 
-const Game = db.define('games', {
-
-playersRequired:{
-  type:{
-
-  }
-},
-
-  playersInLobby:{
-    type:{
-
-    }
-  },
-
-  currentQuest:{
-    type:{
-
-    }
-  },
-currentNominationId:{
-  type:{
-
-  }
-},
-
-})
-
-module.exports = Game;
+module.exports = Game
 
 //methods:
 // how many players associated to this game.

@@ -1,21 +1,15 @@
 const db = require('../db')
-
+const Sequelize = require('sequelize')
 
 const MissionType = db.define('missionTypes', {
-
-numberOfPlayers:{
-  type:{
-
+  numberOfPlayers: {
+    type: Sequelize.STRING,
+    validate: {}
+  },
+  failsRequired: {
+    type: Sequelize.STRING,
+    validate: {}
   }
-  ,validate:{}
-},
-failsRequired:{
-  type:{
-
-  }
-  ,validate:{}
-},
-
 })
 
-module.exports = MissionType;
+module.exports = MissionType

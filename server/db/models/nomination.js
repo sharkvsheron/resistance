@@ -1,60 +1,16 @@
 const db = require('../db')
-
+const Sequelize = require('sequelize')
 
 const Nomination = db.define('nominations', {
-
-questId:{
-  type:{
-
+  nominees: {
+    type: Sequelize.ARRAY(Sequelize.INTEGER),
+    validate: {}
   },
-  validate:{}
-},
-
-  nominator:{
-    type:{
-
-    },
-    validate:{}
-  },
-
-  nominatee:{
-    type:{
-
-    },
-    validate:{}
-  },
-
-  userNominations:{
-    type:{
-
-    },
-    validate:{}
-  },
-
-  userId:{
-    type:{
-
-    },
-    validate:{}
-  },
-  votes:{
-  type:{
-
-  },
-  validate:{}
-},
-gameId:{
-  type:{
-
-  },
-  validate:{}
-},
-pass:{
-  type:{
-
-  },
-  validate:{}
-}
+  status: {
+    type: Sequelize.ENUM('pass', 'fail'),
+    allowNull: true,
+    defaultValue: null
+  }
 })
 
-module.exports = Nomination;
+module.exports = Nomination
