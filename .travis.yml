@@ -16,12 +16,12 @@ install:
 before_script:
   - psql -c 'create database "resistance-test";' -U postgres # remember to change this name if you change it elsewhere (e.g. package.json)
 
-# before_deploy:
-#   - npm run build-client # make the bundle
-#   - rm -rf node_modules # omit from the tarball, since we skip cleanup
-# deploy:
-#   skip_cleanup: true # prevents travis from deleting the build
-#   provider: heroku
-#   app: YOUR-HEROKU-APP-NAME-HERE # see README
-#   api_key:
-#     secure: YOUR-***ENCRYPTED***-API-KEY-HERE # see README
+before_deploy:
+  - npm run build-client # make the bundle
+  - rm -rf node_modules # omit from the tarball, since we skip cleanup
+deploy:
+  skip_cleanup: true # prevents travis from deleting the build
+  provider: heroku
+  app: theresistance # see README
+  api_key:
+    secure: KjxcImtZkqZT4VxEzu4J4bUAzH5tVLRTL6SCsbImfK9AGahvhAxlTR19IPG80OA1IZUyEU4AlkV1js/xI5SUoGNafbONuUbqyXM2n1zMN3sfxBMHnTpZh4fxbEFP/3mkucXelpXVbSLDikU37pBoolQ/om+ZRPoMuirLmDU7xhoGm8kkdoFYqLJKViBoLHoiGa1gUYOuELeL45OmEzPM0UDtBrVdRkdFC9YaaqkonvpKXmKTgPSYBv3sT3PgxcxJUo2NWetcPy+daMnqXpfjxUc1mEMI+S0lgYslJKXeONJPWV0/L6gnp+dqr+Ob5HW2hTgjp68YADoRvhKEbB8kLCXb9uj5PlQVYXl2f27ZImYJ+3GKvMg4rOxMOyw37J7pkml5ILo3eEkKAICSpqyquIliEg+ri1086pORBSENwzKtW4FLOIchC6WIEPw5Oh8TPikfZSD1X+NexcJBc4zylB3XeQNfGa6TXM5lVzJk21jjUCO8Slz+TQGdficrIu57lhm5j9btMkvQQeDncQPs7OrNYnOUxU9kVnqq4SmE3mPmeAheGVJPf4raSEtD9O1kfJethOrPDmLV5a/MtrQ5fvAw4BS5wo5uLOudDPcBg3rrqNNiF4riNAn4QozxV5j/mtCkyn08kzt2pAKDzxrY5mNqPMw1JHe9BPSB5y3Z6w4= # see README
