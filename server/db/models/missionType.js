@@ -3,11 +3,11 @@ const Sequelize = require('sequelize')
 
 const MissionType = db.define('missionTypes', {
   numberOfPlayers: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     validate: {}
   },
   failsRequired: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     validate: {}
   }
 })
