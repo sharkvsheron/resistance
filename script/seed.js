@@ -1,19 +1,40 @@
 'use strict'
 
 const db = require('../server/db')
-// const {User} = require('../server/db/models')
+const {User, Role, GameType} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  // const users = await Promise.all([
-  //   User.create({email: 'cody@email.com', password: '123'}),
-  //   User.create({email: 'murphy@email.com', password: '123'})
-  // ])
+  const users = await Promise.all([
+    User.bulkCreate([
+      {socketId: 12345, userName: 'russel', email: 'r@r.com', password: '123'},
+      {socketId: 23456, userName: 'adam', email: 'a@a.com', password: '123'},
+      {socketId: 34567, userName: 'khalid', email: 'k@k.com', password: '123'},
+      {socketId: 45678, userName: 'peter', email: 'p@p.com', password: '123'},
+      {socketId: 56789, userName: 'bot', email: 'b@b.com', password: '123'}
+    ])
+  ])
 
-  // console.log(`seeded ${users.length} users`)
-  // console.log(`seeded successfully`)
+  const roles = await Promise.all([
+    Role.bulkCreate([
+      {visible: [], name: 'goodguy'},
+      {visible: [2], name: 'badguy'},
+      {visible: [1, 2, 3], name: 'merlin'}
+    ])
+  ])
+
+  const gameType = await Promise.all([
+    GameType.bulkCreate([
+      {numberOfPlayers: 0, rolesAvailable: [1, 2, 3, 1, 2], missions: [0]}
+    ])
+  ])
+
+  console.log(`seeded ${users.length} users`)
+  console.log(`seeded ${roles.length} roles`)
+  console.log(`seeded ${gameType.length} gametypes`)
+  console.log(`seeded successfully`)
 }
 
 // We've separated the `seed` function from the `runSeed` function.
