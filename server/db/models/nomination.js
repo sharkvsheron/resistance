@@ -6,8 +6,13 @@ const Nomination = db.define('nominations', {
     type: Sequelize.ARRAY(Sequelize.INTEGER),
     validate: {}
   },
-  status: {
-    type: Sequelize.ENUM('pass', 'fail'),
+  missionStatus: {
+    type: Sequelize.ENUM('succeed', 'fail'),
+    allowNull: true,
+    defaultValue: null
+  },
+  nominationStatus: {
+    type: Sequelize.ENUM('approve', 'reject'),
     allowNull: true,
     defaultValue: null
   }

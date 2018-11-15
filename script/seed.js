@@ -1,19 +1,92 @@
 'use strict'
 
 const db = require('../server/db')
-// const {User} = require('../server/db/models')
+const {User, Role, GameType, MissionType, Game} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  // const users = await Promise.all([
-  //   User.create({email: 'cody@email.com', password: '123'}),
-  //   User.create({email: 'murphy@email.com', password: '123'})
-  // ])
+  const roles = await Promise.all([
+    Role.bulkCreate([
+      {visible: [], name: 'goodguy'},
+      {visible: [2], name: 'badguy'},
+      {visible: [1, 2, 3], name: 'merlin'}
+    ])
+  ])
 
-  // console.log(`seeded ${users.length} users`)
-  // console.log(`seeded successfully`)
+  const gameType = await Promise.all([
+    GameType.bulkCreate([
+      {
+        numberOfPlayers: 5,
+        rolesAvailable: [1, 2, 3, 1, 2],
+        missions: [1, 2, 3, 4, 5]
+      }
+    ])
+  ])
+
+  const missionType = await Promise.all([
+    MissionType.bulkCreate([
+      {numberOfPlayers: 2, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1},
+      {numberOfPlayers: 2, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1}
+    ])
+  ])
+  const game = await Promise.all([Game.create({gameTypeId: 1})])
+
+  const users = await Promise.all([
+    User.bulkCreate([
+      {
+        socketId: 12345,
+        userName: 'russel',
+        email: 'r@r.com',
+        password: '123',
+        gameId: 1,
+        roleId: 3
+      },
+      {
+        socketId: 23456,
+        userName: 'adam',
+        email: 'a@a.com',
+        password: '123',
+        gameId: 1,
+        roleId: 2
+      },
+      {
+        socketId: 34567,
+        userName: 'khalid',
+        email: 'k@k.com',
+        password: '123',
+        gameId: 1,
+        roleId: 1
+      },
+      {
+        socketId: 45678,
+        userName: 'peter',
+        email: 'p@p.com',
+        password: '123',
+        gameId: 1,
+        roleId: 2
+      },
+      {
+        socketId: 56789,
+        userName: 'bot',
+        email: 'b@b.com',
+        password: '123',
+        gameId: 1,
+        roleId: 1
+      }
+    ])
+  ])
+
+  console.log(`seeded ${game.length} game`)
+  console.log(`seeded ${users.length} users`)
+  console.log(`seeded ${roles.length} roles`)
+  console.log(`seeded ${gameType.length} gametypes`)
+  console.log(`seeded ${missionType.length} missiontypes`)
+  console.log(`seeded successfully`)
 }
 
 // We've separated the `seed` function from the `runSeed` function.
