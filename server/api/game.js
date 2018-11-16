@@ -15,12 +15,24 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+router.get('/:userId', async (req, res, next) => {
+  try {
+    const currentUsersInstance = await User.findOne({
+      where: {id: req.params.userId}
+    })
+    const currentUsersGameId = currentUsersInstance.gameId
+    res.json({gameId: currentUsersGameId})
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.put('/', async (req, res, next) => {
   try {
     const {userId, gameId} = req.body
     const user = await User.findById(userId)
-    await user.update({gameId})
-    res.status(202).send('changed users gameiD')
+    const userWithGameId = await user.update({gameId})
+    res.status(202).json(userWithGameId)
   } catch (err) {
     next(err)
   }
