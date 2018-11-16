@@ -17,9 +17,21 @@ const Nomination = db.define('nominations', {
     defaultValue: null
   }
 })
-Nomination.prototype.nextNominator = function() {}
+Nomination.prototype.nextNominator = function() {
+  if (this.userId !== 5) {
+    return this.userId + 1
+  } else {
+    return 1
+  }
+}
+
 Nomination.prototype.nextMission = function() {
-  if (this.mission===)
+  if (this.missionTypeId < 5) {
+    return this.missionTypeId + 1
+  }
+}
+Nomination.prototype.getNominator = function() {
+  return {currentNominator: this.userId}
 }
 
 module.exports = Nomination
