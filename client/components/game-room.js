@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import socket from '../socket'
-import startGameThunk from './'
+// import startGameThunk from './'
 
 /**
  * COMPONENT
@@ -18,19 +18,25 @@ export class GameRoom extends React.Component {
     return (
       <div>
         <h3>This is the Game Room</h3>
-        <button onClick={() => this.props.startGame()}>Enter GAME</button>
+        <button onClick={() => socket.emit('startGame', this.props.user.id)}>
+          START Game
+        </button>
       </div>
     )
   }
 }
 
-const mapDispatch = dispatch => {
-  return {
-    startGame: dispatch(startGameThunk())
-  }
-}
+// const mapDispatch = dispatch => {
+//   return {
+//     startGame: dispatch(startGameThunk())
+//   }
+// }
+
+const mapState = state => ({
+  user: state.user
+})
 
 export default connect(
-  null,
-  mapDispatch
+  mapState,
+  null
 )(GameRoom)
