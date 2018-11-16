@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import socket from '../socket'
+import { Link } from 'react-router-dom'
 
 /**
  * COMPONENT
@@ -14,12 +15,13 @@ export class UserHome extends React.Component {
   componentDidMount() {
     socket.emit('syncSocketId', this.props.user.id)
   }
-  
+
   render() {
-    const {email} = this.props
+    const { email } = this.props
     return (
       <div>
         <h3>Welcome, {email}</h3>
+        <Link to='/game-room'>Enter Game</Link>
       </div>
     )
   }
