@@ -13,9 +13,14 @@ router.put('/', async (req, res, next) => {
   }
 })
 
-router.put('/start/:gameId', async (req, res, next) => {
+//this route takes userid of whoever clicks 'start game'
+//updates our nomination table with the initial nomination instance
+//updates our users table with roleId's
+router.put('/start/:userId', async (req, res, next) => {
   try {
-    const {gameId} = req.params
+    const {userId} = req.params
+    const user = await User.findById(userId)
+    const gameId = user.gameId
     const {gameTypeId} = await Game.findById(gameId)
     const users = await User.findAll({where: {gameId}})
     const game = await GameType.findById(gameTypeId)
