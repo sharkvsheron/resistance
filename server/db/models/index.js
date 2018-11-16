@@ -24,6 +24,7 @@ module.exports = {
   User,
   Game,
   GameType,
+  Nomination,
   MissionType,
   MissionVote,
   Role,
