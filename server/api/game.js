@@ -1,5 +1,7 @@
 const router = require('express').Router()
-const { Game, User, GameType, Nomination, Role } = require('../db/models')
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
+const {Game, User, GameType, Nomination, Role} = require('../db/models')
 module.exports = router
 
 //all route are base '/api/game/'
@@ -64,10 +66,10 @@ router.get('/players/:userId', async (req, res, next) => {
     // const userId = req.session.userId;
     const userId = req.params.userId
     const user = await User.findById(userId)
-    const { roleId, gameId } = user
+    const {roleId, gameId} = user
     const role = await Role.findById(roleId)
     const visibleRoles = role.visible
-    const players = await User.findAll({ where: { gameId } })
+    const players = await User.findAll({where: {gameId}})
     const playerVisibility = {}
     players.forEach(player => {
       if (visibleRoles.includes(player.roleId))
@@ -77,5 +79,28 @@ router.get('/players/:userId', async (req, res, next) => {
     res.json(playerVisibility)
   } catch (error) {
     next(error)
+  }
+})
+
+/*/nominator/:userId
+INPUT userId
+RETURN OBJ {currentNominator : id}*/
+
+router.get('/nominator/:userId', async (req, res, next) => {
+  try {
+    const {userId} = req.params
+    const user = await User.findById(userId)
+    const nomination = await Nomination.findOne({
+      where: {
+        gameId: user.gameId,
+        userId: userId,
+        missionStatus: {[Op.eq]: null}
+      }
+    })
+    const nominator = nomination.getNominator()
+    res.json(nominator)
+  } catch (error) {
+    next(error)
+
   }
 })
