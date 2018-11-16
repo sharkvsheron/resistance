@@ -14,6 +14,9 @@ export class GameRoom extends React.Component {
     this.state = {}
   }
 
+  componentDidMount() {
+    this.props.getPlayers()
+  }
 
   render() {
     return (
@@ -27,17 +30,19 @@ export class GameRoom extends React.Component {
   }
 }
 
-// const mapDispatch = dispatch => {
-//   return {
-//     startGame: dispatch(startGameThunk())
-//   }
-// }
+const mapDispatch = dispatch => {
+  return {
+    getPlayers: () => { dispatch(getPlayersThunk()) }
+  }
+}
 
 const mapState = state => ({
-  user: state.user
+  user: state.user,
+  players: state.players
 })
+
 
 export default connect(
   mapState,
-  null
+  mapDispatch
 )(GameRoom)
