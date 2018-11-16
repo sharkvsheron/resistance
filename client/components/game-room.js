@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import socket from '../socket'
 // import startGameThunk from './'
 
@@ -12,6 +12,10 @@ export class GameRoom extends React.Component {
     super(props)
 
     this.state = {}
+  }
+
+  componentDidMount() {
+    this.props.getPlayers()
   }
 
   render() {
@@ -26,17 +30,19 @@ export class GameRoom extends React.Component {
   }
 }
 
-// const mapDispatch = dispatch => {
-//   return {
-//     startGame: dispatch(startGameThunk())
-//   }
-// }
+const mapDispatch = dispatch => {
+  return {
+    getPlayers: () => { dispatch(getPlayersThunk()) }
+  }
+}
 
 const mapState = state => ({
-  user: state.user
+  user: state.user,
+  players: state.players
 })
+
 
 export default connect(
   mapState,
-  null
+  mapDispatch
 )(GameRoom)
