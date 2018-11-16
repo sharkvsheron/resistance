@@ -17,9 +17,9 @@ router.get('/', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    const { userId, gameId } = req.body
+    const {userId, gameId} = req.body
     const user = await User.findById(userId)
-    await user.update({ gameId })
+    await user.update({gameId})
     res.status(202).send('changed users gameiD')
   } catch (err) {
     next(err)
@@ -31,11 +31,11 @@ router.put('/', async (req, res, next) => {
 //updates our users table with roleId's
 router.put('/start/:userId', async (req, res, next) => {
   try {
-    const { userId } = req.params
+    const {userId} = req.params
     const user = await User.findById(userId)
     const gameId = user.gameId
-    const { gameTypeId } = await Game.findById(gameId)
-    const users = await User.findAll({ where: { gameId } })
+    const {gameTypeId} = await Game.findById(gameId)
+    const users = await User.findAll({where: {gameId}})
     const game = await GameType.findById(gameTypeId)
     const missionTypeId = game.missions[0]
     if (users.length === game.numberOfPlayers) {
@@ -48,7 +48,7 @@ router.put('/start/:userId', async (req, res, next) => {
       await game.assignRoles(users)
       res.sendStatus(200)
     } else {
-      res.json({ message: 'NOT ENOUGH PLAYERS' })
+      res.json({message: 'NOT ENOUGH PLAYERS'})
     }
   } catch (error) {
     next(error)
@@ -101,6 +101,15 @@ router.get('/nominator/:userId', async (req, res, next) => {
     res.json(nominator)
   } catch (error) {
     next(error)
+  }
+})
 
+router.get('/nominations/:userId', async (req, res, next) => {
+  try {
+    const {userId} = req.params
+    const nomination = await Nomination.findOne({where: {userId, nominees: []}})
+    res.json(nomination)
+  } catch (err) {
+    next(err)
   }
 })
