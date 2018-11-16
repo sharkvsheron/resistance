@@ -17,5 +17,9 @@ const Nomination = db.define('nominations', {
     defaultValue: null
   }
 })
+Nomination.prototype.nextNominator = function() {}
+Nomination.prototype.nextMission = function() {
+  if (this.mission===)
+}
 
 module.exports = Nomination
