@@ -15,3 +15,14 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+router.put('/:userId/:socketId', async (req, res, next) => {
+  try {
+    const {userId, socketId} = req.params;
+    const user = await User.findById(userId);
+    const updatedUser = await user.update({socketId})
+    res.json(updatedUser);
+  } catch (err) {
+    next(err);
+  }
+})

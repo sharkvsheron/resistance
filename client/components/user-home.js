@@ -1,18 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import socket from '../socket'
 
 /**
  * COMPONENT
  */
-export const UserHome = props => {
-  const {email} = props
+export class UserHome extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-  return (
-    <div>
-      <h3>Welcome, {email}</h3>
-    </div>
-  )
+  componentDidMount() {
+    socket.emit('syncSocketId', this.props.user.id)
+  }
+  
+  render() {
+    const {email} = this.props
+    return (
+      <div>
+        <h3>Welcome, {email}</h3>
+      </div>
+    )
+  }
 }
 
 /**
@@ -20,6 +30,7 @@ export const UserHome = props => {
  */
 const mapState = state => {
   return {
+    user: state.user,
     email: state.user.email
   }
 }
