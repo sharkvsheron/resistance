@@ -3,16 +3,18 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import socket from '../socket'
 import {Link} from 'react-router-dom'
+import {getGameList} from '../store/gameList'
 
 /**
  * COMPONENT
  */
-export class UserHome extends React.Component {
+class UserHome extends React.Component {
   constructor(props) {
     super(props)
   }
 
   componentDidMount() {
+    this.props.getGames()
     socket.emit('syncSocketId', this.props.user.id)
   }
 
@@ -21,8 +23,13 @@ export class UserHome extends React.Component {
     return (
       <div>
         <h3>Welcome, {email}</h3>
-        //ON CLICK OF THIS LINK, update userinstance with gameid
-        <Link to="/game-room">Enter Game</Link>
+        {this.props.games.map(game => {
+          return (
+            <Link to={`/game/${game.id}`} key={game.id}>
+              Click to enter game #{game.id}
+            </Link>
+          )
+        })}
       </div>
     )
   }
@@ -34,11 +41,21 @@ export class UserHome extends React.Component {
 const mapState = state => {
   return {
     user: state.user,
-    email: state.user.email
+    email: state.user.email,
+    games: state.games
   }
 }
 
-export default connect(mapState)(UserHome)
+const mapDispatch = dispatch => {
+  return {
+    getGames: () => dispatch(getGameList())
+  }
+}
+
+export default connect(
+  mapState,
+  mapDispatch
+)(UserHome)
 
 /**
  * PROP TYPES
