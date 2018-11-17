@@ -20,7 +20,6 @@ const startGame = async (userId) => {
     const game = await GameType.findById(gameTypeId)
     const missionTypeId = game.missions[0]
     const isNewGame = ! await hasBlankNomination(gameId);
-    console.log(isNewGame);
     if (users.length === game.numberOfPlayers && isNewGame) {
         await Nomination.create({
             nominees: [],
