@@ -15,6 +15,8 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+//INPUT: userId
+//OUTPUT: return obj {gameId: currentUsersGameId}
 router.get('/:userId', async (req, res, next) => {
   try {
     const currentUsersInstance = await User.findOne({
@@ -38,9 +40,9 @@ router.put('/', async (req, res, next) => {
   }
 })
 
-//this route takes userid of whoever clicks 'start game'
-//updates our nomination table with the initial nomination instance
-//updates our users table with roleId's
+//INPUT: userid of client that clicks 'start game'
+//OUTPUT: updates our nomination table with the initial nomination instance
+//OUTPU: assigns roleIds to all users with same gameId
 router.put('/start/:userId', async (req, res, next) => {
   try {
     const {userId} = req.params
@@ -72,7 +74,6 @@ router.put('/start/:userId', async (req, res, next) => {
  *INPUT: No Input,
  *OUTPUT: An object with format {playerId: roleId} that has every player in the game
  */
-
 router.get('/players/:userId', async (req, res, next) => {
   try {
     // const userId = req.session.userId;
@@ -97,7 +98,6 @@ router.get('/players/:userId', async (req, res, next) => {
 /*/nominator/:userId
 INPUT userId
 RETURN OBJ {currentNominator : id}*/
-
 router.get('/nominator/:userId', async (req, res, next) => {
   try {
     const {userId} = req.params
@@ -123,5 +123,17 @@ router.get('/nominations/:userId', async (req, res, next) => {
     res.json(nomination)
   } catch (err) {
     next(err)
+  }
+})
+
+//INPUT: gameId
+//OUTPUT: an array with all users of the same gameId
+router.get('/waiting-phase/:gameId', async (req, res, next) => {
+  try {
+    const {gameId} = req.params
+    const allPlayers = await User.findAll({where: {gameId: gameId}})
+    res.json(allPlayers)
+  } catch (err) {
+    nexT(err)
   }
 })
