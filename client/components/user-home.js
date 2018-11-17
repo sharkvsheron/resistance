@@ -60,10 +60,7 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(
-  mapState,
-  mapDispatch
-)(UserHome)
+export default connect(mapState, mapDispatch)(UserHome)
 
 /**
  * PROP TYPES
