@@ -1,28 +1,13 @@
 const fetch = require('node-fetch')
+const {startGame, getNominations} = require('./functions');
 
 module.exports = io => {
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
 
     socket.on('startGame', async userId => {
-      //awit fetch post to create initial nomination instance
-      //fetch to this instance
-      console.log('server received emission')
-      await fetch(`http://localhost:8080/api/game/start/${userId}`, {
-        method: 'PUT',
-        body: ''
-      })
-      const startingState = fetch(
-        `http://localhost:8080/api/game/nominations/${userId}`,
-        {
-          method: 'GET'
-        }
-      )
-        .then(res => res.json())
-        .then(startingState =>
-          console.log('server-side starting state', startingState)
-        )
-
+      await startGame(userId);
+      const startingState = await getNominations(userId);
       io.emit('gameStarted', startingState)
     })
 

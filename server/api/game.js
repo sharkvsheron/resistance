@@ -15,6 +15,10 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+//INPUT: userId
+//OUTPUT: return obj {gameId: currentUsersGameId}
+
+/* **** REFACTORED INTO FUNCTION, NOT IN USE ANYMORE **** */
 router.get('/:userId', async (req, res, next) => {
   try {
     const currentUsersInstance = await User.findOne({
@@ -38,41 +42,11 @@ router.put('/', async (req, res, next) => {
   }
 })
 
-//this route takes userid of whoever clicks 'start game'
-//updates our nomination table with the initial nomination instance
-//updates our users table with roleId's
-router.put('/start/:userId', async (req, res, next) => {
-  try {
-    const {userId} = req.params
-    const user = await User.findById(userId)
-    const gameId = user.gameId
-    const {gameTypeId} = await Game.findById(gameId)
-    const users = await User.findAll({where: {gameId}})
-    const game = await GameType.findById(gameTypeId)
-    const missionTypeId = game.missions[0]
-    if (users.length === game.numberOfPlayers) {
-      await Nomination.create({
-        nominees: [],
-        gameId,
-        missionTypeId,
-        userId: users[Math.floor(Math.random() * users.length)].id
-      })
-      await game.assignRoles(users)
-      res.sendStatus(200)
-    } else {
-      res.json({message: 'NOT ENOUGH PLAYERS'})
-    }
-  } catch (error) {
-    next(error)
-  }
-})
-
 /*
  *USE CASE: Getting all the players and what the input player can see about their roleIds,
  *INPUT: No Input,
  *OUTPUT: An object with format {playerId: roleId} that has every player in the game
  */
-
 router.get('/players/:userId', async (req, res, next) => {
   try {
     // const userId = req.session.userId;
@@ -97,7 +71,6 @@ router.get('/players/:userId', async (req, res, next) => {
 /*/nominator/:userId
 INPUT userId
 RETURN OBJ {currentNominator : id}*/
-
 router.get('/nominator/:userId', async (req, res, next) => {
   try {
     const {userId} = req.params
@@ -116,11 +89,13 @@ router.get('/nominator/:userId', async (req, res, next) => {
   }
 })
 
-router.get('/nominations/:userId', async (req, res, next) => {
+//INPUT: gameId
+//OUTPUT: an array with all users of the same gameId
+router.get('/waiting-phase/:gameId', async (req, res, next) => {
   try {
-    const {userId} = req.params
-    const nomination = await Nomination.findOne({where: {userId, nominees: []}})
-    res.json(nomination)
+    const {gameId} = req.params
+    const allPlayers = await User.findAll({where: {gameId: gameId}})
+    res.json(allPlayers)
   } catch (err) {
     next(err)
   }
