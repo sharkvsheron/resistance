@@ -61,10 +61,12 @@ export class GameRoom extends React.Component {
   }
 
 
+
   async componentDidMount() {
     await socket.emit('joinGame', this.props.user.id, this.props.match.params.id)
     await socket.emit('getPlayers', this.props.user.id);
   }
+
 
   async startGame(userId) {
     await socket.emit('startGame', userId)
@@ -80,10 +82,7 @@ export class GameRoom extends React.Component {
             <Player key={i} player={player} id={i} />
           ))}
         </div>
-        <div className="footer">
-          <MissionTracker />
-        </div>
-
+        <MissionTracker {...this.props} />
         {this.props.players.length > 0 &&
           this.props.players.map(player => {
             return <div>{player.email}</div>
