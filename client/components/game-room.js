@@ -10,7 +10,7 @@ import {getOtherPlayersInRoom} from '../store/players'
  * COMPONENT
  */
 socket.on('startGame', startingState => {
-  console.log(startingState);
+  console.log(startingState)
 })
 
 export class GameRoom extends React.Component {
@@ -58,15 +58,18 @@ export class GameRoom extends React.Component {
         roleId: 1
       }
     ]
-    console.log('this props user,', this.props.user)
+    this.startGame = this.startGame.bind(this)
   }
 
-  componentDidMount() {
-    this.props.getPlayers(this.props.user.id)
+  componentDidMount() {}
+
+  async startGame(userId) {
+    await socket.emit('startGame', userId)
+    await socket.emit('getVisibility', userId)
+    console.log('second fn invoked on component startGame')
   }
 
   render() {
-    console.log('JOIIUHUHOIUHUJBB', this.players)
     return (
       <div>
         <div className="player-container">
@@ -82,7 +85,7 @@ export class GameRoom extends React.Component {
           this.props.players.map(player => {
             return <div>{player.email}</div>
           })}
-        <button onClick={() => socket.emit('startGame', this.props.user.id)}>
+        <button onClick={() => this.startGame(this.props.user.id)}>
           START Game
         </button>
       </div>
@@ -96,7 +99,11 @@ const mapDispatch = dispatch => ({
 
 const mapState = state => ({
   user: state.user,
-  players: state.players
+  players: state.players,
+  visibility: state.visible //obj {player1: vis1, player2: vis2, etc.}
 })
 
-export default connect(mapState, mapDispatch)(GameRoom)
+export default connect(
+  mapState,
+  mapDispatch
+)(GameRoom)
