@@ -69,8 +69,11 @@ router.get('/players/:userId', async (req, res, next) => {
 })
 
 /*/nominator/:userId
+
 INPUT userId
-RETURN OBJ {currentNominator : id}*/
+RETURN OBJ {currentNominator : id}
+**** REFACTORED INTO FUNCTION, NOT IN USE ANYMORE ****
+*/
 router.get('/nominator/:userId', async (req, res, next) => {
   try {
     const {userId} = req.params
