@@ -67,11 +67,12 @@ export class GameRoom extends React.Component {
       this.props.match.params.id
     )
     await socket.emit('getPlayers', this.props.user.id)
+    // await socket.emit('getVisibility', this.props.user.id)
   }
 
   async startGame(userId) {
     await socket.emit('startGame', userId)
-    await socket.emit('getVisibility', userId)
+    // await socket.emit('getVisibility', userId)
   }
 
   render() {
