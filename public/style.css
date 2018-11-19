@@ -72,6 +72,8 @@ form div {
   justify-content: space-evenly;
   width: 840px;
   margin: 0 auto;
+  position: relative;
+  top: -100px;
 }
 
 .mission .pending{
