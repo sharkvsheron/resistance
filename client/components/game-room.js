@@ -4,7 +4,6 @@ import MissionTracker from './missionTracker'
 import Player from './player'
 import { connect } from 'react-redux'
 import socket from '../socket'
-import { getOtherPlayersInRoom } from '../store/players'
 
 /**
  * COMPONENT
@@ -62,12 +61,14 @@ export class GameRoom extends React.Component {
   }
 
 
-  componentDidMount() {}
+  async componentDidMount() {
+    await socket.emit('joinGame', this.props.user.id, this.props.match.params.id)
+    await socket.emit('getPlayers', this.props.user.id);
+  }
 
   async startGame(userId) {
     await socket.emit('startGame', userId)
     await socket.emit('getVisibility', userId)
-    console.log('second fn invoked on component startGame')
   }
 
   render() {
@@ -95,10 +96,6 @@ export class GameRoom extends React.Component {
   }
 }
 
-const mapDispatch = dispatch => ({
-  getPlayers: userId => dispatch(getOtherPlayersInRoom(userId))
-})
-
 const mapState = state => ({
   user: state.user,
   players: state.players,
@@ -107,5 +104,5 @@ const mapState = state => ({
 
 export default connect(
   mapState,
-  mapDispatch
+  null
 )(GameRoom)

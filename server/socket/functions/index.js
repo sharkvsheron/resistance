@@ -20,6 +20,20 @@ const getGamewithUserId = async userId => {
   const gameId = user.gameId
   return Game.findById(gameId)
 }
+
+const getPlayersWithUserId = async userId => {
+  const game = await getGamewithUserId(userId)
+  const players = await User.findAll({where: {gameId: game.id}})
+  console.log(game.id)
+  // return users.map(user => user.dataValues)
+  const allPlayers = {}
+  players.forEach(player => {
+    allPlayers[player.dataValues.id] = {userName: player.dataValues.userName, roleId: 0}
+  })
+  console.log(game, allPlayers);
+  return allPlayers
+}
+
 /*
     Params: userId
     Return: Nothing
@@ -127,6 +141,7 @@ const getVisibility = async userId => {
 }
 
 module.exports = {
+  getPlayersWithUserId,
   startGame,
   getNominations,
   getNominator,
