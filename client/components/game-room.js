@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import MissionTracker from './missionTracker'
 import Player from './player'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import socket from '../socket'
-import { getOtherPlayersInRoom } from '../store/players'
+import {getOtherPlayersInRoom} from '../store/players'
 
 /**
  * COMPONENT
@@ -61,7 +61,6 @@ export class GameRoom extends React.Component {
     this.startGame = this.startGame.bind(this)
   }
 
-
   componentDidMount() {}
 
   async startGame(userId) {
@@ -90,6 +89,22 @@ export class GameRoom extends React.Component {
         <button onClick={() => this.startGame(this.props.user.id)}>
           START Game
         </button>
+        <button
+          type="submit"
+          onClick={async () =>
+            socket.emit('submitVote', this.props.user.id, 'succeed')
+          }
+        >
+          SUCCESS
+        </button>
+        <button
+          type="submit"
+          onClick={async () =>
+            socket.emit('submitVote', this.props.user.id, 'fail')
+          }
+        >
+          FAIL
+        </button>
       </div>
     )
   }
@@ -105,7 +120,4 @@ const mapState = state => ({
   visibility: state.visible //obj {player1: vis1, player2: vis2, etc.}
 })
 
-export default connect(
-  mapState,
-  mapDispatch
-)(GameRoom)
+export default connect(mapState, mapDispatch)(GameRoom)

@@ -12,6 +12,7 @@ const hasBlankNomination = async gameId => {
 const getNominationWithUserId = async userId => {
   const user = await User.findById(userId)
   const nomination = await Nomination.findAll({where: {gameId: user.gameId}})
+  console.log('THIS IS THE GET NOMINATION', nomination)
   return nomination
 }
 
@@ -33,7 +34,7 @@ const startGame = async userId => {
   const users = await User.findAll({where: {gameId}})
   const game = await GameType.findById(gameTypeId)
   const missionTypeId = game.missions[0]
-  const isNewGame = !(await hasBlankNomination(gameId))
+  const isNewGame = !await hasBlankNomination(gameId)
   if (users.length === game.numberOfPlayers && isNewGame) {
     await Nomination.create({
       nominees: [],
@@ -63,8 +64,10 @@ const getNominations = async userId => {
       Params: userId
       Return: Object {currentNominator: userId}
 */
-const getNominator = async userId => {
-  return getNominationWithUserId(userId).getNominator()
+const getCurrentNominator = async userId => {
+  const user = await User.findById(userId)
+  const nomination = await Nomination.findAll({where: {gameId: user.gameId}})
+  return nomination[0].dataValues.userId
 }
 
 /*
@@ -74,13 +77,13 @@ const getNominator = async userId => {
 */
 
 const submitVote = async (userId, missionResult) => {
-  const nomination = await getNominationWithUserId(userId)
   const game = await getGamewithUserId(userId)
-  if (Number(userId) === nomination.dataValues.userId) {
-    await nomination.update({missionStatus: missionResult})
-  } else {
-    return 'Unathorized'
-  }
+  const nomination = await Nomination.findOne({
+    where: {gameId: game.id, nominees: {[Op.eq]: []}}
+  })
+
+  await nomination.update({missionStatus: missionResult, nominees: [1, 2]})
+
   const result = await game.gameResult()
   if (result.teamWon !== 'none') return result
   else if (nomination.dataValues.missionTypeId < 5) {
@@ -129,7 +132,7 @@ const getVisibility = async userId => {
 module.exports = {
   startGame,
   getNominations,
-  getNominator,
+  getCurrentNominator,
   submitVote,
   getVisibility
 }

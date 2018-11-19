@@ -1,5 +1,11 @@
 const fetch = require('node-fetch')
-const {startGame, getNominations, getVisibility} = require('./functions')
+const {
+  startGame,
+  getNominations,
+  getVisibility,
+  getCurrentNominator,
+  submitVote
+} = require('./functions')
 const {User} = require('../db/models')
 /*
   Params: socket
@@ -42,6 +48,28 @@ module.exports = io => {
         body: ''
       })
       await joinGameRoom(socket)
+    })
+
+    //When user clicks Submit Vote, this socet will write vote to db.
+    socket.on('submitVote', async (userId, missionResult) => {
+      const gameRoom = await joinGameRoom(socket)
+      console.log('server listener for submitVote reached USER ID', userId)
+      console.log(
+        'server listener for submitVote reached MISSON RESUKT',
+        missionResult
+      )
+      const nominator = await getCurrentNominator(userId)
+      console.log('THISIS THE USER ID ', userId)
+      console.log('THISIS THE nominatorid ', nominator)
+      if (userId == nominator) {
+        const vote = await submitVote(userId, missionResult)
+        console.log('THIS IS INSIDE THE INDEX SUBMIT VOTE', vote)
+        io.in(gameRoom).emit('voteSubmitted', vote)
+      } else {
+        const vote = 'NOT THE NOMINATOR'
+        console.log('THIS IS INSIDE THE INDEX SUBMIT VOTE', vote)
+        io.in(gameRoom).emit('voteSubmitted', vote)
+      }
     })
 
     socket.on('disconnect', () => {
