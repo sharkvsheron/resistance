@@ -9,6 +9,10 @@ import {getOtherPlayersInRoom} from '../store/players'
 /**
  * COMPONENT
  */
+socket.on('startGame', startingState => {
+  console.log(startingState);
+})
+
 export class GameRoom extends React.Component {
   constructor(props) {
     super(props)

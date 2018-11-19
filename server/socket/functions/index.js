@@ -26,24 +26,24 @@ const getGamewithUserId = async userId => {
     Side Effects: Creates the initial nomination instance of a game, assigns roleId's to users in game
 */
 
-const startGame = async userId => {
-  const user = await User.findById(userId)
-  const gameId = user.gameId
-  const {gameTypeId} = await Game.findById(gameId)
-  const users = await User.findAll({where: {gameId}})
-  const game = await GameType.findById(gameTypeId)
-  const missionTypeId = game.missions[0]
-  const isNewGame = !await hasBlankNomination(gameId)
-  console.log(isNewGame)
-  if (users.length === game.numberOfPlayers && isNewGame) {
-    await Nomination.create({
-      nominees: [],
-      gameId,
-      missionTypeId,
-      userId: users[Math.floor(Math.random() * users.length)].id
-    })
-    await game.assignRoles(users)
-  }
+
+const startGame = async (userId) => {
+    const user = await User.findById(userId)
+    const gameId = user.gameId
+    const {gameTypeId} = await Game.findById(gameId)
+    const users = await User.findAll({where: {gameId}})
+    const game = await GameType.findById(gameTypeId)
+    const missionTypeId = game.missions[0]
+    const isNewGame = ! await hasBlankNomination(gameId);
+    if (users.length === game.numberOfPlayers && isNewGame) {
+        await Nomination.create({
+            nominees: [],
+            gameId,
+            missionTypeId,
+            userId: users[Math.floor(Math.random() * users.length)].id
+        })
+        await game.assignRoles(users)
+    }
 }
 
 /*

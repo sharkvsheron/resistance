@@ -11,14 +11,14 @@ const {
 } = require('../server/db/models')
 
 async function seed() {
-  await db.sync({force: true})
+  await db.sync({ force: true })
   console.log('db synced!')
 
   const roles = await Promise.all([
     Role.bulkCreate([
-      {visible: [], name: 'goodguy'},
-      {visible: [2], name: 'badguy'},
-      {visible: [1, 2, 3], name: 'merlin'}
+      { visible: [], name: 'goodguy' },
+      { visible: [2], name: 'badguy' },
+      { visible: [1, 2, 3], name: 'merlin' }
     ])
   ])
 
@@ -34,59 +34,63 @@ async function seed() {
 
   const missionType = await Promise.all([
     MissionType.bulkCreate([
-      {numberOfPlayers: 2, failsRequired: 1},
-      {numberOfPlayers: 3, failsRequired: 1},
-      {numberOfPlayers: 2, failsRequired: 1},
-      {numberOfPlayers: 3, failsRequired: 1},
-      {numberOfPlayers: 3, failsRequired: 1}
+      { numberOfPlayers: 2, failsRequired: 1 },
+      { numberOfPlayers: 3, failsRequired: 1 },
+      { numberOfPlayers: 2, failsRequired: 1 },
+      { numberOfPlayers: 3, failsRequired: 1 },
+      { numberOfPlayers: 3, failsRequired: 1 }
     ])
   ])
-  const game = await Promise.all([Game.create({gameTypeId: 1})])
+  const game = await Promise.all([Game.create({ gameTypeId: 1 })])
 
-  const users = await Promise.all([
-    User.bulkCreate([
-      {
-        socketId: 12345,
-        userName: 'russel',
-        email: 'r@r.com',
-        password: '123',
-        gameId: 1,
-        roleId: 3
-      },
-      {
-        socketId: 23456,
-        userName: 'adam',
-        email: 'a@a.com',
-        password: '123',
-        gameId: 1,
-        roleId: 2
-      },
-      {
-        socketId: 34567,
-        userName: 'khalid',
-        email: 'k@k.com',
-        password: '123',
-        gameId: 1,
-        roleId: 1
-      },
-      {
-        socketId: 45678,
-        userName: 'peter',
-        email: 'p@p.com',
-        password: '123',
-        gameId: 1,
-        roleId: 2
-      },
-      {
-        socketId: 56789,
-        userName: 'bot',
-        email: 'b@b.com',
-        password: '123',
-        gameId: 1,
-        roleId: 1
-      }
-    ])
-  ])
+  const users = [
+    {
+      socketId: 12345,
+      userName: 'russell',
+      email: 'r@r.com',
+      password: '123',
+      gameId: 1,
+      roleId: 3
+    },
+    {
+      socketId: 23456,
+      userName: 'adam',
+      email: 'a@a.com',
+      password: '123',
+      gameId: 1,
+      roleId: 2
+    },
+    {
+      socketId: 34567,
+      userName: 'khalid',
+      email: 'k@k.com',
+      password: '123',
+      gameId: 1,
+      roleId: 1
+    },
+    {
+      socketId: 45678,
+      userName: 'peter',
+      email: 'p@p.com',
+      password: '123',
+      gameId: 1,
+      roleId: 2
+    },
+    {
+      socketId: 56789,
+      userName: 'bot',
+      email: 'b@b.com',
+      password: '123',
+      gameId: 1,
+      roleId: 1
+    }
+  ];
+
+  await Promise.all(users.map(user => User.create(user)))
+  console.log(`seeded ${users.length} users`)
+
+
+
 
   const nominations = await Promise.all([
     Nomination.create({
