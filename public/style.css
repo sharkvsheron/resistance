@@ -19,3 +19,16 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.player-container {
+  /* display: flex; */
+  border: 1px solid black;
+}
+
+.player-card {
+  border: 1px dashed black;
+  border-radius: 12%;
+  padding: 10px;
+  margin: 10px;
+  /* position: absolute; */
+}

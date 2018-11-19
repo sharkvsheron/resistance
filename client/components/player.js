@@ -1,16 +1,20 @@
 import React, {Component} from 'react'
-
-class Player extends Component {
+export default class Player extends Component {
   constructor(props) {
     super(props)
   }
   render() {
+    const {userName, roleId} = this.props.player
+    const {id} = this.props
     return (
-      <div>
-        <h3>PLAYER Color</h3>
-        <h3>PLAYER Name</h3>
-        <h3>PLAYER Role</h3>
-        <h3>PLAYER Other</h3>
+      <div className="player-card" id={id}>
+        <h3>PLAYER VIDEO</h3>
+        <h3>{userName}</h3>
+        <h3>{roleId}</h3>
+        <button type="submit">WAITING FOR PLAYER TO JOIN</button>
+        <div>
+          <button type="submit">ADD BOT</button>
+        </div>
       </div>
     )
   }
