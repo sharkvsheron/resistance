@@ -134,5 +134,6 @@ module.exports = {
   getNominations,
   getCurrentNominator,
   submitVote,
-  getVisibility
+  getVisibility,
+  getNominationWithUserId
 }
