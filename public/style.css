@@ -66,3 +66,33 @@ form div {
   width: 200px; 
   height: 250px;
 }
+
+.mission-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 840px;
+  margin: 0 auto;
+  position: relative;
+  top: -100px;
+}
+
+.mission .pending{
+  background-image: url("images/mission-pending.png");
+  width:100px;
+  height:130px;
+  background-size: cover;
+}
+
+.mission .success{
+  background-image: url("images/mission-success.png");
+  width:100px;
+  height:130px;
+  background-size: cover;
+}
+
+.mission .fail{
+  background-image: url("images/mission-fail.png");
+  width:100px;
+  height:130px;
+  background-size: cover;
+}
