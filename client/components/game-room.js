@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import MissionTracker from './missionTracker'
 import Player from './player'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import socket from '../socket'
-import {getOtherPlayersInRoom} from '../store/players'
+import { getOtherPlayersInRoom } from '../store/players'
 
 /**
  * COMPONENT
@@ -19,7 +19,7 @@ export class GameRoom extends React.Component {
     this.players = [
       {
         socketId: 12345,
-        userName: 'russel',
+        userName: 'russell',
         email: 'r@r.com',
         password: '123',
         gameId: 1,
@@ -61,6 +61,7 @@ export class GameRoom extends React.Component {
     this.startGame = this.startGame.bind(this)
   }
 
+
   componentDidMount() {}
 
   async startGame(userId) {
@@ -72,14 +73,15 @@ export class GameRoom extends React.Component {
   render() {
     return (
       <div>
+        <h3>This is the Game Room</h3>
         <div className="player-container">
           {this.players.map((player, i) => (
             <Player key={i} player={player} id={i} />
           ))}
         </div>
-
-        <MissionTracker />
-        <h3>This is the Game Room</h3>
+        <div className="footer">
+          <MissionTracker />
+        </div>
 
         {this.props.players.length > 0 &&
           this.props.players.map(player => {

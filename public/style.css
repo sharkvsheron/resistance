@@ -21,8 +21,10 @@ form div {
 }
 
 .player-container {
-  /* display: flex; */
+  display: flex;
   border: 1px solid black;
+  height: 600px;
+  justify-content: space-evenly;
 }
 
 .player-card {
@@ -30,5 +32,37 @@ form div {
   border-radius: 12%;
   padding: 10px;
   margin: 10px;
-  /* position: absolute; */
+  width:220px;
+  height: 220px;
+  position: relative;
+}
+
+#player0, #player4{
+  top:125px;
+}
+
+#player1, #player3{
+  top:75px;
+}
+
+
+#role1 {
+  background-image: url("images/goodspaceman.png");
+  background-size: cover;
+  width: 200px; 
+  height: 250px;
+}
+
+#role2{
+  background-image: url("images/badspaceman.png");
+  background-size: cover;
+  width: 200px; 
+  height: 250px;
+}
+
+#role3 {
+  background-image: url("images/commander.png");
+  background-size: cover;
+  width: 200px; 
+  height: 250px;
 }
