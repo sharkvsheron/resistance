@@ -31,9 +31,21 @@ module.exports = io => {
       const allGames = await Game.findAll()
       io.to(`${socket.id}`).emit('getGames', allGames)
     })
+
     socket.on('joinGame', async (userId, gameId) => {
+      const toBeUpdatedUser = await User.findById(userId)
+      await toBeUpdatedUser.update({socketId: socket.id})
+      await joinGameRoom(socket)
       const user = await User.findById(userId)
       await user.update({gameId})
+      const players = await getPlayersWithUserId(userId)
+      const gameRoom = await joinGameRoom(socket)
+      io.in(gameRoom).emit('getPlayers', players)
+      const users = await User.findAll({where: {gameId: user.gameId}})
+      users.forEach(async user => {
+        let visibility = await getVisibility(user.id)
+        io.to(`${user.socketId}`).emit('getVisibility', visibility)
+      })
     })
 
     socket.on('getPlayers', async userId => {
@@ -64,7 +76,6 @@ module.exports = io => {
     })
 
     socket.on('getVisibility', async userId => {
-      //FIX THIS SHIT
       let visibility = await getVisibility(userId)
       console.log(visibility, userId)
       io.to(`${socket.id}`).emit('getVisibility', visibility)
@@ -72,11 +83,8 @@ module.exports = io => {
 
     //When user clicks join game, their socket joins the appropriate gameRoom
     socket.on('syncSocketId', async userId => {
-      await fetch(`http://localhost:8080/api/users/${userId}/${socket.id}`, {
-        method: 'PUT',
-        body: ''
-      })
-      await joinGameRoom(socket)
+      const toBeUpdatedUser = await User.findById(userId)
+      toBeUpdatedUser.update({socketId: socket.id})
     })
 
     //When user clicks Submit Vote, this socet will write vote to db.
