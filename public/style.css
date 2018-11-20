@@ -32,37 +32,69 @@ form div {
   border-radius: 12%;
   padding: 10px;
   margin: 10px;
-  width:220px;
+  width: 220px;
   height: 220px;
   position: relative;
 }
 
-#player0, #player4{
-  top:125px;
+#player0,
+#player4 {
+  top: 125px;
 }
 
-#player1, #player3{
-  top:75px;
+#player1,
+#player3 {
+  top: 75px;
 }
 
-
-#role1 {
-  background-image: url("images/goodspaceman.png");
+#role1,
+#role0 {
+  background-image: url('images/goodspaceman.png');
   background-size: cover;
-  width: 200px; 
+  width: 200px;
   height: 250px;
 }
 
-#role2{
-  background-image: url("images/badspaceman.png");
+#role2 {
+  background-image: url('images/badspaceman.png');
   background-size: cover;
-  width: 200px; 
+  width: 200px;
   height: 250px;
 }
 
 #role3 {
-  background-image: url("images/commander.png");
+  background-image: url('images/commander.png');
   background-size: cover;
-  width: 200px; 
+  width: 200px;
   height: 250px;
+}
+
+.mission-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 840px;
+  margin: 0 auto;
+  position: relative;
+  top: -100px;
+}
+
+.mission .pending {
+  background-image: url('images/mission-pending.png');
+  width: 100px;
+  height: 130px;
+  background-size: cover;
+}
+
+.mission .success {
+  background-image: url('images/mission-success.png');
+  width: 100px;
+  height: 130px;
+  background-size: cover;
+}
+
+.mission .fail {
+  background-image: url('images/mission-fail.png');
+  width: 100px;
+  height: 130px;
+  background-size: cover;
 }

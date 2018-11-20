@@ -11,14 +11,14 @@ const {
 } = require('../server/db/models')
 
 async function seed() {
-  await db.sync({ force: true })
+  await db.sync({force: true})
   console.log('db synced!')
 
   const roles = await Promise.all([
     Role.bulkCreate([
-      { visible: [], name: 'goodguy' },
-      { visible: [2], name: 'badguy' },
-      { visible: [1, 2, 3], name: 'merlin' }
+      {visible: [], name: 'goodguy'},
+      {visible: [2], name: 'badguy'},
+      {visible: [1, 2, 3], name: 'merlin'}
     ])
   ])
 
@@ -34,14 +34,14 @@ async function seed() {
 
   const missionType = await Promise.all([
     MissionType.bulkCreate([
-      { numberOfPlayers: 2, failsRequired: 1 },
-      { numberOfPlayers: 3, failsRequired: 1 },
-      { numberOfPlayers: 2, failsRequired: 1 },
-      { numberOfPlayers: 3, failsRequired: 1 },
-      { numberOfPlayers: 3, failsRequired: 1 }
+      {numberOfPlayers: 2, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1},
+      {numberOfPlayers: 2, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1}
     ])
   ])
-  const game = await Promise.all([Game.create({ gameTypeId: 1 })])
+  const game = await Promise.all([Game.create({gameTypeId: 1})])
 
   const users = [
     {
@@ -50,7 +50,7 @@ async function seed() {
       email: 'r@r.com',
       password: '123',
       gameId: 1,
-      roleId: 3
+      roleId: 1
     },
     {
       socketId: 23456,
@@ -58,7 +58,7 @@ async function seed() {
       email: 'a@a.com',
       password: '123',
       gameId: 1,
-      roleId: 2
+      roleId: 1
     },
     {
       socketId: 34567,
@@ -74,7 +74,7 @@ async function seed() {
       email: 'p@p.com',
       password: '123',
       gameId: 1,
-      roleId: 2
+      roleId: 1
     },
     {
       socketId: 56789,
@@ -84,30 +84,15 @@ async function seed() {
       gameId: 1,
       roleId: 1
     }
-  ];
+  ]
 
   await Promise.all(users.map(user => User.create(user)))
   console.log(`seeded ${users.length} users`)
-
-
-
-
-  const nominations = await Promise.all([
-    Nomination.create({
-      nominees: [],
-      missionStatus: null,
-      nominationStatus: null,
-      gameId: 1,
-      missionTypeId: 1,
-      userId: 1
-    })
-  ])
 
   console.log(`seeded ${game.length} game`)
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${roles.length} roles`)
   console.log(`seeded ${gameType.length} gametypes`)
-  console.log(`seeded ${nominations.length} gametypes`)
   console.log(`seeded ${missionType.length} missiontypes`)
   console.log(`seeded successfully`)
 }
