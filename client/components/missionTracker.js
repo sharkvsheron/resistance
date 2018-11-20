@@ -22,15 +22,17 @@ export default class MissionTracker extends Component {
     super(props)
   }
   render() {
+    console.log(missionInfo)
     const indexs = Object.keys(missionInfo)
     return (
       <div className="mission-container">
         {indexs.map((number, i) => {
+          console.log('HTHI ISN THIS MUNBER ', missionInfo[number])
           return (
             <Mission
               key={i}
               number={number}
-              mission={missionInfo.number}
+              status={missionInfo[number]}
               // numberOfPlayers={single.numberOfPlayers}
               // failsRequired={single.failsRequired}
               {...this.props}
