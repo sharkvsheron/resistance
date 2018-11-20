@@ -14,9 +14,10 @@ export const getVisibility = visibility => ({
 })
 
 const writeVisibility = (players, visibility) => {
-  const newPlayers = {...players};
+  const newPlayers = {...players}
+  console.log('newplayers in write visibility:', newPlayers)
   for (let prop in visibility) {
-    newPlayers[prop][roleId] = visibility[prop]
+    newPlayers[prop].roleId = visibility[prop]
   }
   return newPlayers
 }
@@ -26,9 +27,9 @@ const initialState = {}
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_PLAYERS:
-      return action.players
+      return action.players //{1: {username:adam, roleId:1}, 2: {username:russell, roleId:1}, etc.}
     case GET_VISIBILITY:
-      return writeVisibility(state.players, action.visibility)
+      return writeVisibility(state, action.visibility)
     default:
       return state
   }

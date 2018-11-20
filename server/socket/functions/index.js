@@ -28,9 +28,12 @@ const getPlayersWithUserId = async userId => {
   // return users.map(user => user.dataValues)
   const allPlayers = {}
   players.forEach(player => {
-    allPlayers[player.dataValues.id] = {userName: player.dataValues.userName, roleId: 0}
+    allPlayers[player.dataValues.id] = {
+      userName: player.dataValues.userName,
+      roleId: 0
+    }
   })
-  console.log(game, allPlayers);
+  console.log(game, allPlayers)
   return allPlayers
 }
 
@@ -132,10 +135,11 @@ const getVisibility = async userId => {
   const visibleRoles = role.visible
   const players = await User.findAll({where: {gameId}})
   const playerVisibility = {}
+  // const hasStarted = await hasBlankNomination(gameId)
   players.forEach(player => {
     if (visibleRoles.includes(player.roleId))
       playerVisibility[player.id] = player.roleId
-    else playerVisibility[player.id] = 0
+    else playerVisibility[player.id] = 1
   })
   return playerVisibility
 }
