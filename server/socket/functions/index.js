@@ -89,8 +89,8 @@ const getCurrentNominator = async userId => {
 
 /*
     Params: userId
-    Return: none.
-    BUT: This function will create a nw Mission and Nomination
+    Return: {1:'succeed'}
+    BUT: This function will create a new Mission and Nomination
 */
 
 const submitVote = async (userId, missionResult) => {

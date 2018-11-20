@@ -2,6 +2,7 @@ import io from 'socket.io-client'
 import store from './store'
 import {getPlayers, getVisibility} from './store/players'
 import {getGames} from './store/games'
+import {getMissions} from './store/mission'
 
 const socket = io(window.location.origin)
 
@@ -26,6 +27,7 @@ socket.on('connect', () => {
 })
 socket.on('voteSubmitted', vote => {
   console.log('THIS IS THE VOT E', vote)
+  store.dispatch(getMissions(vote))
 })
 
 export default socket
