@@ -31,7 +31,11 @@ module.exports = io => {
       const allGames = await Game.findAll()
       io.to(`${socket.id}`).emit('getGames', allGames)
     })
+
     socket.on('joinGame', async (userId, gameId) => {
+      const toBeUpdatedUser = await User.findById(userId)
+      await toBeUpdatedUser.update({socketId: socket.id})
+      await joinGameRoom(socket)
       const user = await User.findById(userId)
       await user.update({gameId})
       const players = await getPlayersWithUserId(userId)
@@ -81,7 +85,6 @@ module.exports = io => {
     socket.on('syncSocketId', async userId => {
       const toBeUpdatedUser = await User.findById(userId)
       toBeUpdatedUser.update({socketId: socket.id})
-      await joinGameRoom(socket)
     })
 
     //When user clicks Submit Vote, this socet will write vote to db.

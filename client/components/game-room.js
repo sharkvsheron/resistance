@@ -4,6 +4,7 @@ import MissionTracker from './missionTracker'
 import Player from './player'
 import {connect} from 'react-redux'
 import socket from '../socket'
+import store, {me} from '../store'
 
 /**
  * COMPONENT
@@ -19,6 +20,8 @@ export class GameRoom extends React.Component {
   }
 
   async componentDidMount() {
+    await store.dispatch(me())
+    console.log(this.props.user)
     await socket.emit(
       'joinGame',
       this.props.user.id,
