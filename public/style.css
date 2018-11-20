@@ -85,6 +85,20 @@ form div {
   background-size: cover;
 }
 
+.mission .good {
+  background-image: url('images/goodspaceman.png');
+  width: 100px;
+  height: 130px;
+  background-size: cover;
+}
+
+.mission .bad {
+  background-image: url('images/badspaceman.png');
+  width: 100px;
+  height: 130px;
+  background-size: cover;
+}
+
 .mission .succeed {
   background-image: url('images/mission-success.png');
   width: 100px;

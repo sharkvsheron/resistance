@@ -98,12 +98,11 @@ const submitVote = async (userId, missionResult) => {
   const nomination = await Nomination.findOne({
     where: {gameId: game.id, nominees: {[Op.eq]: []}}
   })
-
   await nomination.update({missionStatus: missionResult, nominees: [1, 2]})
-
   const result = await game.gameResult()
   if (result.gameEndResult !== 'none') return result
   else if (nomination.dataValues.missionTypeId < 5) {
+    const missions = {}
     const newNominator = nomination.nextNominator()
     const newMission = nomination.nextMission()
     await Nomination.create({
@@ -112,18 +111,7 @@ const submitVote = async (userId, missionResult) => {
       userId: newNominator,
       gameId: nomination.gameId
     })
-    const missionNominations = await Nomination.findAll({
-      where: {
-        gameId: game.id,
-        missionStatus: {
-          [Op.ne]: null
-        }
-      }
-    })
-    const missions = {}
-    missionNominations.forEach(mission => {
-      missions[mission.missionTypeId] = mission.missionStatus
-    })
+    missions[nomination.missionTypeId] = nomination.missionStatus
     return missions
   }
 }
