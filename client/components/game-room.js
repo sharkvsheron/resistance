@@ -66,6 +66,7 @@ export class GameRoom extends React.Component {
   async startGame(userId) {
     await socket.emit('startGame', userId)
     await socket.emit('getVisibility', userId)
+
     console.log('second fn invoked on component startGame')
   }
 

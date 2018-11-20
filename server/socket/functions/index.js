@@ -85,7 +85,7 @@ const submitVote = async (userId, missionResult) => {
   await nomination.update({missionStatus: missionResult, nominees: [1, 2]})
 
   const result = await game.gameResult()
-  if (result.teamWon !== 'none') return result
+  if (result.gameEndResult !== 'none') return result
   else if (nomination.dataValues.missionTypeId < 5) {
     const newNominator = nomination.nextNominator()
     const newMission = nomination.nextMission()

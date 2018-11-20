@@ -15,5 +15,8 @@ socket.on('connect', () => {
     store.dispatch(getVisibility(visibilityObj))
   })
 })
+socket.on('voteSubmitted', vote => {
+  console.log('THIS IS THE VOT E', vote)
+})
 
 export default socket
