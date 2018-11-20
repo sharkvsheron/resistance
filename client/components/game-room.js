@@ -4,6 +4,7 @@ import MissionTracker from './missionTracker'
 import Player from './player'
 import {connect} from 'react-redux'
 import socket from '../socket'
+import store, {me} from '../store'
 
 /**
  * COMPONENT
@@ -15,63 +16,23 @@ socket.on('startGame', startingState => {
 export class GameRoom extends React.Component {
   constructor(props) {
     super(props)
-    // this.players = [
-    //   {
-    //     socketId: 12345,
-    //     userName: 'russell',
-    //     email: 'r@r.com',
-    //     password: '123',
-    //     gameId: 1,
-    //     roleId: 3
-    //   },
-    //   {
-    //     socketId: 23456,
-    //     userName: 'adam',
-    //     email: 'a@a.com',
-    //     password: '123',
-    //     gameId: 1,
-    //     roleId: 2
-    //   },
-    //   {
-    //     socketId: 34567,
-    //     userName: 'khalid',
-    //     email: 'k@k.com',
-    //     password: '123',
-    //     gameId: 1,
-    //     roleId: 1
-    //   },
-    //   {
-    //     socketId: 45678,
-    //     userName: 'peter',
-    //     email: 'p@p.com',
-    //     password: '123',
-    //     gameId: 1,
-    //     roleId: 2
-    //   },
-    //   {
-    //     socketId: 56789,
-    //     userName: 'bot',
-    //     email: 'b@b.com',
-    //     password: '123',
-    //     gameId: 1,
-    //     roleId: 1
-    //   }
-    // ]
     this.startGame = this.startGame.bind(this)
   }
 
   async componentDidMount() {
+    await store.dispatch(me())
+    console.log(this.props.user)
     await socket.emit(
       'joinGame',
       this.props.user.id,
       this.props.match.params.id
     )
-    await socket.emit('getPlayers', this.props.user.id)
+    // await socket.emit('getPlayers', this.props.user.id)
     // await socket.emit('getVisibility', this.props.user.id)
   }
 
   async startGame(userId) {
-    await socket.emit('startGame', userId)
+    socket.emit('startGame', userId)
     // await socket.emit('getVisibility', userId)
   }
 
@@ -117,4 +78,7 @@ const mapState = state => ({
   visibility: state.visible //obj {player1: vis1, player2: vis2, etc.}
 })
 
-export default connect(mapState, null)(GameRoom)
+export default connect(
+  mapState,
+  null
+)(GameRoom)
