@@ -6,7 +6,10 @@ export default class Mission extends Component {
   render() {
     return (
       <div className="mission">
-        <div className="pending" id={`mission${this.props.mission}`} />
+        <div
+          className={this.props.mission}
+          id={`mission${this.props.number}`}
+        />
         <div className="mission-number">Mission #{this.props.mission}</div>
         <div className="number-players">
           People Required {this.props.numberOfPlayers}
