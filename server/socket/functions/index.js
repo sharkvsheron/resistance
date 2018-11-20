@@ -22,6 +22,11 @@ const getGamewithUserId = async userId => {
   return Game.findById(gameId)
 }
 
+const syncSocket = async (socket, userId) => {
+  const toBeUpdatedUser = await User.findById(userId)
+  await toBeUpdatedUser.update({socketId: socket.id})
+}
+
 const getPlayersWithUserId = async userId => {
   const game = await getGamewithUserId(userId)
   const players = await User.findAll({where: {gameId: game.id}})
@@ -36,6 +41,19 @@ const getPlayersWithUserId = async userId => {
   })
   console.log(game, allPlayers)
   return allPlayers
+}
+
+const getUsersInGame = async userId => {
+  const user = await User.findById(userId)
+  const users = await User.findAll({where: {gameId: user.gameId}})
+  return users;
+}
+
+const broadcastVisibility = async (io, users) => {
+  users.forEach(async user => {
+    let visibility = await getVisibility(user.id)
+    io.to(`${user.socketId}`).emit('getVisibility', visibility)
+  })
 }
 
 /*
@@ -142,5 +160,8 @@ module.exports = {
   getCurrentNominator,
   submitVote,
   getVisibility,
-  getNominationWithUserId
+  getNominationWithUserId,
+  getUsersInGame,
+  syncSocket,
+  broadcastVisibility
 }

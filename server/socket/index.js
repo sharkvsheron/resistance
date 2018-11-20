@@ -1,11 +1,13 @@
-const fetch = require('node-fetch')
 const {
   startGame,
   getNominations,
   getVisibility,
   getCurrentNominator,
   submitVote,
-  getPlayersWithUserId
+  getPlayersWithUserId,
+  getUsersInGame,
+  syncSocket,
+  broadcastVisibility
 } = require('./functions')
 const {User, Game} = require('../db/models')
 /*
@@ -15,7 +17,6 @@ const {User, Game} = require('../db/models')
 */
 
 const joinGameRoom = async socket => {
-  console.log(socket.id)
   const socketId = socket.id
   const user = await User.findOne({where: {socketId}})
   const gameId = user.dataValues.gameId
@@ -33,8 +34,7 @@ module.exports = io => {
     })
 
     socket.on('joinGame', async (userId, gameId) => {
-      const toBeUpdatedUser = await User.findById(userId)
-      await toBeUpdatedUser.update({socketId: socket.id})
+      await syncSocket(socket, userId);
       await joinGameRoom(socket)
       const user = await User.findById(userId)
       await user.update({gameId})
@@ -42,22 +42,15 @@ module.exports = io => {
       const gameRoom = await joinGameRoom(socket)
       io.in(gameRoom).emit('getPlayers', players)
       const users = await User.findAll({where: {gameId: user.gameId}})
-      users.forEach(async user => {
-        let visibility = await getVisibility(user.id)
-        io.to(`${user.socketId}`).emit('getVisibility', visibility)
-      })
+      broadcastVisibility(io, users)
     })
 
     socket.on('getPlayers', async userId => {
       const players = await getPlayersWithUserId(userId)
       const gameRoom = await joinGameRoom(socket)
       io.in(gameRoom).emit('getPlayers', players)
-      const user = await User.findById(userId)
-      const users = await User.findAll({where: {gameId: user.gameId}})
-      users.forEach(async user => {
-        let visibility = await getVisibility(user.id)
-        io.to(`${user.socketId}`).emit('getVisibility', visibility)
-      })
+      const users = await getUsersInGame(userId)
+      broadcastVisibility(io, users)
     })
 
     socket.on('startGame', async userId => {
@@ -67,24 +60,18 @@ module.exports = io => {
       const startingState = await getNominations(userId)
       //selectively emits to only people in the gameRoom
       io.in(gameRoom).emit('gameStarted', startingState)
-      const user = await User.findById(userId)
-      const users = await User.findAll({where: {gameId: user.gameId}})
-      users.forEach(async user => {
-        let visibility = await getVisibility(user.id)
-        io.to(`${user.socketId}`).emit('getVisibility', visibility)
-      })
+      const users = await getUsersInGame(userId)
+      broadcastVisibility(io, users)
     })
 
     socket.on('getVisibility', async userId => {
       let visibility = await getVisibility(userId)
-      console.log(visibility, userId)
       io.to(`${socket.id}`).emit('getVisibility', visibility)
     })
 
     //When user clicks join game, their socket joins the appropriate gameRoom
     socket.on('syncSocketId', async userId => {
-      const toBeUpdatedUser = await User.findById(userId)
-      toBeUpdatedUser.update({socketId: socket.id})
+      await syncSocket(socket, userId);
     })
 
     //When user clicks Submit Vote, this socet will write vote to db.
