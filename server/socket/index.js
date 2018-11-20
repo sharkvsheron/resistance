@@ -94,9 +94,9 @@ module.exports = io => {
       if (userId == nominator) {
         const vote = await submitVote(userId, missionResult)
         io.in(gameRoom).emit('voteSubmitted', vote)
-      } else {
-        const vote = {}
-        io.in(gameRoom).emit('voteSubmitted', vote)
+        // } else {
+        //   const vote = {}
+        //   io.in(gameRoom).emit('voteSubmitted', vote)
       }
     })
 

@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import Mission from './mission'
+import {connect} from 'react-redux'
 
 // const missionInfo = [
 //   { mission: 1, numberOfPlayers: 2, failsRequired: 1 },
@@ -9,30 +10,20 @@ import Mission from './mission'
 //   { mission: 5, numberOfPlayers: 3, failsRequired: 1 },
 // ]
 
-const missionInfo = {
-  1: 'succeed',
-  2: 'fail',
-  3: 'succeed',
-  4: 'fail',
-  5: 'succeed'
-}
-
-export default class MissionTracker extends Component {
+class MissionTracker extends Component {
   constructor(props) {
     super(props)
   }
   render() {
-    console.log(missionInfo)
-    const indexs = Object.keys(missionInfo)
+    const indexs = Object.keys(this.props.missions)
     return (
       <div className="mission-container">
         {indexs.map((number, i) => {
-          console.log('HTHI ISN THIS MUNBER ', missionInfo[number])
           return (
             <Mission
               key={i}
               number={number}
-              status={missionInfo[number]}
+              status={this.props.missions[number]}
               // numberOfPlayers={single.numberOfPlayers}
               // failsRequired={single.failsRequired}
               {...this.props}
@@ -43,3 +34,9 @@ export default class MissionTracker extends Component {
     )
   }
 }
+
+const mapToState = state => ({
+  missions: state.missions
+})
+
+export default connect(mapToState)(MissionTracker)
