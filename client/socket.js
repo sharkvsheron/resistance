@@ -21,12 +21,10 @@ socket.on('connect', () => {
   })
 
   socket.on('getVisibility', visibilityObj => {
-    console.log('client listener hit', visibilityObj)
     store.dispatch(getVisibility(visibilityObj))
   })
 })
 socket.on('voteSubmitted', vote => {
-  console.log('THIS IS THE VOT E', vote)
   store.dispatch(getMissions(vote))
 })
 

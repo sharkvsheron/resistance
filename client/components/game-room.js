@@ -41,6 +41,7 @@ export class GameRoom extends React.Component {
 
     return (
       <div>
+        {this.props.gameResult !== "" && <div>Game Result: {this.props.gameResult}</div>}
         <h3>This is the Game Room</h3>
         <div className="player-container">
           {userIds.map((playerId, i) => (
@@ -75,7 +76,8 @@ export class GameRoom extends React.Component {
 const mapState = state => ({
   user: state.user,
   players: state.players, //obj {1: {username:adam, roleId: 1}, 2: {username:russ, roleId: 2}, etc.}
-  visibility: state.visible //obj {player1: vis1, player2: vis2, etc.}
+  visibility: state.visible, //obj {player1: vis1, player2: vis2, etc.}
+  gameResult: state.gameResult
 })
 
 export default connect(
