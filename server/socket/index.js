@@ -4,7 +4,8 @@ const {
   getNominations,
   getVisibility,
   getCurrentNominator,
-  submitVote
+  submitVote,
+  getPlayersWithUserId
 } = require('./functions')
 const {User, Game} = require('../db/models')
 /*
