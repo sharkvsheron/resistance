@@ -90,6 +90,22 @@ export class GameRoom extends React.Component {
         <button onClick={() => this.startGame(this.props.user.id)}>
           START Game
         </button>
+        <button
+          type="submit"
+          onClick={async () =>
+            socket.emit('submitVote', this.props.user.id, 'succeed')
+          }
+        >
+          SUCCESS
+        </button>
+        <button
+          type="submit"
+          onClick={async () =>
+            socket.emit('submitVote', this.props.user.id, 'fail')
+          }
+        >
+          FAIL
+        </button>
       </div>
     )
   }
@@ -101,7 +117,4 @@ const mapState = state => ({
   visibility: state.visible //obj {player1: vis1, player2: vis2, etc.}
 })
 
-export default connect(
-  mapState,
-  null
-)(GameRoom)
+export default connect(mapState, null)(GameRoom)

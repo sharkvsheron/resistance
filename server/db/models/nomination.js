@@ -31,7 +31,7 @@ Nomination.prototype.nextMission = function() {
   }
 }
 Nomination.prototype.getNominator = function() {
-  return {currentNominator: this.userId}
+  return this.userId
 }
 
 module.exports = Nomination

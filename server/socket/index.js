@@ -1,9 +1,11 @@
 const fetch = require('node-fetch')
 const {
-  getPlayersWithUserId,
   startGame,
   getNominations,
-  getVisibility
+  getVisibility,
+  getCurrentNominator,
+  submitVote,
+  getPlayersWithUserId
 } = require('./functions')
 const {User, Game} = require('../db/models')
 /*
@@ -75,6 +77,19 @@ module.exports = io => {
         body: ''
       })
       await joinGameRoom(socket)
+    })
+
+    //When user clicks Submit Vote, this socet will write vote to db.
+    socket.on('submitVote', async (userId, missionResult) => {
+      const gameRoom = await joinGameRoom(socket)
+      const nominator = await getCurrentNominator(userId)
+      if (userId == nominator) {
+        const vote = await submitVote(userId, missionResult)
+        io.in(gameRoom).emit('voteSubmitted', vote)
+      } else {
+        const vote = 'NOT THE NOMINATOR'
+        io.in(gameRoom).emit('voteSubmitted', vote)
+      }
     })
 
     socket.on('disconnect', () => {
