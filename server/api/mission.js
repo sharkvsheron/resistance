@@ -2,12 +2,22 @@ const router = require('express').Router()
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const { Game, User, GameType, Nomination } = require('../db/models')
-const { submitNomination } = require('../socket/functions')
+const { submitNomination, voteOnNomination } = require('../socket/functions')
 module.exports = router
 
 router.get('/test/:userId', async (req, res, next) => {
   const response = await submitNomination(req.params.userId, [1, 2])
   res.json(response)
+})
+
+router.get('/submitApprove/:userId', async (req, res, next) => {
+  const response = await voteOnNomination(req.params.userId, "approve")
+  res.json(response);
+})
+
+router.get('/submitReject/:userId', async (req, res, next) => {
+  const response = await voteOnNomination(req.params.userId, "reject")
+  res.json(response);
 })
 
 

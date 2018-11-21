@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
-const { Game, User, GameType, Nomination, Role, NominationVote, MissionType } = require('../../db/models')
+const { Game, User, GameType, Nomination, Role, NominationVote, MissionType, MissionVote } = require('../../db/models')
 
 const hasBlankNomination = async gameId => {
   const blankNomination = await Nomination.findOne({
@@ -190,6 +190,53 @@ const submitNomination = async (nominatorId, nominees) => {
     }
     return nominees
   }
+}
+
+const voteOnNomination = async (userId, vote) => {
+  const user = await User.findById(userId);
+  const currentNominationVote = await NominationVote.findOne({
+    where: {
+      userId,
+      vote: null
+    }
+  })
+  if (currentNominationVote) {
+    const nominationId = currentNominationVote.nominationId
+    const currentNomination = await Nomination.findById(nominationId)
+    await currentNominationVote.update({ vote })
+    // check number of votes
+    const game = await getGamewithUserId(userId)
+    const gameType = await GameType.findById(1)
+    // console.log('USERID: ', userId, 'GAME: ', game, 'GAMETYPE: ', gameType);
+    const numPlayers = gameType.numberOfPlayers
+    //check if all votes are submitted
+    //if all votesd are submitted, calculate success or failure of the nomination
+    const allVotes = await NominationVote.findAll({ where: { nominationId, vote: { [Op.ne]: null } } })
+    const isVotingComplete = allVotes.length === numPlayers
+    if (isVotingComplete) {
+      const approveVotes = await NominationVote.findAll({ where: { nominationId, vote: { [Op.eq]: "approve" } } })
+      const nominationPassed = approveVotes.length >= (Math.floor(numPlayers / 2) + 1)
+      if (nominationPassed) {
+        await currentNomination.update({ nominationStatus: "approve" })
+        const nominees = currentNomination.nominees;
+        nominees.forEach(async nominee => {
+          await MissionVote.create({ vote: null, nominationId, userId: nominee })
+        })
+      }
+      else {
+        const { gameId, missionTypeId } = currentNomination
+        const nominationsForMission = await Nomination.findAll({ where: { gameId, missionTypeId } })
+        if (nominationsForMission.length === 5) {
+          return { gameEndResult: "bad" }
+        }
+        else {
+          await currentNomination.update({ nominationStatus: "reject" })
+          await Nomination.create({ nominees: [], userId: currentNomination.nextNominator(), gameId, missionTypeId })
+        }
+      }
+      return allVotes
+    }
+  }
 
 }
 
@@ -204,5 +251,6 @@ module.exports = {
   getUsersInGame,
   syncSocket,
   broadcastVisibility,
-  submitNomination
+  submitNomination,
+  voteOnNomination
 }
