@@ -24,6 +24,13 @@ class UserHome extends React.Component {
     return (
       <div>
         <h3>Welcome, {email}</h3>
+        <button
+          type="submit"
+          onClick={() => socket.emit('createGame', this.props.user.id)}
+        >
+          CREATE GAME
+        </button>
+
         {this.props.games.map(game => {
           return (
             <Link to={`/game/${game.id}`} key={game.id}>
@@ -47,10 +54,7 @@ const mapState = state => {
   }
 }
 
-export default connect(
-  mapState,
-  null
-)(UserHome)
+export default connect(mapState, null)(UserHome)
 
 /**
  * PROP TYPES

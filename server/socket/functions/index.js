@@ -12,7 +12,6 @@ const hasBlankNomination = async gameId => {
 const getNominationWithUserId = async userId => {
   const user = await User.findById(userId)
   const nomination = await Nomination.findAll({where: {gameId: user.gameId}})
-  console.log('THIS IS THE GET NOMINATION', nomination)
   return nomination
 }
 
@@ -30,7 +29,6 @@ const syncSocket = async (socket, userId) => {
 const getPlayersWithUserId = async userId => {
   const game = await getGamewithUserId(userId)
   const players = await User.findAll({where: {gameId: game.id}})
-  console.log(game.id)
   // return users.map(user => user.dataValues)
   const allPlayers = {}
   players.forEach(player => {
@@ -39,14 +37,13 @@ const getPlayersWithUserId = async userId => {
       roleId: 0
     }
   })
-  console.log(game, allPlayers)
   return allPlayers
 }
 
 const getUsersInGame = async userId => {
   const user = await User.findById(userId)
   const users = await User.findAll({where: {gameId: user.gameId}})
-  return users;
+  return users
 }
 
 const broadcastVisibility = async (io, users) => {

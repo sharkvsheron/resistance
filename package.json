@@ -46,6 +46,8 @@
     "history": "^4.6.3",
     "morgan": "^1.9.1",
     "node-fetch": "^2.3.0",
+    "opentok": "^2.8.0",
+    "opentok-react": "^0.9.0",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
     "pg": "^6.1.2",

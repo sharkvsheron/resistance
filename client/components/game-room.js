@@ -5,6 +5,7 @@ import Player from './player'
 import {connect} from 'react-redux'
 import socket from '../socket'
 import store, {me} from '../store'
+import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 
 /**
  * COMPONENT
@@ -41,7 +42,9 @@ export class GameRoom extends React.Component {
 
     return (
       <div>
-        {this.props.gameResult !== "" && <div>Game Result: {this.props.gameResult}</div>}
+        {this.props.gameResult !== '' && (
+          <div>Game Result: {this.props.gameResult}</div>
+        )}
         <h3>This is the Game Room</h3>
         <div className="player-container">
           {userIds.map((playerId, i) => (
@@ -80,7 +83,4 @@ const mapState = state => ({
   gameResult: state.gameResult
 })
 
-export default connect(
-  mapState,
-  null
-)(GameRoom)
+export default connect(mapState, null)(GameRoom)

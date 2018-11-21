@@ -6,6 +6,9 @@ const User = db.define('user', {
   socketId: {
     type: Sequelize.STRING
   },
+  sessionKey: {
+    type: Sequelize.TEXT
+  },
   userName: {
     type: Sequelize.STRING
   },
