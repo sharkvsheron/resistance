@@ -10,6 +10,7 @@ const {
   broadcastVisibility
 } = require('./functions')
 const {User, Game} = require('../db/models')
+const OpenTok = require('opentok')
 /*
   Params: socket
   Returns: gameRoom that socket is in
@@ -23,6 +24,10 @@ const joinGameRoom = async socket => {
   socket.join(gameId)
   return gameId
 }
+let opentok = new OpenTok(
+  '46223602',
+  '0fc918d84f76d91bdb56aa52429bf60fb4ccf9fc'
+)
 
 module.exports = io => {
   io.on('connection', socket => {
@@ -33,8 +38,28 @@ module.exports = io => {
       io.to(`${socket.id}`).emit('getGames', allGames)
     })
 
+    socket.on('createGame', async userId => {
+      let sessionId
+
+      await opentok.createSession({mediaMode: 'routed'}, async function(
+        err,
+        session
+      ) {
+        if (err) {
+          console.log(err)
+          return
+        }
+        sessionId = session.sessionId
+        // let sessionKey = opentok.generateToken(sessionId)
+        // await User.update({sessionKey}, {where: {id: userId}})
+        await Game.create({sessionId, gameTypeId: 1})
+        const allGames = await Game.findAll()
+        socket.emit('createdNewGame', allGames)
+      })
+    })
+
     socket.on('joinGame', async (userId, gameId) => {
-      await syncSocket(socket, userId);
+      await syncSocket(socket, userId)
       await joinGameRoom(socket)
       const user = await User.findById(userId)
       await user.update({gameId})
@@ -43,6 +68,14 @@ module.exports = io => {
       io.in(gameRoom).emit('getPlayers', players)
       const users = await User.findAll({where: {gameId: user.gameId}})
       broadcastVisibility(io, users)
+
+      const game = await Game.findById(gameRoom)
+      const sessionId = game.sessionId
+      console.log('THIS IS THE GAME SESSION ID', sessionId)
+      let sessionKey = opentok.generateToken(sessionId)
+      console.log('THIS IS THE GAME SESSION KEY', sessionKey)
+      await User.update({sessionKey}, {where: {id: userId}})
+      io.to(`${socket.id}`).emit('getSessionIdAndKey', {sessionId, sessionKey})
     })
 
     socket.on('getPlayers', async userId => {
@@ -71,7 +104,7 @@ module.exports = io => {
 
     //When user clicks join game, their socket joins the appropriate gameRoom
     socket.on('syncSocketId', async userId => {
-      await syncSocket(socket, userId);
+      await syncSocket(socket, userId)
     })
 
     //When user clicks Submit Vote, this socet will write vote to db.

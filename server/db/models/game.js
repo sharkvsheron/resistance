@@ -3,7 +3,11 @@ const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const Nomination = require('./nomination')
 
-const Game = db.define('game', {})
+const Game = db.define('game', {
+  sessionId: {
+    type: Sequelize.TEXT
+  }
+})
 
 module.exports = Game
 

@@ -3,12 +3,21 @@ import store from './store'
 import {getPlayers, getVisibility} from './store/players'
 import {getGames} from './store/games'
 import {getMissions} from './store/mission'
+import {getSessionId, getSessionKey} from './store/video'
 
 const socket = io(window.location.origin)
 
 socket.on('connect', () => {
   console.log('Connected!')
 
+  socket.on('createdNewGame', allGames => {
+    store.dispatch(getGames(allGames))
+  })
+  socket.on('getSessionIdAndKey', keyAndId => {
+    const {sessionKey, sessionId} = keyAndId
+    store.dispatch(getSessionId(sessionId))
+    store.dispatch(getSessionKey(sessionKey))
+  })
   socket.on('getGames', allGames => {
     store.dispatch(getGames(allGames))
   })
