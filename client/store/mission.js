@@ -24,7 +24,6 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_MISSIONS:
-      console.log('THIS IS TON THE REDUCER', action)
       let newState = {...state}
       let initialKeys = Object.keys(state)
       let incomingKeys = Object.keys(action.missions)

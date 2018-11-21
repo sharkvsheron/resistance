@@ -6,8 +6,9 @@ import user from './user'
 import games from './games'
 import players from './players'
 import missions from './mission'
+import video from './video'
 
-const reducer = combineReducers({user, games, players, missions})
+const reducer = combineReducers({user, games, players, missions, video})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )

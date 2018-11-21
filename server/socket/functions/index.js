@@ -174,7 +174,6 @@ const submitNomination = async (nominatorId, nominees) => {
     }
   })
 
-
   const currentMissionType = await MissionType.findById(currentNomination.missionTypeId)
   const isValidNomiation = currentMissionType.numberOfPlayers === nominees.length
 
@@ -182,7 +181,7 @@ const submitNomination = async (nominatorId, nominees) => {
     await currentNomination.update({ nominees })
     const allPlayers = await getPlayersWithUserId(nominatorId)
 
-    for (let userId in allPlayers) {
+    for (const userId in allPlayers) {
       await NominationVote.create({
         userId,
         nominationId: currentNomination.id,
