@@ -16,9 +16,10 @@ export const getVisibility = visibility => ({
 const writeVisibility = (players, visibility) => {
   const newPlayers = {...players}
   console.log('newplayers in write visibility:', newPlayers)
-  for (let prop in visibility) {
+  for (const prop in visibility) {
     newPlayers[prop].roleId = visibility[prop]
   }
+  console.log('newplayers in write visibility:AFTER AFTER ', newPlayers)
   return newPlayers
 }
 
@@ -29,6 +30,7 @@ export default function(state = initialState, action) {
     case GET_PLAYERS:
       return action.players //{1: {username:adam, roleId:1}, 2: {username:russell, roleId:1}, etc.}
     case GET_VISIBILITY:
+      console.log('INSIDE GET VISIBILITY REDUCER', state)
       return writeVisibility(state, action.visibility)
     default:
       return state

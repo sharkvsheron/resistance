@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import Video from './video'
 import {connect} from 'react-redux'
 
-class Player extends Component {
+export default class Player extends Component {
   constructor(props) {
     super(props)
   }
@@ -23,8 +23,8 @@ class Player extends Component {
     )
   }
 }
-const mapState = state => ({
-  user: state.user,
-  video: state.video
-})
-export default connect(mapState, null)(Player)
+// const mapState = state => ({
+//   user: state.user,
+//   video: state.video
+// })
+// export default connect(mapState, null)(Player)
