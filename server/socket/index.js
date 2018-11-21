@@ -71,9 +71,7 @@ module.exports = io => {
 
       const game = await Game.findById(gameRoom)
       const sessionId = game.sessionId
-      console.log('THIS IS THE GAME SESSION ID', sessionId)
       let sessionKey = opentok.generateToken(sessionId)
-      console.log('THIS IS THE GAME SESSION KEY', sessionKey)
       await User.update({sessionKey}, {where: {id: userId}})
       io.to(`${socket.id}`).emit('getSessionIdAndKey', {sessionId, sessionKey})
     })

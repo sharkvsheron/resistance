@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import MissionTracker from './missionTracker'
 import Player from './player'
+import Video from './video'
 import { connect } from 'react-redux'
 import socket from '../socket'
 import store, { me } from '../store'
@@ -46,6 +47,10 @@ export class GameRoom extends React.Component {
           <div>Game Result: {this.props.gameResult}</div>
         )}
         <h3>This is the Game Room</h3>
+        <div>
+          {this.props.video.sessionId.length &&
+            this.props.video.sessionKey.length && <Video />}
+        </div>
         <div className="player-container">
           {userIds.map((playerId, i) => (
             <Player key={i} player={this.props.players[playerId]} id={i} />
@@ -92,7 +97,8 @@ const mapState = state => ({
   user: state.user,
   players: state.players, //obj {1: {username:adam, roleId: 1}, 2: {username:russ, roleId: 2}, etc.}
   visibility: state.visible, //obj {player1: vis1, player2: vis2, etc.}
-  gameResult: state.gameResult
+  gameResult: state.gameResult,
+  video: state.video
 })
 
 export default connect(mapState, null)(GameRoom)
