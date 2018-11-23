@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import MissionTracker from './missionTracker'
 import Player from './player'
 import Video from './video'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import socket from '../socket'
-import store, { me } from '../store'
-import { OTSession, OTPublisher, OTStreams, OTSubscriber } from 'opentok-react'
+import store, {me} from '../store'
+import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 
 /**
  * COMPONENT
@@ -18,7 +18,9 @@ socket.on('startGame', startingState => {
 export class GameRoom extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {selectedPlayers: []}
     this.startGame = this.startGame.bind(this)
+    this.handleSelect = this.handleSelect.bind(this)
   }
 
   async componentDidMount() {
@@ -38,6 +40,28 @@ export class GameRoom extends React.Component {
     // await socket.emit('getVisibility', userId)
   }
 
+  handleSelect(playerId) {
+    if (this.state.selectedPlayers.includes(playerId)) {
+      const newSelectedPlayers = [...this.state.selectedPlayers].filter(
+        id => id !== playerId
+      )
+      this.setState({selectedPlayers: newSelectedPlayers})
+    } else {
+      this.setState({
+        selectedPlayers: [...this.state.selectedPlayers, playerId]
+      })
+    }
+  }
+
+  handleNominationSubmit() {
+    console.log('clicc')
+    socket.emit(
+      'submitNomination',
+      this.props.user.id,
+      this.state.selectedPlayers
+    )
+  }
+
   render() {
     const userIds = Object.keys(this.props.players)
 
@@ -53,24 +77,36 @@ export class GameRoom extends React.Component {
         </div>
         <div className="player-container">
           {userIds.map((playerId, i) => (
-            <Player key={i} player={this.props.players[playerId]} id={i} />
+            <Player
+              key={i}
+              player={this.props.players[playerId]}
+              id={i}
+              playerId={playerId}
+              handleSelect={this.handleSelect}
+            />
           ))}
         </div>
         <MissionTracker {...this.props} />
         <button onClick={() => this.startGame(this.props.user.id)}>
           START Game
         </button>
-        <div className='nomination-vote-container'>
-          <button type='submit'
+        <div className="nomination-vote-container">
+          <button
+            type="submit"
             onClick={async () =>
               socket.emit('submitNominationVote', this.props.user.id, 'approve')
             }
-          >Approve</button>
-          <button type='submit'
+          >
+            Approve
+          </button>
+          <button
+            type="submit"
             onClick={async () =>
               socket.emit('submitNominationVote', this.props.user.id, 'reject')
             }
-          >Reject</button>
+          >
+            Reject
+          </button>
         </div>
         <button
           type="submit"
@@ -88,6 +124,14 @@ export class GameRoom extends React.Component {
         >
           FAIL
         </button>
+        <div
+          text="YEET"
+          className="button submit-nomination"
+          onClick={() => this.handleNominationSubmit()}
+        >
+          {' '}
+          SUBMIT NOMINATION{' '}
+        </div>
       </div>
     )
   }
@@ -98,7 +142,9 @@ const mapState = state => ({
   players: state.players, //obj {1: {username:adam, roleId: 1}, 2: {username:russ, roleId: 2}, etc.}
   visibility: state.visible, //obj {player1: vis1, player2: vis2, etc.}
   gameResult: state.gameResult,
-  video: state.video
+  video: state.video,
+  nominations: state.nominations,
+  nominationVotes: state.nominationVotes
 })
 
 export default connect(mapState, null)(GameRoom)

@@ -4,6 +4,8 @@ import {getPlayers, getVisibility} from './store/players'
 import {getGames} from './store/games'
 import {getMissions} from './store/mission'
 import {getSessionId, getSessionKey} from './store/video'
+import {getNominations} from './store/nominations'
+import {getNominationVotes} from './store/nomination-votes'
 
 const socket = io(window.location.origin)
 
@@ -25,12 +27,20 @@ socket.on('connect', () => {
     store.dispatch(getPlayers(players))
   })
 
-  socket.on('gameStarted', startingState => {
-    console.log('received starting state from server', startingState)
+  socket.on('gameStarted', (nominations, nominationVotes) => {
+    // console.log('received starting state from server', startingState)
+    console.log(nominations)
+    store.dispatch(getNominations(nominations))
+    store.dispatch(getNominationVotes(nominationVotes))
   })
 
   socket.on('getVisibility', visibilityObj => {
     store.dispatch(getVisibility(visibilityObj))
+  })
+
+  socket.on('nominationSubmitted', (nominations, nominationVotes) => {
+    store.dispatch(getNominations(nominations))
+    store.dispatch(getNominationVotes(nominationVotes))
   })
 })
 socket.on('voteSubmitted', vote => {

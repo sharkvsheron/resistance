@@ -1,36 +1,44 @@
 const router = require('express').Router()
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
-const { Game, User, GameType, Nomination } = require('../db/models')
-const { submitNomination, voteOnNomination } = require('../socket/functions')
+const {Game, User, GameType, Nomination} = require('../db/models')
+const {
+  submitNomination,
+  voteOnNomination,
+  getNominationVotes,
+  getNominations
+} = require('../socket/functions')
 module.exports = router
 
+router.get('/getNoms/:userId', async (req, res, next) => {
+  const response = await getNominations(req.params.userId)
+  res.json(response)
+})
 router.get('/test/:userId', async (req, res, next) => {
   const response = await submitNomination(req.params.userId, [1, 2])
   res.json(response)
 })
 
 router.get('/submitApprove/:userId', async (req, res, next) => {
-  const response = await voteOnNomination(req.params.userId, "approve")
-  res.json(response);
+  const response = await voteOnNomination(req.params.userId, 'approve')
+  res.json(response)
 })
 
 router.get('/submitReject/:userId', async (req, res, next) => {
-  const response = await voteOnNomination(req.params.userId, "reject")
-  res.json(response);
+  const response = await voteOnNomination(req.params.userId, 'reject')
+  res.json(response)
 })
-
 
 router.put('/:userId', async (req, res, next) => {
   try {
     // const {userId} = req.session.userId
-    const { userId } = req.params
-    const { missionResult } = req.body
+    const {userId} = req.params
+    const {missionResult} = req.body
     const user = await User.findById(userId)
     const game = await Game.findById(user.gameId)
-    const nomination = await Nomination.findOne({ where: { id: userId } })
+    const nomination = await Nomination.findOne({where: {id: userId}})
     if (Number(userId) === nomination.dataValues.userId) {
-      await nomination.update({ missionStatus: missionResult })
+      await nomination.update({missionStatus: missionResult})
     } else {
       res.send('Unathorized')
     }

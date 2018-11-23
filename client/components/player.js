@@ -8,9 +8,13 @@ export default class Player extends Component {
   }
   render() {
     const {userName, roleId} = this.props.player
-    const {id} = this.props
+    const {id, playerId, handleSelect} = this.props
     return (
-      <div className="player-card" id={`player${id}`}>
+      <div
+        className="player-card"
+        id={`player${id}`}
+        onClick={() => handleSelect(playerId)}
+      >
         <div className="videoWrapper" id={`role${roleId}`} />
 
         <h3>username: {userName}</h3>
