@@ -12,7 +12,8 @@ const {
   submitNomination,
   getNominationVotes,
   voteOnNomination,
-  getMissions
+  getMissions,
+  getGameResult
 } = require('./functions')
 const {User, Game} = require('../db/models')
 const OpenTok = require('opentok')
@@ -72,9 +73,14 @@ module.exports = io => {
       await joinGameRoom(socket)
       const user = await User.findById(userId)
       await user.update({sessionKey, gameId})
-      const players = await getPlayersWithUserId(userId)
+      // await user.update({gameId})
       const gameRoom = await joinGameRoom(socket)
+      const players = await getPlayersWithUserId(userId)
       io.in(gameRoom).emit('getPlayers', players)
+      const gameResult = await getGameResult(userId)
+      io.in(gameRoom).emit('getGameResult', gameResult)
+      const missions = await getMissions(userId)
+      io.in(gameRoom).emit('getMissions', missions)
       const users = await User.findAll({where: {gameId: user.gameId}})
       broadcastVisibility(io, users)
 
@@ -145,6 +151,8 @@ module.exports = io => {
         if (voteResult !== null) {
           const missions = await getMissions(userId)
           io.in(gameRoom).emit('getMissions', missions)
+          const gameResult = await getGameResult(userId)
+          io.in(gameRoom).emit('getGameResult', gameResult)
         }
       }
     })
