@@ -12,13 +12,13 @@ export default class Player extends Component {
 
     return (
       <div
-        className="player-card"
+        className={`player-card {this.state.playerId === }`}
         id={`player${id}`}
         onClick={() => handleSelect(playerId)}
       >
         <div className="videoWrapper" id={`role${roleId}`} />
-        <h3>username: {userName}</h3>
-        <h3>role id: {roleId}</h3>
+        <h3>{userName}</h3>
+        {/* <h3>role id: {roleId}</h3> */}
         <button type="submit">WAITING FOR PLAYER TO JOIN</button>
         <div>
           <button type="submit">ADD BOT</button>
