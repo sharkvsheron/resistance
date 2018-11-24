@@ -38,19 +38,16 @@ const syncSocket = async (socket, userId) => {
 const getPlayersWithUserId = async userId => {
   const game = await getGamewithUserId(userId)
   const players = await User.findAll({where: {gameId: game.id}})
-  console.log(game.id)
   // return users.map(user => user.dataValues)
   const allPlayers = {}
   players.forEach(player => {
     allPlayers[player.dataValues.id] = {
       userName: player.dataValues.userName,
       userId: player.dataValues.id,
-      roleId: 0
+      roleId: 0,
       sessionKey: player.dataValues.sessionKey
-
     }
   })
-  console.log(game, allPlayers)
   return allPlayers
 }
 
@@ -80,7 +77,7 @@ const startGame = async userId => {
   const users = await User.findAll({where: {gameId}})
   const game = await GameType.findById(gameTypeId)
   const missionTypeId = game.missions[0]
-  const isNewGame = !(await hasBlankNomination(gameId))
+  const isNewGame = !await hasBlankNomination(gameId)
   if (users.length === game.numberOfPlayers && isNewGame) {
     await Nomination.create({
       nominees: [],

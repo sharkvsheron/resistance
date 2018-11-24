@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import socket from '../socket'
-import store, { me } from '../store'
+import store, {me} from '../store'
 
 /**
  * COMPONENT
@@ -11,14 +11,12 @@ import store, { me } from '../store'
 class NominatorForm extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-
-    }
+    this.state = {}
     this.handleInputChange = this.handleInputChange.bind(this)
   }
 
   componentDidMount() {
-    const initState = {};
+    const initState = {}
 
     for (const player in this.props.players) {
       initState[player.userId] = false
@@ -37,22 +35,26 @@ class NominatorForm extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     let playerKeys = []
-    if (this.state.players)
-      playerKeys = Object.keys(this.state.players) // [1,2,3,4,5]
+    if (this.state.players) playerKeys = Object.keys(this.state.players) // [1,2,3,4,5]
     const players = this.state.players
     return (
       <div>
         <form>
-          {this.state.players && playerKeys.map(playerKey => (<label>
-            {`${players[playerKey].userName}`}
-            <input name={player.userId} type='checkbox' checked={this.state.player.userId} onChange={this.handleInputChange} />
-          </label>))}
+          {this.state.players &&
+            playerKeys.map(playerKey => (
+              <label>
+                {`${players[playerKey].userName}`}
+                <input
+                  name={player.userId}
+                  type="checkbox"
+                  checked={this.state.player.userId}
+                  onChange={this.handleInputChange}
+                />
+              </label>
+            ))}
         </form>
-
       </div>
-
     )
   }
 }
