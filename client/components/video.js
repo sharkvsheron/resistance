@@ -73,4 +73,7 @@ const mapState = state => ({
   game: state.game,
   video: state.video
 })
-export default connect(mapState, null)(Video)
+export default connect(
+  mapState,
+  null
+)(Video)
