@@ -1,7 +1,7 @@
-import { OTSession, OTPublisher, OTStreams, OTSubscriber } from 'opentok-react'
+import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 
 class Video extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class Video extends Component {
       streamCreated: () => {
         console.log('Publisher stream created')
       },
-      streamDestroyed: ({ reason }) => {
+      streamDestroyed: ({reason}) => {
         console.log(`Publisher stream destroyed because: ${reason}`)
       }
     }
@@ -32,7 +32,7 @@ class Video extends Component {
     return (
       <div className="individual-video">
         <OTSession
-          apiKey="46223602"
+          apiKey="46225662"
           sessionId={this.props.video.sessionId}
           token={this.props.video.sessionKey}
         >

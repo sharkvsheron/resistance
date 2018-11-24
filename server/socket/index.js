@@ -30,8 +30,8 @@ const joinGameRoom = async socket => {
   return gameId
 }
 let opentok = new OpenTok(
-  '46223602',
-  '0fc918d84f76d91bdb56aa52429bf60fb4ccf9fc'
+  '46225662',
+  '2ce7562d0d4a766d9cd55c246ddcd8d35aa4ab85'
 )
 
 module.exports = io => {
@@ -117,9 +117,11 @@ module.exports = io => {
         const gameRoom = await joinGameRoom(socket)
         const nominations = await getNominations(nominatorId)
         const nominationVotes = await getNominationVotes(nominatorId)
-        io
-          .in(gameRoom)
-          .emit('nominationSubmitted', nominations, nominationVotes)
+        io.in(gameRoom).emit(
+          'nominationSubmitted',
+          nominations,
+          nominationVotes
+        )
       }
     })
 
@@ -129,9 +131,11 @@ module.exports = io => {
         const gameRoom = await joinGameRoom(socket)
         const nominations = await getNominations(userId)
         const nominationVotes = await getNominationVotes(userId)
-        io
-          .in(gameRoom)
-          .emit('nominationSubmitted', nominations, nominationVotes)
+        io.in(gameRoom).emit(
+          'nominationSubmitted',
+          nominations,
+          nominationVotes
+        )
       }
     })
 
