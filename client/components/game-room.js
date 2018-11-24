@@ -9,7 +9,6 @@ import NominatorForm from './nominatorForm'
 import store, {me} from '../store'
 import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 
-
 /**
  * COMPONENT
  */
@@ -25,7 +24,6 @@ export class GameRoom extends React.Component {
 
   async componentDidMount() {
     await store.dispatch(me())
-    console.log(this.props.user)
     await socket.emit(
       'joinGame',
       this.props.user.id,
@@ -42,14 +40,13 @@ export class GameRoom extends React.Component {
 
   render() {
     const userIds = Object.keys(this.props.players)
-    console.log('thisprops players on render', this.props.players)
     return (
       <div>
         {this.props.gameResult !== '' && (
           <div>Game Result: {this.props.gameResult}</div>
         )}
         <h3>This is the Game Room</h3>
-        <div className='video-container'>
+        <div className="video-container">
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
         </div>
@@ -63,9 +60,9 @@ export class GameRoom extends React.Component {
           START Game
         </button>
 
-        <div className='nomination-vote-container'>
-          <button type='submit'
-
+        <div className="nomination-vote-container">
+          <button
+            type="submit"
             onClick={async () =>
               socket.emit('submitNominationVote', this.props.user.id, 'approve')
             }
@@ -81,7 +78,7 @@ export class GameRoom extends React.Component {
             Reject
           </button>
         </div>
-        <div className='nominate-form'>
+        <div className="nominate-form">
           <NominatorForm players={this.props.players} />
         </div>
         <button
@@ -113,7 +110,4 @@ const mapState = state => ({
   video: state.video
 })
 
-export default connect(
-  mapState,
-  null
-)(GameRoom)
+export default connect(mapState, null)(GameRoom)
