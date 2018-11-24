@@ -213,8 +213,10 @@ const getMission = async userId => {
   const game = await getGamewithUserId(userId)
   const nominationsInGame = await Nomination.findAll({where: {gameId: game.id}})
   nominationsInGame.forEach(nomination => {
+    // const numFails = await
     missions[nomination.dataValues.id] = {
-      status: `${nomination.dataValues.missionStatus}`
+      status: `${nomination.dataValues.missionStatus}`,
+      fails: 0
     }
   })
 }
