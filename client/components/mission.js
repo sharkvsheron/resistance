@@ -1,13 +1,14 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 export default class Mission extends Component {
   constructor(props) {
     super(props)
   }
   render() {
+    console.log(`props in mission`, this.props)
     return (
       <div className="mission">
         <div
-          className={`${this.props.status}`}
+          className={this.props.missions.status ? `${this.props.missions.status}` : 'pending'}
           id={`mission${this.props.number}`}
         />
         <div className="mission-number">Mission #{this.props.mission}</div>

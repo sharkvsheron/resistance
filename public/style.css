@@ -1,5 +1,10 @@
+*{
+  color: wheat;
+}
 body {
   font-family: sans-serif;
+  background-image: url('images/space-background.jpg');
+  background-size: cover;
 }
 
 a {
@@ -13,6 +18,21 @@ label {
 nav a {
   display: inline-block;
   margin: 1em;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  color: wheat;
+}
+
+h1{
+  font-family: 'Orbitron', sans-serif;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
 }
 
 form div {
