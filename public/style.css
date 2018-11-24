@@ -112,3 +112,33 @@ form div {
   height: 130px;
   background-size: cover;
 }
+
+.individual-video > div {
+  display: flex;
+}
+
+.individual-video:first-child {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.individual-video > div > div > div{
+  margin: 10px;
+}
+
+.OTPublisherContainer {
+  width: 200px!important;
+}
+
+.OTSubscriberContainer {
+  width: 200px!important;
+}
+
+.individual-video > div > div {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+  top: 0px;
+  z-index: 1;
+}

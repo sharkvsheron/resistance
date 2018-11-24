@@ -44,8 +44,10 @@ const getPlayersWithUserId = async userId => {
   players.forEach(player => {
     allPlayers[player.dataValues.id] = {
       userName: player.dataValues.userName,
-      roleId: 0,
+      userId: player.dataValues.id,
+      roleId: 0
       sessionKey: player.dataValues.sessionKey
+
     }
   })
   console.log(game, allPlayers)

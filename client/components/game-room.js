@@ -5,8 +5,10 @@ import Player from './player'
 import Video from './video'
 import {connect} from 'react-redux'
 import socket from '../socket'
+import NominatorForm from './nominatorForm'
 import store, {me} from '../store'
 import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
+
 
 /**
  * COMPONENT
@@ -47,7 +49,7 @@ export class GameRoom extends React.Component {
           <div>Game Result: {this.props.gameResult}</div>
         )}
         <h3>This is the Game Room</h3>
-        <div>
+        <div className='video-container'>
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
         </div>
@@ -60,9 +62,10 @@ export class GameRoom extends React.Component {
         <button onClick={() => this.startGame(this.props.user.id)}>
           START Game
         </button>
-        <div className="nomination-vote-container">
-          <button
-            type="submit"
+
+        <div className='nomination-vote-container'>
+          <button type='submit'
+
             onClick={async () =>
               socket.emit('submitNominationVote', this.props.user.id, 'approve')
             }
@@ -77,6 +80,9 @@ export class GameRoom extends React.Component {
           >
             Reject
           </button>
+        </div>
+        <div className='nominate-form'>
+          <NominatorForm players={this.props.players} />
         </div>
         <button
           type="submit"
