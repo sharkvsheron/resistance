@@ -1,7 +1,7 @@
-import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
+import { OTSession, OTPublisher, OTStreams, OTSubscriber } from 'opentok-react'
 
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 class Video extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class Video extends Component {
       streamCreated: () => {
         console.log('Publisher stream created')
       },
-      streamDestroyed: ({reason}) => {
+      streamDestroyed: ({ reason }) => {
         console.log(`Publisher stream destroyed because: ${reason}`)
       }
     }
@@ -30,39 +30,41 @@ class Video extends Component {
   render() {
     console.log(this.props.video)
     return (
-      <OTSession
-        apiKey="46223602"
-        sessionId={this.props.video.sessionId}
-        token={this.props.video.sessionKey}
-      >
-        <OTPublisher
-          properties={{
-            publishVideo: true,
-            width: 150,
-            height: 150,
-            name: this.props.user.userName
-          }}
-          onPublish={() => console.log('SUCCESSFULLY PUBLISHED')}
-          onError={() => console.log('ERROR OCCURED DURING PUBLISH')}
-          eventHandlers={this.publisherEventHandlers}
-        />
-        <OTStreams>
-          <OTSubscriber
+      <div className="individual-video">
+        <OTSession
+          apiKey="46223602"
+          sessionId={this.props.video.sessionId}
+          token={this.props.video.sessionKey}
+        >
+          <OTPublisher
             properties={{
-              subscribeToAudio: true,
-              subscribeToVideo: true,
+              publishVideo: true,
               width: 150,
               height: 150,
               name: this.props.user.userName
             }}
-            onSubscribe={() => console.log('SUCCESSFULLY SUBSCRIBED')}
-            onSubscribeError={() =>
-              console.log('ERROR OCCURED DURING SUBSCRIBE')
-            }
-            eventHandlers={this.subscriberEventHandlers}
+            onPublish={() => console.log('SUCCESSFULLY PUBLISHED')}
+            onError={() => console.log('ERROR OCCURED DURING PUBLISH')}
+            eventHandlers={this.publisherEventHandlers}
           />
-        </OTStreams>
-      </OTSession>
+          <OTStreams>
+            <OTSubscriber
+              properties={{
+                subscribeToAudio: true,
+                subscribeToVideo: true,
+                width: 150,
+                height: 150,
+                name: this.props.user.userName
+              }}
+              onSubscribe={() => console.log('SUCCESSFULLY SUBSCRIBED')}
+              onSubscribeError={() =>
+                console.log('ERROR OCCURED DURING SUBSCRIBE')
+              }
+              eventHandlers={this.subscriberEventHandlers}
+            />
+          </OTStreams>
+        </OTSession>
+      </div>
     )
   }
 }
