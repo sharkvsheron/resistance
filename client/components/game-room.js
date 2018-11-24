@@ -19,7 +19,9 @@ socket.on('startGame', startingState => {
 export class GameRoom extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {selectedPlayers: []}
     this.startGame = this.startGame.bind(this)
+    this.handleSelect = this.handleSelect.bind(this)
   }
 
   async componentDidMount() {
@@ -38,6 +40,28 @@ export class GameRoom extends React.Component {
     // await socket.emit('getVisibility', userId)
   }
 
+  handleSelect(playerId) {
+    if (this.state.selectedPlayers.includes(playerId)) {
+      const newSelectedPlayers = [...this.state.selectedPlayers].filter(
+        id => id !== playerId
+      )
+      this.setState({selectedPlayers: newSelectedPlayers})
+    } else {
+      this.setState({
+        selectedPlayers: [...this.state.selectedPlayers, playerId]
+      })
+    }
+  }
+
+  handleNominationSubmit() {
+    console.log('clicc')
+    socket.emit(
+      'submitNomination',
+      this.props.user.id,
+      this.state.selectedPlayers
+    )
+  }
+
   render() {
     const userIds = Object.keys(this.props.players)
     return (
@@ -52,7 +76,13 @@ export class GameRoom extends React.Component {
         </div>
         <div className="player-container">
           {userIds.map((playerId, i) => (
-            <Player key={i} player={this.props.players[playerId]} id={i} />
+            <Player
+              key={i}
+              player={this.props.players[playerId]}
+              id={i}
+              playerId={playerId}
+              handleSelect={this.handleSelect}
+            />
           ))}
         </div>
         <MissionTracker {...this.props} />
@@ -80,11 +110,12 @@ export class GameRoom extends React.Component {
         </div>
         <div className="nominate-form">
           <NominatorForm players={this.props.players} />
+
         </div>
         <button
           type="submit"
           onClick={async () =>
-            socket.emit('submitVote', this.props.user.id, 'succeed')
+            socket.emit('submitMissionVote', this.props.user.id, 'succeed')
           }
         >
           SUCCESS
@@ -92,11 +123,18 @@ export class GameRoom extends React.Component {
         <button
           type="submit"
           onClick={async () =>
-            socket.emit('submitVote', this.props.user.id, 'fail')
+            socket.emit('submitMissionVote', this.props.user.id, 'fail')
           }
         >
           FAIL
         </button>
+        <div
+          className="button submit-nomination"
+          onClick={() => this.handleNominationSubmit()}
+        >
+          {' '}
+          SUBMIT NOMINATION{' '}
+        </div>
       </div>
     )
   }
@@ -107,7 +145,9 @@ const mapState = state => ({
   players: state.players, //obj {1: {username:adam, roleId: 1}, 2: {username:russ, roleId: 2}, etc.}
   visibility: state.visible, //obj {player1: vis1, player2: vis2, etc.}
   gameResult: state.gameResult,
-  video: state.video
+  video: state.video,
+  nominations: state.nominations,
+  nominationVotes: state.nominationVotes
 })
 
 export default connect(mapState, null)(GameRoom)

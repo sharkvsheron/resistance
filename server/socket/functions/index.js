@@ -95,12 +95,36 @@ const startGame = async userId => {
 */
 const getNominations = async userId => {
   const user = await User.findById(userId)
-  const nominations = await Nomination.findAll({where: {gameId: user.gameId}})
+  const nominations = await Nomination.findAll({
+    where: {gameId: user.gameId},
+    attributes: [
+      'id',
+      'nominees',
+      'missionStatus',
+      'nominationStatus',
+      'userId',
+      'missionTypeId'
+    ]
+  })
   const allNominations = {}
   nominations.forEach(nomination => {
     allNominations[nomination.dataValues.id] = nomination.dataValues
   })
   return allNominations
+}
+
+const getNominationVotes = async userId => {
+  const game = await getGamewithUserId(userId)
+  const allNominations = await Nomination.findAll({
+    where: {gameId: game.id},
+    attributes: ['id']
+  })
+  const allNominationIds = allNominations.map(nomination => nomination.id)
+  const allNominationVotes = await NominationVote.findAll({
+    where: {nominationId: {[Op.in]: allNominationIds}},
+    attributes: ['vote', 'nominationId', 'userId']
+  })
+  return allNominationVotes
 }
 
 /*
@@ -113,33 +137,88 @@ const getCurrentNominator = async userId => {
   return nomination[0].dataValues.userId
 }
 
+const getCurrentNominees = async userId => {
+  const game = await getGamewithUserId(userId)
+  const currentNomination = await Nomination.findOne({
+    where: {
+      gameId: game.id,
+      nominationStatus: {[Op.ne]: null},
+      nominees: {[Op.ne]: null},
+      missionStatus: {[Op.eq]: null}
+    }
+  })
+  return currentNomination.nominees
+}
 /*
     Params: userId
     Return: {1:'succeed'}
     BUT: This function will create a new Mission and Nomination
 */
 
-const submitVote = async (userId, missionResult) => {
-  const game = await getGamewithUserId(userId)
-  const nomination = await Nomination.findOne({
-    where: {gameId: game.id, nominees: {[Op.eq]: []}}
+// const submitMissionVote = async (userId, missionResult) => {
+//   const game = await getGamewithUserId(userId)
+//   const nomination = await Nomination.findOne({
+//     where: {gameId: game.id, nominees: {[Op.eq]: []}}
+//   })
+//   await nomination.update({missionStatus: missionResult, nominees: [1, 2]})
+//   const result = await game.gameResult()
+//   if (result.gameEndResult !== 'none') return result
+//   else if (nomination.dataValues.missionTypeId < 5) {
+//     const missions = {}
+//     const newNominator = nomination.nextNominator()
+//     const newMission = nomination.nextMission()
+//     await Nomination.create({
+//       nominees: [],
+//       missionTypeId: newMission,
+//       userId: newNominator,
+//       gameId: nomination.gameId
+//     })
+//     missions[nomination.missionTypeId] = nomination.missionStatus
+//     return missions
+//   }
+// }
+
+const submitMissionVote = async (userId, missionResult) => {
+  const missionVote = await MissionVote.findOne({where: {userId}})
+  await missionVote.update({vote: missionResult})
+  const nullVotes = await missionVote.findAll({
+    where: {nominationId: missionVote.nominationId, vote: {[Op.eq]: null}}
   })
-  await nomination.update({missionStatus: missionResult, nominees: [1, 2]})
-  const result = await game.gameResult()
-  if (result.gameEndResult !== 'none') return result
-  else if (nomination.dataValues.missionTypeId < 5) {
-    const missions = {}
-    const newNominator = nomination.nextNominator()
-    const newMission = nomination.nextMission()
-    await Nomination.create({
-      nominees: [],
-      missionTypeId: newMission,
-      userId: newNominator,
-      gameId: nomination.gameId
+  if (!nullVotes) {
+    const currentNomination = await Nomination.findById(
+      missionVote.nominationId
+    )
+    const missionType = await MissionType.findById(
+      currentNomination.missionTypeId
+    )
+    const failsRequired = missionType.failsRequired
+    const failedVotes = await missionVote.findAll({
+      where: {nominationId: missionVote.nominationId, vote: 'fail'}
+
     })
-    missions[nomination.missionTypeId] = nomination.missionStatus
-    return missions
+    const missionFailed = failedVotes.length >= failsRequired
+    if (missionFailed) {
+      await currentNomination.update({missionStatus: 'fail'})
+    } else {
+      await currentNomination.update({missionStatus: 'succeed'})
+    }
+    return currentNomination
+  } else {
+    return null
   }
+}
+
+const getMission = async userId => {
+  const missions = {}
+  const game = await getGamewithUserId(userId)
+  const nominationsInGame = await Nomination.findAll({where: {gameId: game.id}})
+  nominationsInGame.forEach(nomination => {
+    // const numFails = await
+    missions[nomination.dataValues.id] = {
+      status: `${nomination.dataValues.missionStatus}`,
+      fails: 0
+    }
+  })
 }
 /*
   PARAMS: userId
@@ -200,7 +279,7 @@ const submitNomination = async (nominatorId, nominees) => {
       })
     }
     return nominees
-  }
+  } else return null
 }
 
 const voteOnNomination = async (userId, vote) => {
@@ -217,15 +296,16 @@ const voteOnNomination = async (userId, vote) => {
     await currentNominationVote.update({vote})
     // check number of votes
     const game = await getGamewithUserId(userId)
-    const gameType = await GameType.findById(1)
+    const gameType = await GameType.findById(game.id)
     // console.log('USERID: ', userId, 'GAME: ', game, 'GAMETYPE: ', gameType);
     const numPlayers = gameType.numberOfPlayers
     //check if all votes are submitted
     //if all votesd are submitted, calculate success or failure of the nomination
-    const allVotes = await NominationVote.findAll({
+    const submittedVotes = await NominationVote.findAll({
       where: {nominationId, vote: {[Op.ne]: null}}
     })
-    const isVotingComplete = allVotes.length === numPlayers
+    const isVotingComplete = submittedVotes.length === numPlayers
+
     if (isVotingComplete) {
       const approveVotes = await NominationVote.findAll({
         where: {nominationId, vote: {[Op.eq]: 'approve'}}
@@ -256,7 +336,7 @@ const voteOnNomination = async (userId, vote) => {
         }
       }
       return allVotes
-    }
+    } else return null
   }
 }
 
@@ -265,12 +345,14 @@ module.exports = {
   startGame,
   getNominations,
   getCurrentNominator,
-  submitVote,
+  submitMissionVote,
   getVisibility,
   getNominationWithUserId,
   getUsersInGame,
   syncSocket,
   broadcastVisibility,
   submitNomination,
-  voteOnNomination
+  voteOnNomination,
+  getNominationVotes,
+  getCurrentNominees
 }

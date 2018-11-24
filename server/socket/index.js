@@ -3,11 +3,16 @@ const {
   getNominations,
   getVisibility,
   getCurrentNominator,
-  submitVote,
+  getCurrentNominees,
+  submitMissionVote,
   getPlayersWithUserId,
   getUsersInGame,
   syncSocket,
-  broadcastVisibility
+  broadcastVisibility,
+  submitNomination,
+  getNominationVotes,
+  voteOnNomination,
+  getMissions
 } = require('./functions')
 const {User, Game} = require('../db/models')
 const OpenTok = require('opentok')
@@ -88,9 +93,10 @@ module.exports = io => {
       await startGame(userId)
       //potential refactor--joining game room not necc, just the return val.
       const gameRoom = await joinGameRoom(socket)
-      const startingState = await getNominations(userId)
+      const nominations = await getNominations(userId)
+      const nominationVotes = await getNominationVotes(userId)
       //selectively emits to only people in the gameRoom
-      io.in(gameRoom).emit('gameStarted', startingState)
+      io.in(gameRoom).emit('gameStarted', nominations, nominationVotes)
       const users = await getUsersInGame(userId)
       broadcastVisibility(io, users)
     })
@@ -105,16 +111,42 @@ module.exports = io => {
       await syncSocket(socket, userId)
     })
 
+    socket.on('submitNomination', async (nominatorId, nominees) => {
+      const newNomination = await submitNomination(nominatorId, nominees)
+      if (newNomination !== null) {
+        const gameRoom = await joinGameRoom(socket)
+        const nominations = await getNominations(nominatorId)
+        const nominationVotes = await getNominationVotes(nominatorId)
+        io
+          .in(gameRoom)
+          .emit('nominationSubmitted', nominations, nominationVotes)
+      }
+    })
+
+    socket.on('submitNominationVote', async (userId, vote) => {
+      const voteResult = await voteOnNomination(userId, vote)
+      if (voteResult !== null) {
+        const gameRoom = await joinGameRoom(socket)
+        const nominations = await getNominations(userId)
+        const nominationVotes = await getNominationVotes(userId)
+        io
+          .in(gameRoom)
+          .emit('nominationSubmitted', nominations, nominationVotes)
+      }
+    })
+
     //When user clicks Submit Vote, this socet will write vote to db.
-    socket.on('submitVote', async (userId, missionResult) => {
+    socket.on('submitMissionVote', async (userId, missionResult) => {
       const gameRoom = await joinGameRoom(socket)
-      const nominator = await getCurrentNominator(userId)
-      if (userId == nominator) {
-        const vote = await submitVote(userId, missionResult)
-        io.in(gameRoom).emit('voteSubmitted', vote)
-        // } else {
-        //   const vote = {}
-        //   io.in(gameRoom).emit('voteSubmitted', vote)
+      const nominees = await getCurrentNominees(userId)
+      console.log(nominees)
+      if (nominees.includes(userId)) {
+        const voteResult = await submitMissionVote(userId, missionResult)
+        if (voteResult !== null) {
+          io.in(gameRoom).emit('voteSubmitted', voteResult)
+          const missions = await getMissions(userId)
+          io.in(gameRoom).emit('getMissions', missions)
+        }
       }
     })
 
