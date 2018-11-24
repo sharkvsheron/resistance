@@ -1,10 +1,11 @@
-*{
+* {
   color: wheat;
 }
 body {
   font-family: sans-serif;
   background-image: url('images/space-background.jpg');
   background-size: cover;
+  background-attachment: fixed;
 }
 
 a {
@@ -15,9 +16,19 @@ label {
   display: block;
 }
 
-nav a {
+nav a,
+nav h3 {
   display: inline-block;
-  margin: 1em;
+  margin: 0 5px;
+  padding: 10px;
+  border: solid 1px transparent;
+  transition: border 0.5s ease;
+}
+
+nav a:hover {
+  border: solid wheat 1px;
+  padding: 10px;
+  transition: border 0.5s ease;
 }
 
 .nav-container {
@@ -26,7 +37,14 @@ nav a {
   color: wheat;
 }
 
-h1{
+.nav-container h1 {
+  padding: 10px;
+}
+
+h1,
+h2,
+h3,
+h4 {
   font-family: 'Orbitron', sans-serif;
 }
 
@@ -47,8 +65,12 @@ form div {
   justify-content: space-evenly;
 }
 
+.player-card h3 {
+  text-align: center;
+}
+
 .player-card {
-  border: 1px dashed black;
+  /* border: 1px dashed black; */
   border-radius: 12%;
   padding: 10px;
   margin: 10px;
@@ -71,22 +93,22 @@ form div {
 #role0 {
   background-image: url('images/goodspaceman.png');
   background-size: cover;
-  width: 200px;
-  height: 250px;
+  width: 220px;
+  height: 273px;
 }
 
 #role2 {
   background-image: url('images/badspaceman.png');
   background-size: cover;
-  width: 200px;
-  height: 250px;
+  width: 220px;
+  height: 273px;
 }
 
 #role3 {
   background-image: url('images/commander.png');
   background-size: cover;
-  width: 200px;
-  height: 250px;
+  width: 220px;
+  height: 273px;
 }
 
 .mission-container {
@@ -142,16 +164,16 @@ form div {
   justify-content: space-evenly;
 }
 
-.individual-video > div > div > div{
+.individual-video > div > div > div {
   margin: 10px;
 }
 
 .OTPublisherContainer {
-  width: 200px!important;
+  width: 200px !important;
 }
 
 .OTSubscriberContainer {
-  width: 200px!important;
+  width: 200px !important;
 }
 
 .individual-video > div > div {

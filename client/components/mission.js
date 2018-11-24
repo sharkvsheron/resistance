@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 export default class Mission extends Component {
   constructor(props) {
     super(props)
@@ -8,7 +8,11 @@ export default class Mission extends Component {
     return (
       <div className="mission">
         <div
-          className={this.props.missions.status ? `${this.props.missions.status}` : 'pending'}
+          className={
+            this.props.missions.status
+              ? `${this.props.missions.status}`
+              : 'pending'
+          }
           id={`mission${this.props.number}`}
         />
         <div className="mission-number">Mission #{this.props.mission}</div>

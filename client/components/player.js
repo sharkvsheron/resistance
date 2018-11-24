@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Video from './video'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 
 export default class Player extends Component {
   constructor(props) {
     super(props)
   }
   render() {
-    const { id, playerId, handleSelect } = this.props
-    const { userName, roleId, sessionKey } = this.props.player
+    const {id, playerId, handleSelect} = this.props
+    const {userName, roleId, sessionKey} = this.props.player
 
     return (
       <div
-        className="player-card"
+        className={`player-card {this.state.playerId === }`}
         id={`player${id}`}
         onClick={() => handleSelect(playerId)}
       >

@@ -66,10 +66,10 @@ export class GameRoom extends React.Component {
     const userIds = Object.keys(this.props.players)
     return (
       <div>
-        {this.props.gameResult !== '' && (
+        {/* {this.props.gameResult !== '' && (
           <div>Game Result: {this.props.gameResult}</div>
-        )}
-        <h3>This is the Game Room</h3>
+        )} */}
+        {/* <h3>This is the Game Room</h3> */}
         <div className="video-container">
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
@@ -110,7 +110,6 @@ export class GameRoom extends React.Component {
         </div>
         <div className="nominate-form">
           <NominatorForm players={this.props.players} />
-
         </div>
         <button
           type="submit"
