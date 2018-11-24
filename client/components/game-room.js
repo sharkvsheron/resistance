@@ -5,6 +5,7 @@ import Player from './player'
 import Video from './video'
 import {connect} from 'react-redux'
 import socket from '../socket'
+import NominatorForm from './nominatorForm'
 import store, {me} from '../store'
 import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 
@@ -25,7 +26,6 @@ export class GameRoom extends React.Component {
 
   async componentDidMount() {
     await store.dispatch(me())
-    console.log(this.props.user)
     await socket.emit(
       'joinGame',
       this.props.user.id,
@@ -64,14 +64,13 @@ export class GameRoom extends React.Component {
 
   render() {
     const userIds = Object.keys(this.props.players)
-
     return (
       <div>
         {this.props.gameResult !== '' && (
           <div>Game Result: {this.props.gameResult}</div>
         )}
         <h3>This is the Game Room</h3>
-        <div>
+        <div className="video-container">
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
         </div>
@@ -90,6 +89,7 @@ export class GameRoom extends React.Component {
         <button onClick={() => this.startGame(this.props.user.id)}>
           START Game
         </button>
+
         <div className="nomination-vote-container">
           <button
             type="submit"
@@ -107,6 +107,10 @@ export class GameRoom extends React.Component {
           >
             Reject
           </button>
+        </div>
+        <div className="nominate-form">
+          <NominatorForm players={this.props.players} />
+
         </div>
         <button
           type="submit"

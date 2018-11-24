@@ -64,20 +64,20 @@ module.exports = io => {
     })
 
     socket.on('joinGame', async (userId, gameId) => {
+      const game = await Game.findById(gameId)
+      const sessionId = game.sessionId
+      let sessionKey = opentok.generateToken(sessionId)
+
       await syncSocket(socket, userId)
       await joinGameRoom(socket)
       const user = await User.findById(userId)
-      await user.update({gameId})
+      await user.update({sessionKey, gameId})
       const players = await getPlayersWithUserId(userId)
       const gameRoom = await joinGameRoom(socket)
       io.in(gameRoom).emit('getPlayers', players)
       const users = await User.findAll({where: {gameId: user.gameId}})
       broadcastVisibility(io, users)
 
-      const game = await Game.findById(gameRoom)
-      const sessionId = game.sessionId
-      let sessionKey = opentok.generateToken(sessionId)
-      await User.update({sessionKey}, {where: {id: userId}})
       io.to(`${socket.id}`).emit('getSessionIdAndKey', {sessionId, sessionKey})
     })
 

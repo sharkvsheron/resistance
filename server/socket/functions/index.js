@@ -21,7 +21,6 @@ const hasBlankNomination = async gameId => {
 const getNominationWithUserId = async userId => {
   const user = await User.findById(userId)
   const nomination = await Nomination.findAll({where: {gameId: user.gameId}})
-  console.log('THIS IS THE GET NOMINATION', nomination)
   return nomination
 }
 
@@ -39,16 +38,16 @@ const syncSocket = async (socket, userId) => {
 const getPlayersWithUserId = async userId => {
   const game = await getGamewithUserId(userId)
   const players = await User.findAll({where: {gameId: game.id}})
-  console.log(game.id)
   // return users.map(user => user.dataValues)
   const allPlayers = {}
   players.forEach(player => {
     allPlayers[player.dataValues.id] = {
       userName: player.dataValues.userName,
-      roleId: 0
+      userId: player.dataValues.id,
+      roleId: 0,
+      sessionKey: player.dataValues.sessionKey
     }
   })
-  // console.log(game, allPlayers)
   return allPlayers
 }
 
@@ -195,6 +194,7 @@ const submitMissionVote = async (userId, missionResult) => {
     const failsRequired = missionType.failsRequired
     const failedVotes = await missionVote.findAll({
       where: {nominationId: missionVote.nominationId, vote: 'fail'}
+
     })
     const missionFailed = failedVotes.length >= failsRequired
     if (missionFailed) {
@@ -305,6 +305,7 @@ const voteOnNomination = async (userId, vote) => {
       where: {nominationId, vote: {[Op.ne]: null}}
     })
     const isVotingComplete = submittedVotes.length === numPlayers
+
     if (isVotingComplete) {
       const approveVotes = await NominationVote.findAll({
         where: {nominationId, vote: {[Op.eq]: 'approve'}}
