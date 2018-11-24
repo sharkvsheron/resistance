@@ -3,14 +3,16 @@ const {
   getNominations,
   getVisibility,
   getCurrentNominator,
-  submitVote,
+  getCurrentNominees,
+  submitMissionVote,
   getPlayersWithUserId,
   getUsersInGame,
   syncSocket,
   broadcastVisibility,
   submitNomination,
   getNominationVotes,
-  voteOnNomination
+  voteOnNomination,
+  getMissions
 } = require('./functions')
 const {User, Game} = require('../db/models')
 const OpenTok = require('opentok')
@@ -134,15 +136,17 @@ module.exports = io => {
     })
 
     //When user clicks Submit Vote, this socet will write vote to db.
-    socket.on('submitVote', async (userId, missionResult) => {
+    socket.on('submitMissionVote', async (userId, missionResult) => {
       const gameRoom = await joinGameRoom(socket)
-      const nominator = await getCurrentNominator(userId)
-      if (userId == nominator) {
-        const vote = await submitVote(userId, missionResult)
-        io.in(gameRoom).emit('voteSubmitted', vote)
-        // } else {
-        //   const vote = {}
-        //   io.in(gameRoom).emit('voteSubmitted', vote)
+      const nominees = await getCurrentNominees(userId)
+      console.log(nominees)
+      if (nominees.includes(userId)) {
+        const voteResult = await submitMissionVote(userId, missionResult)
+        if (voteResult !== null) {
+          io.in(gameRoom).emit('voteSubmitted', voteResult)
+          const missions = await getMissions(userId)
+          io.in(gameRoom).emit('getMissions', missions)
+        }
       }
     })
 

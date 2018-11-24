@@ -111,7 +111,7 @@ export class GameRoom extends React.Component {
         <button
           type="submit"
           onClick={async () =>
-            socket.emit('submitVote', this.props.user.id, 'succeed')
+            socket.emit('submitMissionVote', this.props.user.id, 'succeed')
           }
         >
           SUCCESS
@@ -119,13 +119,12 @@ export class GameRoom extends React.Component {
         <button
           type="submit"
           onClick={async () =>
-            socket.emit('submitVote', this.props.user.id, 'fail')
+            socket.emit('submitMissionVote', this.props.user.id, 'fail')
           }
         >
           FAIL
         </button>
         <div
-          text="YEET"
           className="button submit-nomination"
           onClick={() => this.handleNominationSubmit()}
         >
