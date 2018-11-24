@@ -115,7 +115,7 @@ export class GameRoom extends React.Component {
         <button
           type="submit"
           onClick={async () =>
-            socket.emit('submitMissionVote', this.props.user.id, 'succeed')
+            socket.emit('submitMissionVote', this.props.user.id, 'success')
           }
         >
           SUCCESS
@@ -147,7 +147,8 @@ const mapState = state => ({
   gameResult: state.gameResult,
   video: state.video,
   nominations: state.nominations,
-  nominationVotes: state.nominationVotes
+  nominationVotes: state.nominationVotes,
+  missions: state.missions
 })
 
 export default connect(mapState, null)(GameRoom)

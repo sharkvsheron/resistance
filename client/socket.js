@@ -42,9 +42,10 @@ socket.on('connect', () => {
     store.dispatch(getNominations(nominations))
     store.dispatch(getNominationVotes(nominationVotes))
   })
-})
-socket.on('voteSubmitted', vote => {
-  store.dispatch(getMissions(vote))
+
+  socket.on('getMissions', missions => {
+    store.dispatch(getMissions(missions))
+  })
 })
 
 export default socket

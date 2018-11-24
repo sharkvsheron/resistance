@@ -139,11 +139,10 @@ module.exports = io => {
     socket.on('submitMissionVote', async (userId, missionResult) => {
       const gameRoom = await joinGameRoom(socket)
       const nominees = await getCurrentNominees(userId)
-      console.log(nominees)
       if (nominees.includes(userId)) {
         const voteResult = await submitMissionVote(userId, missionResult)
+        // console.log('VOTE RESULT', voteResult)
         if (voteResult !== null) {
-          io.in(gameRoom).emit('voteSubmitted', voteResult)
           const missions = await getMissions(userId)
           io.in(gameRoom).emit('getMissions', missions)
         }
