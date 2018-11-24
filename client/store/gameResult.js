@@ -1,13 +1,13 @@
-const END_GAME = 'END_GAME'
+const GET_GAME_RESULT = 'GET_GAME_RESULT'
 
-export const endGame = gameEndResult => ({type: END_GAME, gameEndResult})
+export const getGameResult = gameResult => ({type: GET_GAME_RESULT, gameResult})
 
-const initialState = "";
+const initialState = 'none';
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case END_GAME:
-            return action.gameEndResult
+        case GET_GAME_RESULT:
+            return action.gameResult
         default:
             return state
     }

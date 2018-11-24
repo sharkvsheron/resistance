@@ -6,6 +6,7 @@ import {getMissions} from './store/mission'
 import {getSessionId, getSessionKey} from './store/video'
 import {getNominations} from './store/nominations'
 import {getNominationVotes} from './store/nomination-votes'
+import {getGameResult} from './store/gameResult'
 
 const socket = io(window.location.origin)
 
@@ -25,6 +26,9 @@ socket.on('connect', () => {
   })
   socket.on('getPlayers', players => {
     store.dispatch(getPlayers(players))
+  })
+  socket.on('getGameResult', gameResult => {
+    store.dispatch(getGameResult(gameResult))
   })
 
   socket.on('gameStarted', (nominations, nominationVotes) => {

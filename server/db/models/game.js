@@ -23,8 +23,7 @@ Game.prototype.gameResult = async function() {
     if (missionResults[i].missionStatus === 'succeed') successes++
     if (missionResults[i].missionStatus === 'fail') fails++
   }
-  console.log('RESULTS SUCCESS', successes, 'FAILS', fails)
-  if (successes >= 3) return {gameEndResult: 'good'}
-  if (fails >= 3) return {gameEndResult: 'bad'}
-  else return {gameEndResult: 'none'}
+  if (successes >= 3) return 'good'
+  if (fails >= 3) return 'bad'
+  else return 'none'
 }
