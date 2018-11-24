@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import MissionTracker from './missionTracker'
 import Player from './player'
 import Video from './video'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import socket from '../socket'
-import store, { me } from '../store'
-import { OTSession, OTPublisher, OTStreams, OTSubscriber } from 'opentok-react'
+import store, {me} from '../store'
+import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 
 /**
  * COMPONENT
@@ -40,7 +40,7 @@ export class GameRoom extends React.Component {
 
   render() {
     const userIds = Object.keys(this.props.players)
-
+    console.log('thisprops players on render', this.props.players)
     return (
       <div>
         {this.props.gameResult !== '' && (
@@ -60,17 +60,23 @@ export class GameRoom extends React.Component {
         <button onClick={() => this.startGame(this.props.user.id)}>
           START Game
         </button>
-        <div className='nomination-vote-container'>
-          <button type='submit'
+        <div className="nomination-vote-container">
+          <button
+            type="submit"
             onClick={async () =>
               socket.emit('submitNominationVote', this.props.user.id, 'approve')
             }
-          >Approve</button>
-          <button type='submit'
+          >
+            Approve
+          </button>
+          <button
+            type="submit"
             onClick={async () =>
               socket.emit('submitNominationVote', this.props.user.id, 'reject')
             }
-          >Reject</button>
+          >
+            Reject
+          </button>
         </div>
         <button
           type="submit"
@@ -101,4 +107,7 @@ const mapState = state => ({
   video: state.video
 })
 
-export default connect(mapState, null)(GameRoom)
+export default connect(
+  mapState,
+  null
+)(GameRoom)
