@@ -69,6 +69,7 @@ export class GameRoom extends React.Component {
 
   render() {
     const userIds = Object.keys(this.props.players)
+    // ************ Change line 73 from 1 to whatever the current nom userId is
     const amINominator = this.props.user.id === 1
     console.log(this.props.user.id === 1)
     return (

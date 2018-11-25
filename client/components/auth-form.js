@@ -10,7 +10,7 @@ const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div>
+    <div className="login-container">
       <form onSubmit={handleSubmit} name={name}>
         <div>
           <label htmlFor="email">
@@ -69,14 +69,8 @@ const mapDispatch = dispatch => {
   }
 }
 
-export const Login = connect(
-  mapLogin,
-  mapDispatch
-)(AuthForm)
-export const Signup = connect(
-  mapSignup,
-  mapDispatch
-)(AuthForm)
+export const Login = connect(mapLogin, mapDispatch)(AuthForm)
+export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
 
 /**
  * PROP TYPES

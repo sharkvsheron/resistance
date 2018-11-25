@@ -32,12 +32,18 @@ export default class Player extends Component {
           nominatedPlayers
         )}`}
         id={`player${id}`}
-        onClick={handleSelectForNominatorOnly}
+        // onClick={handleSelectForNominatorOnly}
       >
         <div className="videoWrapper" id={`role${roleId}`} />
         <h3>{userName}</h3>
-        {/* <h3>role id: {roleId}</h3> */}
-        <div className="game-button nominate">Nominate</div>
+        {isNominator && (
+          <div
+            onClick={handleSelectForNominatorOnly}
+            className="game-button nominate"
+          >
+            Nominate
+          </div>
+        )}
         <button type="submit">WAITING FOR PLAYER TO JOIN</button>
         <div>
           <button type="submit">ADD BOT</button>
