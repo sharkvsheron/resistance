@@ -22,6 +22,7 @@ export class GameRoom extends React.Component {
     this.state = {selectedPlayers: []}
     this.startGame = this.startGame.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
+    this.isNominator = this.isNominator.bind(this)
   }
 
   async componentDidMount() {
@@ -53,6 +54,10 @@ export class GameRoom extends React.Component {
     }
   }
 
+  isNominator(userId) {
+    return userId === 1
+  }
+
   handleNominationSubmit() {
     console.log('clicc')
     socket.emit(
@@ -64,12 +69,13 @@ export class GameRoom extends React.Component {
 
   render() {
     const userIds = Object.keys(this.props.players)
+    const amINominator = this.props.user.id === 1
+    console.log(this.props.user.id === 1)
     return (
       <div>
         {/* {this.props.gameResult !== '' && (
           <div>Game Result: {this.props.gameResult}</div>
         )} */}
-        {/* <h3>This is the Game Room</h3> */}
         <div className="video-container">
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
@@ -81,7 +87,9 @@ export class GameRoom extends React.Component {
               player={this.props.players[playerId]}
               id={i}
               playerId={playerId}
+              nominatedPlayers={this.state.selectedPlayers}
               handleSelect={this.handleSelect}
+              isNominator={amINominator}
             />
           ))}
         </div>
