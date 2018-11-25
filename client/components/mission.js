@@ -4,7 +4,7 @@ export default class Mission extends Component {
     super(props)
   }
   render() {
-    console.log(`props in mission`, this.props)
+    // console.log(`props in mission`, this.props)
     return (
       <div className="mission">
         <div
