@@ -30,6 +30,12 @@ const getGamewithUserId = async userId => {
   return Game.findById(gameId)
 }
 
+const getGameResult = async userId => {
+  const game = await getGamewithUserId(userId)
+  const gameResult = await game.gameResult()
+  return gameResult
+}
+
 const syncSocket = async (socket, userId) => {
   const toBeUpdatedUser = await User.findById(userId)
   await toBeUpdatedUser.update({socketId: socket.id})
@@ -77,7 +83,7 @@ const startGame = async userId => {
   const users = await User.findAll({where: {gameId}})
   const game = await GameType.findById(gameTypeId)
   const missionTypeId = game.missions[0]
-  const isNewGame = !await hasBlankNomination(gameId)
+  const isNewGame = !(await hasBlankNomination(gameId))
   if (users.length === game.numberOfPlayers && isNewGame) {
     await Nomination.create({
       nominees: [],
@@ -194,7 +200,6 @@ const submitMissionVote = async (userId, missionResult) => {
     const failsRequired = missionType.failsRequired
     const failedVotes = await MissionVote.findAll({
       where: {nominationId: missionVote.nominationId, vote: 'fail'}
-
     })
     const missionFailed = failedVotes.length >= failsRequired
     if (missionFailed) {
@@ -203,7 +208,8 @@ const submitMissionVote = async (userId, missionResult) => {
       await currentNomination.update({missionStatus: 'succeed'})
     }
     const gameResult = await getGameResult(userId)
-    if (gameResult.gameEndResult === 'none') {
+    console.log('gameresult', gameResult)
+    if (gameResult === 'none') {
       console.log('inhere')
       const newNominator = currentNomination.nextNominator()
       const newMission = currentNomination.nextMission()
@@ -321,7 +327,7 @@ const voteOnNomination = async (userId, vote) => {
     await currentNominationVote.update({vote})
     // check number of votes
     const game = await getGamewithUserId(userId)
-    const gameType = await GameType.findById(game.id)
+    const gameType = await GameType.findById(game.gameTypeId)
     // console.log('USERID: ', userId, 'GAME: ', game, 'GAMETYPE: ', gameType);
     const numPlayers = gameType.numberOfPlayers
     //check if all votes are submitted
@@ -360,15 +366,8 @@ const voteOnNomination = async (userId, vote) => {
           })
         }
       }
-      return allVotes
     } else return null
   }
-}
-
-const getGameResult = async (userId) => {
-  const game = await getGamewithUserId(userId)
-  const gameResult = await game.gameResult()
-  return gameResult
 }
 
 module.exports = {
