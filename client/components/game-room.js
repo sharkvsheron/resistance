@@ -99,6 +99,7 @@ export class GameRoom extends React.Component {
             </p>
           </div>
         )}
+        {}
         <div className="player-container">
           {userIds.map((playerId, i) => (
             <Player
@@ -166,8 +167,7 @@ export class GameRoom extends React.Component {
           className="game-button submit-nomination"
           onClick={() => this.handleNominationSubmit()}
         >
-          {' '}
-          SUBMIT NOMINATION{' '}
+          SUBMIT NOMINATION
         </div>
       </div>
     )
@@ -185,4 +185,7 @@ const mapState = state => ({
   missions: state.missions
 })
 
-export default connect(mapState, null)(GameRoom)
+export default connect(
+  mapState,
+  null
+)(GameRoom)
