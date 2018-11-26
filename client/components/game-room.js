@@ -44,6 +44,8 @@ export class GameRoom extends React.Component {
   }
 
   handleSelect(playerId) {
+    // # of players can only go up to # of players in mission type
+    //
     if (this.state.selectedPlayers.includes(playerId)) {
       const newSelectedPlayers = [...this.state.selectedPlayers].filter(
         id => id !== playerId
@@ -208,7 +210,4 @@ const mapState = state => ({
   missions: state.missions
 })
 
-export default connect(
-  mapState,
-  null
-)(GameRoom)
+export default connect(mapState, null)(GameRoom)
