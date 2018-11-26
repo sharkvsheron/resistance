@@ -13,7 +13,9 @@ const {
   getNominationVotes,
   voteOnNomination,
   getMissions,
-  getGameResult
+  getGameResult,
+  getAssassin,
+  submitAssassination
 } = require('./functions')
 const {User, Game} = require('../db/models')
 const OpenTok = require('opentok')
@@ -159,11 +161,22 @@ module.exports = io => {
           const missions = await getMissions(userId)
           io.in(gameRoom).emit('getMissions', missions)
           const gameResult = await getGameResult(userId)
+          if (gameResult === 'good') {
+            const assassin = getAssassin(userId);
+            io.in(gameRoom).emit('assassinationActive', {assassinationStatus: 'active', assassinId: assassin.id})
+          }
           io.in(gameRoom).emit('getGameResult', gameResult)
         }
       }
     })
 
+    socket.on('submitAssassination', async (assassinId, targetId) => {
+      const gameRoom = await joinGameRoom(socket)
+      const gameResult = await submitAssassination(assassinId, targetId)
+      if (gameResult !== null) {
+        io.in(gameRoom).emit('getGameResult', gameResult)
+      }
+    })
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
     })

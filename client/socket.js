@@ -7,6 +7,7 @@ import {getSessionId, getSessionKey} from './store/video'
 import {getNominations} from './store/nominations'
 import {getNominationVotes} from './store/nomination-votes'
 import {getGameResult} from './store/gameResult'
+import {enableAssassination} from './store/assassination'
 
 const socket = io(window.location.origin)
 
@@ -49,6 +50,10 @@ socket.on('connect', () => {
 
   socket.on('getMissions', missions => {
     store.dispatch(getMissions(missions))
+  })
+
+  socket.on('assassinationActive', assassinationInfo => {
+    store.dispatch(enableAssassination(assassinationInfo))
   })
 })
 

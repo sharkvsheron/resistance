@@ -208,7 +208,6 @@ const submitMissionVote = async (userId, missionResult) => {
       await currentNomination.update({missionStatus: 'succeed'})
     }
     const gameResult = await getGameResult(userId)
-    console.log('gameresult', gameResult)
     if (gameResult === 'none') {
       console.log('inhere')
       const newNominator = currentNomination.nextNominator()
@@ -230,9 +229,11 @@ const getMissions = async userId => {
   const missions = {}
   const game = await getGamewithUserId(userId)
   const gameType = await GameType.findById(game.gameTypeId)
-  gameType.dataValues.missions.forEach(mission => {
-    missions[mission] = {status: 'null', fails: 0}
-  })
+  const missionsInGame = await MissionType.findAll({where: {id: {[Op.in]: gameType.missions}}})
+  for (let i = 0; i < missionsInGame.length; i++) {
+    const mission = missionsInGame[i].dataValues
+    missions[mission.id] = {status: 'null', fails: 0, playersRequired: mission.numberOfPlayers}
+  }
   const nominationsInGame = await Nomination.findAll({
     where: {
       gameId: game.dataValues.id,
@@ -329,6 +330,7 @@ const voteOnNomination = async (userId, vote) => {
     const game = await getGamewithUserId(userId)
     const gameType = await GameType.findById(game.gameTypeId)
     // console.log('USERID: ', userId, 'GAME: ', game, 'GAMETYPE: ', gameType);
+
     const numPlayers = gameType.numberOfPlayers
     //check if all votes are submitted
     //if all votesd are submitted, calculate success or failure of the nomination
@@ -370,6 +372,24 @@ const voteOnNomination = async (userId, vote) => {
   }
 }
 
+const getAssassin = async (userId) => {
+  const game = await getGamewithUserId(userId)
+  const assassin = await User.findOne({where: {gameId: game.id, roleId: 4}})
+  return assassin
+}
+
+const submitAssassination = async (assassinId, targetId) => {
+  const game = await getGamewithUserId(assassinId)
+  const assassin = await User.findOne({where: {gameId: game.id, roleId: 4}})
+  const merlin = await User.findOne({where: {gameId: game.id, roleId: 3}})
+  if (assassin.id !== assassinId)
+    return null
+  if (merlin.id !== targetId)
+    return 'good'
+  else
+    return 'bad'
+}
+
 module.exports = {
   getPlayersWithUserId,
   startGame,
@@ -386,5 +406,7 @@ module.exports = {
   getNominationVotes,
   getCurrentNominees,
   getMissions,
-  getGameResult
+  getGameResult,
+  getAssassin,
+  submitAssassination
 }

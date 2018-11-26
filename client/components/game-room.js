@@ -67,6 +67,7 @@ export class GameRoom extends React.Component {
       this.props.user.id,
       this.state.selectedPlayers
     )
+    this.setState({selectedPlayers: []})
   }
 
   isWaitingOnNominator() {
@@ -96,6 +97,12 @@ export class GameRoom extends React.Component {
     } else {
       return 'not-ready'
     }
+  }
+
+  submitAssassination() {
+    const targetId = Number(this.state.selectedPlayers[0])
+    socket.emit('submitAssassination', this.props.user.id, targetId)
+    this.setState({selectedPlayers: []})
   }
 
   render() {
@@ -197,6 +204,14 @@ export class GameRoom extends React.Component {
             FAIL
           </div>
         </div>
+        {
+          //comment out up till === 'active' for testing purposes
+          this.props.assassination.assassinationStatus === 'active' && <div
+          className="game-button submit-assassination"
+          onClick={() => this.submitAssassination()}
+        >
+          SUBMIT ASSASSINATION
+        </div>}
       </div>
     )
   }
@@ -210,7 +225,8 @@ const mapState = state => ({
   video: state.video,
   nominations: state.nominations,
   nominationVotes: state.nominationVotes,
-  missions: state.missions
+  missions: state.missions,
+  assassination: state.assassination
 })
 
 export default connect(mapState, null)(GameRoom)

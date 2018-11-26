@@ -10,6 +10,7 @@ import video from './video'
 import nominations from './nominations'
 import nominationVotes from './nomination-votes'
 import gameResult from './gameResult'
+import assassination from './assassination'
 
 const reducer = combineReducers({
   user,
@@ -19,7 +20,8 @@ const reducer = combineReducers({
   video,
   nominations,
   nominationVotes,
-  gameResult
+  gameResult,
+  assassination
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
