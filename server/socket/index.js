@@ -83,6 +83,9 @@ module.exports = io => {
       io.in(gameRoom).emit('getMissions', missions)
       const users = await User.findAll({where: {gameId: user.gameId}})
       broadcastVisibility(io, users)
+      const nominations = await getNominations(userId)
+      const nominationVotes = await getNominationVotes(userId)
+      io.to(`${socket.id}`).emit('gameStarted', nominations, nominationVotes)
 
       io.to(`${socket.id}`).emit('getSessionIdAndKey', {sessionId, sessionKey})
     })

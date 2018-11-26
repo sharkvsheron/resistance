@@ -22,8 +22,9 @@ export class GameRoom extends React.Component {
     this.state = {selectedPlayers: []}
     this.startGame = this.startGame.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
-    this.isNominator = this.isNominator.bind(this)
     this.isWaitingOnNominator = this.isWaitingOnNominator.bind(this)
+    this.amINominator = this.amINominator.bind(this)
+    this.isNominationReady = this.isNominationReady.bind(this)
   }
 
   async componentDidMount() {
@@ -57,10 +58,6 @@ export class GameRoom extends React.Component {
     }
   }
 
-  isNominator(userId) {
-    return userId === 1
-  }
-
   handleNominationSubmit() {
     console.log('clicc')
     socket.emit(
@@ -71,7 +68,6 @@ export class GameRoom extends React.Component {
   }
 
   isWaitingOnNominator() {
-    console.log('thispropsnominations', this.props.nominations)
     const latestNomination = Math.max(...Object.keys(this.props.nominations))
     console.log('highest nomination id', latestNomination)
     const currentNomination = this.props.nominations[latestNomination]
@@ -81,18 +77,29 @@ export class GameRoom extends React.Component {
     )
   }
 
+  amINominator() {
+    const nominationKeys = Object.keys(this.props.nominations)
+    if (nominationKeys.length) {
+      const latestNomination = Math.max(...Object.keys(this.props.nominations))
+      return (
+        this.props.user.id === this.props.nominations[latestNomination].userId
+      )
+    }
+    return false
+  }
+
+  isNominationReady() {
+    if (this.state.selectedPlayers.length >= 2 && this.amINominator()) {
+      return 'ready'
+    } else {
+      return 'not-ready'
+    }
+  }
+
   render() {
     const userIds = Object.keys(this.props.players)
     // ************ Change line 73 from 1 to whatever the current nom userId is
-    const amINominator = this.props.user.id === 1
-    const isNominationReady = () => {
-      if (this.state.selectedPlayers.length === 2 && amINominator) {
-        return 'ready'
-      } else {
-        return 'not-ready'
-      }
-    }
-
+    const nominationKeys = Object.keys(this.props.nominations)
     return (
       <div>
         {/* {this.props.gameResult !== '' && (
@@ -102,7 +109,7 @@ export class GameRoom extends React.Component {
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
         </div>
-        {amINominator && (
+        {this.amINominator() && (
           <div className="nominator-info">
             <p>
               You are the nominator. Nominate 2 players to go on a mission.
@@ -110,10 +117,10 @@ export class GameRoom extends React.Component {
             </p>
           </div>
         )}
-        {this.props.nominations[1] &&
+        {nominationKeys.length &&
           this.isWaitingOnNominator() && (
             <div className="nominator-info">
-              We are waiting on the nominator
+              We are waiting on the nominator:
             </div>
           )}
         <div className="player-container">
@@ -125,13 +132,13 @@ export class GameRoom extends React.Component {
               playerId={playerId}
               nominatedPlayers={this.state.selectedPlayers}
               handleSelect={this.handleSelect}
-              isNominator={amINominator}
+              isNominator={this.amINominator()}
             />
           ))}
         </div>
-        {amINominator && (
+        {this.amINominator() && (
           <div
-            className={`game-button submit-nomination ${isNominationReady()}`}
+            className={`game-button submit-nomination ${this.isNominationReady()}`}
             onClick={() => this.handleNominationSubmit()}
           >
             SUBMIT NOMINATION
