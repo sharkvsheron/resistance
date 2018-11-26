@@ -14,11 +14,11 @@ export const gameEnd = result => ({
 })
 
 const initialState = {
-  1: {status: 'null', fails: 0},
-  2: {status: 'null', fails: 0},
-  3: {status: 'null', fails: 0},
-  4: {status: 'null', fails: 0},
-  5: {status: 'null', fails: 0}
+  2: {status: 'null', fails: 0, playersRequired: 0},
+  1: {status: 'null', fails: 0, playersRequired: 0},
+  3: {status: 'null', fails: 0, playersRequired: 0},
+  4: {status: 'null', fails: 0, playersRequired: 0},
+  5: {status: 'null', fails: 0, playersRequired: 0}
 }
 
 export default function(state = initialState, action) {
