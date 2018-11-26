@@ -235,14 +235,33 @@ input:not([type='submit']):not([type='file']) {
 .submit-nomination {
   transition: all 0.5s ease;
   display: block;
-
   position: relative;
   margin: 0 auto;
   top: -200px;
+}
+
+#startgame-button {
+  position: relative;
+  top: -425px;
+  margin: 0 auto;
 }
 
 .not-ready {
   border: 1px solid transparent;
   color: transparent;
   z-index: -1000;
+}
+
+.nomination-vote-container {
+  display: flex;
+  position: relative;
+  top: -440px;
+  justify-content: center;
+}
+
+.mission-vote-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  top: -430px;
 }

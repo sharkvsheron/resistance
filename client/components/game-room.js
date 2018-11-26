@@ -100,8 +100,12 @@ export class GameRoom extends React.Component {
 
   render() {
     const userIds = Object.keys(this.props.players)
-    // ************ Change line 73 from 1 to whatever the current nom userId is
     const nominationKeys = Object.keys(this.props.nominations)
+    const latestNominationNumber = Math.max(
+      ...Object.keys(this.props.nominations)
+    )
+    const latestNomination = this.props.nominations[latestNominationNumber]
+    console.log('latest nomination ', latestNomination)
     return (
       <div>
         {/* {this.props.gameResult !== '' && (
@@ -147,52 +151,51 @@ export class GameRoom extends React.Component {
           </div>
         )}
         <MissionTracker {...this.props} />
-        <button onClick={() => this.startGame(this.props.user.id)}>
-          START Game
-        </button>
+        {!this.props.nominations[1] && (
+          <div
+            className="game-button"
+            id="startgame-button"
+            onClick={() => this.startGame(this.props.user.id)}
+          >
+            START Game
+          </div>
+        )}
 
         <div className="nomination-vote-container">
-          <button
-            type="submit"
+          <div
+            className="game-button"
             onClick={async () =>
               socket.emit('submitNominationVote', this.props.user.id, 'approve')
             }
           >
-            Approve
-          </button>
-          <button
-            type="submit"
+            APPROVE
+          </div>
+          <div
+            className="game-button"
             onClick={async () =>
               socket.emit('submitNominationVote', this.props.user.id, 'reject')
             }
           >
-            Reject
-          </button>
+            REJECT
+          </div>
         </div>
-        <div className="nominate-form">
-          <NominatorForm players={this.props.players} />
-        </div>
-        <button
-          type="submit"
-          onClick={async () =>
-            socket.emit('submitMissionVote', this.props.user.id, 'success')
-          }
-        >
-          SUCCESS
-        </button>
-        <button
-          type="submit"
-          onClick={async () =>
-            socket.emit('submitMissionVote', this.props.user.id, 'fail')
-          }
-        >
-          FAIL
-        </button>
-        <div
-          className="game-button submit-nomination"
-          onClick={() => this.handleNominationSubmit()}
-        >
-          SUBMIT NOMINATION
+        <div className="mission-vote-container">
+          <div
+            className="game-button"
+            onClick={async () =>
+              socket.emit('submitMissionVote', this.props.user.id, 'success')
+            }
+          >
+            SUCCESS
+          </div>
+          <div
+            className="game-button"
+            onClick={async () =>
+              socket.emit('submitMissionVote', this.props.user.id, 'fail')
+            }
+          >
+            FAIL
+          </div>
         </div>
       </div>
     )
