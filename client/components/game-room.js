@@ -46,7 +46,9 @@ export class GameRoom extends React.Component {
       const newSelectedPlayers = [...this.state.selectedPlayers].filter(
         id => id !== playerId
       )
-      this.setState({selectedPlayers: newSelectedPlayers})
+      if (newSelectedPlayers.length <= 2) {
+        this.setState({selectedPlayers: newSelectedPlayers})
+      }
     } else {
       this.setState({
         selectedPlayers: [...this.state.selectedPlayers, playerId]
@@ -69,7 +71,16 @@ export class GameRoom extends React.Component {
 
   render() {
     const userIds = Object.keys(this.props.players)
+    // ************ Change line 73 from 1 to whatever the current nom userId is
     const amINominator = this.props.user.id === 1
+    const isNominationReady = () => {
+      if (this.state.selectedPlayers.length === 2 && amINominator) {
+        return 'ready'
+      } else {
+        return 'not-ready'
+      }
+    }
+
     console.log(this.props.user.id === 1)
     return (
       <div>
@@ -80,6 +91,14 @@ export class GameRoom extends React.Component {
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
         </div>
+        {amINominator && (
+          <div className="nominator-info">
+            <p>
+              You are the nominator. Nominate 2 players to go on a mission.
+              Don't eff this up
+            </p>
+          </div>
+        )}
         <div className="player-container">
           {userIds.map((playerId, i) => (
             <Player
@@ -93,6 +112,14 @@ export class GameRoom extends React.Component {
             />
           ))}
         </div>
+        {amINominator && (
+          <div
+            className={`game-button submit-nomination ${isNominationReady()}`}
+            onClick={() => this.handleNominationSubmit()}
+          >
+            SUBMIT NOMINATION
+          </div>
+        )}
         <MissionTracker {...this.props} />
         <button onClick={() => this.startGame(this.props.user.id)}>
           START Game
@@ -136,7 +163,7 @@ export class GameRoom extends React.Component {
           FAIL
         </button>
         <div
-          className="button submit-nomination"
+          className="game-button submit-nomination"
           onClick={() => this.handleNominationSubmit()}
         >
           {' '}
