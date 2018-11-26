@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import socket from '../socket'
 import {Link} from 'react-router-dom'
 import store, {me} from '../store'
+import NewGameForm from './new-game-form'
 
 /**
  * COMPONENT
@@ -11,8 +12,13 @@ import store, {me} from '../store'
 class UserHome extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      openForm: false
+    }
   }
-
+  openForm() {
+    this.setState({openForm: !this.state.openForm})
+  }
   async componentDidMount() {
     await store.dispatch(me())
     socket.emit('getGames')
@@ -21,15 +27,18 @@ class UserHome extends React.Component {
 
   render() {
     const {email} = this.props
+    const {openForm} = this.state
+    console.log('THIS IS THE OPEN FORM ', this.state.openForm)
     return (
       <div>
         <h3>Welcome, {email}</h3>
-        <button
-          type="submit"
-          onClick={() => socket.emit('createGame', this.props.user.id)}
-        >
-          CREATE GAME
-        </button>
+        {!openForm ? (
+          <button type="submit" onClick={() => this.openForm()}>
+            CREATE GAME
+          </button>
+        ) : (
+          <NewGameForm />
+        )}
 
         {this.props.games.map(game => {
           return (
@@ -61,4 +70,13 @@ export default connect(mapState, null)(UserHome)
  */
 UserHome.propTypes = {
   email: PropTypes.string
+}
+
+{
+  /* <Row>
+    <Input name='group1' type='checkbox' value='red' label='Red' />
+    <Input name='group1' type='checkbox' value='yellow' label='Yellow' defaultValue='checked' />
+    <Input name='group1' type='checkbox' value='green' label='Green' className='filled-in' defaultChecked='checked' />
+    <Input name='group1' type='checkbox' value='brown' label='Brown' disabled='disabled' />
+</Row> */
 }

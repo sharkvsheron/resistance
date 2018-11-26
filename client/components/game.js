@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import {Card, CardTitle} from 'react-materialize'
 
 export default class Game extends Component {
   constructor(props) {
