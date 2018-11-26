@@ -29,10 +29,6 @@ class Player extends Component {
     } = this.props
     const {userName, roleId, sessionKey} = this.props.player
 
-    const handleSelectForNominatorOnly = isNominator
-      ? () => handleSelect(playerId)
-      : () => alert('You are not the nominator')
-
     console.log(this.props)
     return (
       <div
@@ -41,7 +37,6 @@ class Player extends Component {
           nominatedPlayers
         )} nominator-${this.isPlayerNominator(parseInt(playerId))}`}
         id={`player${id}`}
-        onClick={() => handleSelect(playerId)}
       >
         <div className="video-wrapper" id={`role${roleId}`} />
         <h3>
