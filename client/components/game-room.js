@@ -23,6 +23,7 @@ export class GameRoom extends React.Component {
     this.startGame = this.startGame.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.isNominator = this.isNominator.bind(this)
+    this.isWaitingOnNominator = this.isWaitingOnNominator.bind(this)
   }
 
   async componentDidMount() {
@@ -69,6 +70,17 @@ export class GameRoom extends React.Component {
     )
   }
 
+  isWaitingOnNominator() {
+    console.log('thispropsnominations', this.props.nominations)
+    const latestNomination = Math.max(...Object.keys(this.props.nominations))
+    console.log('highest nomination id', latestNomination)
+    const currentNomination = this.props.nominations[latestNomination]
+    return (
+      currentNomination.nominees.length === 0 &&
+      currentNomination.missionStatus === null
+    )
+  }
+
   render() {
     const userIds = Object.keys(this.props.players)
     // ************ Change line 73 from 1 to whatever the current nom userId is
@@ -81,7 +93,6 @@ export class GameRoom extends React.Component {
       }
     }
 
-    console.log(this.props.user.id === 1)
     return (
       <div>
         {/* {this.props.gameResult !== '' && (
@@ -99,7 +110,12 @@ export class GameRoom extends React.Component {
             </p>
           </div>
         )}
-        {}
+        {this.props.nominations[1] &&
+          this.isWaitingOnNominator() && (
+            <div className="nominator-info">
+              We are waiting on the nominator
+            </div>
+          )}
         <div className="player-container">
           {userIds.map((playerId, i) => (
             <Player
