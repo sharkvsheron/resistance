@@ -20,22 +20,26 @@ export default class Player extends Component {
       isNominator
     } = this.props
     const {userName, roleId, sessionKey} = this.props.player
-    console.log('this is props: ', this.props)
+
     const handleSelectForNominatorOnly = isNominator
       ? () => handleSelect(playerId)
       : () => alert('You are not the nominator')
-    // console.log('props in player.js ', this.props)
+
+    const nominatorClass = isNominator && playerId === 1 ? 'nominator' : ''
+    console.log(this.props)
     return (
       <div
         className={`player-card ${this.isNominated(
           playerId,
           nominatedPlayers
-        )}`}
+        )} nominator-${playerId === '1'}`}
         id={`player${id}`}
         // onClick={handleSelectForNominatorOnly}
       >
-        <div className="videoWrapper" id={`role${roleId}`} />
-        <h3>{userName}</h3>
+        <div className="video-wrapper" id={`role${roleId}`} />
+        <h3>
+          {userName} <br />UserId = {playerId}
+        </h3>
         {isNominator && (
           <div
             onClick={handleSelectForNominatorOnly}
@@ -44,10 +48,9 @@ export default class Player extends Component {
             Nominate
           </div>
         )}
-        <button type="submit">WAITING FOR PLAYER TO JOIN</button>
-        <div>
-          <button type="submit">ADD BOT</button>
-        </div>
+        <br />
+        {/* <div className="game-button">waiting for others...</div>
+        <div className="game-button">Add Bot</div> */}
       </div>
     )
   }
