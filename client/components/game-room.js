@@ -57,14 +57,14 @@ export class GameRoom extends React.Component {
 
   isNominationStage() {
     const currentNomination = this.getCurrentNomination()
-    if (!currentNomination) return
+    if (!currentNomination) return false
     return currentNomination.nominees.length === 0
     // Nominees have not yet been selected, Nominator is in nomination selection process.
   }
 
   isVotingStage() {
     const currentNomination = this.getCurrentNomination()
-    if (!currentNomination) return
+    if (!currentNomination) return false
 
     return (
       !this.isNominationStage() && currentNomination.nominationStatus === null
