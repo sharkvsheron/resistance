@@ -6,6 +6,7 @@ class Player extends Component {
   constructor(props) {
     super(props)
     this.getCurrentNomination = this.getCurrentNomination.bind(this)
+    this.state = {}
   }
 
   isNominated = (userId, array) => {
@@ -38,11 +39,8 @@ class Player extends Component {
     const {userName, roleId, sessionKey} = this.props.player
     return (
       <div
-        className={`player-card local ${this.isNominated(
-          playerId,
-          nominatedPlayers
-        )}
-        nominator-${this.isPlayerNominator(parseInt(playerId))}`}
+        className={`player-card ${this.isNominated(playerId, nominatedPlayers)}
+        nominator-${this.isPlayerNominator(Number(playerId))}`}
         id={`player${id}`}
       >
         <div className="video-wrapper" id={`role${roleId}`} />

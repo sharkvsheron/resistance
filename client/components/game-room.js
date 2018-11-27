@@ -52,7 +52,21 @@ export class GameRoom extends React.Component {
   getCurrentNomination() {
     const maxKey = Math.max(...Object.keys(this.props.nominations))
     const currentNomination = this.props.nominations[maxKey]
+    console.log('current nomination', currentNomination)
+    if (currentNomination === undefined) return {nominees: []}
     return currentNomination
+  }
+
+  getNumPlayersRequiredForMission() {
+    let playersReq
+    for (let prop in this.props.missions) {
+      console.log(this.props.missions[prop])
+      if (this.props.missions[prop].status === 'null') {
+        playersReq = this.props.missions[prop].playersRequired
+        break
+      }
+    }
+    return playersReq
   }
 
   isNominationStage() {
@@ -74,6 +88,7 @@ export class GameRoom extends React.Component {
 
   isMissionStage() {
     const currentNomination = this.getCurrentNomination()
+    if (!!currentNomination) return false
     return !this.isVotingStage() && currentNomination.missionStatus === null
     // Nominees should see succeed/fail buttons. Non-nominated players should see 'waiting for succeed/fail' and should still see nomination status borders.
   }
@@ -130,6 +145,19 @@ export class GameRoom extends React.Component {
     return false
   }
 
+  amIOnMission() {
+    const currentNomination = this.getCurrentNomination()
+    if (currentNomination === undefined) return false
+    if (Object.keys(currentNomination).length === 0) return false
+    else {
+      console.log('amIonMission NOMINATION', currentNomination)
+      return (
+        this.getCurrentNomination().nominees.includes(this.props.user.id) &&
+        this.isMissionStage()
+      )
+    }
+  }
+
   isNominationReady() {
     const latestNomination = Math.max(...Object.keys(this.props.nominations))
     const playersRequiredForMission = this.props.missions[
@@ -165,14 +193,19 @@ export class GameRoom extends React.Component {
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
         </div>
-        {this.amINominator() && (
-          <div className="nominator-info">
-            <p>
-              You are the nominator. Nominate players to go on a mission. Don't
-              eff this up
-            </p>
-          </div>
+        {this.amIOnMission() && (
+          <div className="nominator-info">You're on the mission, glhf.</div>
         )}
+        {this.amINominator() &&
+          this.isNominationStage() && (
+            <div className="nominator-info">
+              <p>
+                You are the nominator. Nominate
+                {this.getNumPlayersRequiredForMission()} players to go on a
+                mission. Don't eff this up
+              </p>
+            </div>
+          )}
         {nominationKeys.length &&
           this.isWaitingOnNominator() && (
             <div className="nominator-info">
