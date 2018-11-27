@@ -43,6 +43,27 @@ export class GameRoom extends React.Component {
     // await socket.emit('getVisibility', userId)
   }
 
+  getCurrentNomination() {
+    const maxKey = Math.max(...Object.keys(this.props.nominations))
+    const currentNomination = this.props.nominations[maxKey]
+    return currentNomination
+  }
+
+  isNominationStage() {
+    const currentNomination = this.getCurrentNomination()
+    return currentNomination.nominees.length === 0
+  }
+
+  isVotingStage() {
+    const currentNomination = this.getCurrentNomination()
+    return !this.isNominationStage() && currentNomination.nominationStatus === null
+  }
+
+  isMissionStage() {
+    const currentNomination = this.getCurrentNomination()
+    return !this.isVotingStage() && currentNomination.missionStatus === null
+  }
+
   handleSelect(playerId) {
     // # of players can only go up to # of players in mission type
     //
