@@ -18,7 +18,12 @@ async function seed() {
     Role.bulkCreate([
       {visible: [], name: 'goodguy'},
       {visible: [2], name: 'badguy'},
-      {visible: [1, 2, 3], name: 'merlin'}
+      {visible: [1, 2, 3, 4, 5, 6, 8], name: 'merlin'},
+      {visible: [2], name: 'assasin'},
+      {visible: [3, 6], name: 'percival'},
+      {visible: [2], name: 'morgana'},
+      {visible: [2], name: 'mordred'},
+      {visible: [1], name: 'oberon'}
     ])
   ])
 

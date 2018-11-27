@@ -44,24 +44,31 @@ module.exports = io => {
       io.to(`${socket.id}`).emit('getGames', allGames)
     })
 
-    socket.on('createGame', async (userId, newGame) => {
-      let sessionId
-      const {gameName, numberOfPlayers, roles} = newGame
-      await opentok.createSession({mediaMode: 'routed'}, async function(
-        err,
-        session
-      ) {
-        if (err) {
-          console.log(err)
-          return
-        }
-        sessionId = session.sessionId
-        const newGameType = await GameType.create({numberOfPlayers})
-        await Game.create({sessionId, gameTypeId: newGameType.id})
-        const allGames = await Game.findAll()
-        socket.emit('createdNewGame', allGames)
-      })
-    })
+    socket.on(
+      'createGame',
+      async (gameName, numberOfPlayers, roles, missions) => {
+        let sessionId
+        const rolesAvailable = roles.map(role => role.id)
+        await opentok.createSession({mediaMode: 'routed'}, async function(
+          err,
+          session
+        ) {
+          if (err) {
+            console.log(err)
+            return
+          }
+          sessionId = session.sessionId
+          const newGameType = await GameType.create({
+            numberOfPlayers,
+            rolesAvailable,
+            missions
+          })
+          await Game.create({sessionId, gameTypeId: newGameType.id})
+          const allGames = await Game.findAll()
+          socket.emit('createdNewGame', allGames)
+        })
+      }
+    )
 
     socket.on('joinGame', async (userId, gameId) => {
       const game = await Game.findById(gameId)

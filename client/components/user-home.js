@@ -12,6 +12,7 @@ import NewGameForm from './new-game-form'
 class UserHome extends React.Component {
   constructor(props) {
     super(props)
+    this.openForm = this.openForm.bind(this)
     this.state = {
       openForm: false
     }
@@ -28,7 +29,6 @@ class UserHome extends React.Component {
   render() {
     const {email} = this.props
     const {openForm} = this.state
-    console.log('THIS IS THE OPEN FORM ', this.state.openForm)
     return (
       <div>
         <h3>Welcome, {email}</h3>
@@ -37,7 +37,7 @@ class UserHome extends React.Component {
             CREATE GAME
           </button>
         ) : (
-          <NewGameForm />
+          <NewGameForm openForm={this.openForm} />
         )}
 
         {this.props.games.map(game => {

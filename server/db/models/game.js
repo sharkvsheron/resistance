@@ -6,6 +6,9 @@ const Nomination = require('./nomination')
 const Game = db.define('game', {
   sessionId: {
     type: Sequelize.TEXT
+  },
+  name: {
+    type: Sequelize.STRING
   }
 })
 
