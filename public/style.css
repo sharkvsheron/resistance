@@ -95,7 +95,7 @@ form div {
   background-color: goldenrod;
 }
 
-#player0,
+/* #player0,
 #player4 {
   top: 125px;
 }
@@ -105,6 +105,10 @@ form div {
   top: 75px;
 }
 
+#player5 {
+  
+  top: 200px;
+} */
 #role1,
 #role0 {
   background-image: url('images/goodspaceman.png');

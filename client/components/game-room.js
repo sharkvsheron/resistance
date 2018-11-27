@@ -52,7 +52,6 @@ export class GameRoom extends React.Component {
   getCurrentNomination() {
     const maxKey = Math.max(...Object.keys(this.props.nominations))
     const currentNomination = this.props.nominations[maxKey]
-    console.log('current nomination', currentNomination)
     if (currentNomination === undefined) return {nominees: []}
     return currentNomination
   }
@@ -126,7 +125,6 @@ export class GameRoom extends React.Component {
 
   isWaitingOnNominator() {
     const latestNomination = Math.max(...Object.keys(this.props.nominations))
-    console.log('highest nomination id', latestNomination)
     const currentNomination = this.props.nominations[latestNomination]
     return (
       currentNomination.nominees.length === 0 &&
@@ -150,7 +148,6 @@ export class GameRoom extends React.Component {
     if (currentNomination === undefined) return false
     if (Object.keys(currentNomination).length === 0) return false
     else {
-      console.log('amIonMission NOMINATION', currentNomination)
       return (
         this.getCurrentNomination().nominees.includes(this.props.user.id) &&
         this.isMissionStage()
@@ -281,7 +278,4 @@ const mapState = state => ({
   assassination: state.assassination
 })
 
-export default connect(
-  mapState,
-  null
-)(GameRoom)
+export default connect(mapState, null)(GameRoom)
