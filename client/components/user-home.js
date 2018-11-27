@@ -5,10 +5,8 @@ import socket from '../socket'
 import {Link} from 'react-router-dom'
 import store, {me} from '../store'
 import NewGameForm from './new-game-form'
+import Game from './game'
 
-/**
- * COMPONENT
- */
 class UserHome extends React.Component {
   constructor(props) {
     super(props)
@@ -39,14 +37,9 @@ class UserHome extends React.Component {
         ) : (
           <NewGameForm openForm={this.openForm} />
         )}
-
-        {this.props.games.map(game => {
-          return (
-            <Link to={`/game/${game.id}`} key={game.id}>
-              Click to Enter {game.gameName} #{game.id}
-            </Link>
-          )
-        })}
+        {this.props.games.map((game, i) => (
+          <Game name={game.gameName} id={game.id} key={i} />
+        ))}
       </div>
     )
   }
@@ -64,19 +57,3 @@ const mapState = state => {
 }
 
 export default connect(mapState, null)(UserHome)
-
-/**
- * PROP TYPES
- */
-UserHome.propTypes = {
-  email: PropTypes.string
-}
-
-{
-  /* <Row>
-    <Input name='group1' type='checkbox' value='red' label='Red' />
-    <Input name='group1' type='checkbox' value='yellow' label='Yellow' defaultValue='checked' />
-    <Input name='group1' type='checkbox' value='green' label='Green' className='filled-in' defaultChecked='checked' />
-    <Input name='group1' type='checkbox' value='brown' label='Brown' disabled='disabled' />
-</Row> */
-}

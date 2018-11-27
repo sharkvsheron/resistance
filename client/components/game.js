@@ -7,23 +7,12 @@ export default class Game extends Component {
   }
   render() {
     return (
-      <div className="game-card">
-        <Card
-          style={{'max-height': '82%'}}
-          className="small"
-          header={
-            <CardTitle image="images/space-background.jpg">
-              GAME ROOM # {this.props.game.id}
-            </CardTitle>
-          }
-          actions={[
-            <Link to={`/game/${this.props.game.id}`} key={this.props.game.id}>
-              Click to enter game #{this.props.game.id}
-            </Link>
-          ]}
-        >
-          {' '}
-        </Card>
+      <div className="game-card" img="/images/space-background.jpg">
+        <Link to={`/game/${this.props.id}`} key={this.props.id}>
+          <button className="game-button">
+            Enter Game {this.props.name} #{this.props.id}
+          </button>
+        </Link>
       </div>
     )
   }
