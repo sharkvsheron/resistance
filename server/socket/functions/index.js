@@ -83,7 +83,7 @@ const startGame = async userId => {
   const users = await User.findAll({where: {gameId}})
   const game = await GameType.findById(gameTypeId)
   const missionTypeId = game.missions[0]
-  const isNewGame = !await hasBlankNomination(gameId)
+  const isNewGame = !(await hasBlankNomination(gameId))
   if (users.length === game.numberOfPlayers && isNewGame) {
     await Nomination.create({
       nominees: [],
@@ -145,15 +145,16 @@ const getCurrentNominator = async userId => {
 
 const getCurrentNominees = async userId => {
   const game = await getGamewithUserId(userId)
-  const currentNomination = await Nomination.findOne({
+  const currentNomination = await Nomination.findAll({
     where: {
       gameId: game.id,
       nominationStatus: {[Op.ne]: null},
       nominees: {[Op.ne]: null},
       missionStatus: {[Op.eq]: null}
-    }
+    },
+    order: [['id', 'DESC']]
   })
-  return currentNomination.nominees
+  return currentNomination[0].nominees
 }
 /*
     Params: userId
@@ -210,8 +211,8 @@ const submitMissionVote = async (userId, missionResult) => {
     const gameResult = await getGameResult(userId)
     if (gameResult === 'none') {
       console.log('inhere')
-      const newNominator = currentNomination.nextNominator()
-      const newMission = currentNomination.nextMission()
+      const newNominator = await currentNomination.nextNominator()
+      const newMission = await currentNomination.nextMission(Game)
       await Nomination.create({
         nominees: [],
         missionTypeId: newMission,
@@ -377,7 +378,7 @@ const voteOnNomination = async (userId, vote) => {
           await currentNomination.update({nominationStatus: 'reject'})
           await Nomination.create({
             nominees: [],
-            userId: currentNomination.nextNominator(),
+            userId: await currentNomination.nextNominator(),
             gameId,
             missionTypeId
           })
