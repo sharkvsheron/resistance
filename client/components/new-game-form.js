@@ -128,58 +128,72 @@ export default class NewGameForm extends Component {
         <br />
         <br />
         <br />
-        <form>
-          <label>
-            Game Name:
-            <input
-              type="text"
-              name="gameName"
-              value={this.state.gameName}
-              onChange={this.handleChange}
-            />
-          </label>
-          {roleArray.map((role, i) => (
-            <label key={i}>
-              {role.name}
-              <input
-                name={role.name}
-                type="number"
-                min={0}
-                max={10}
-                onChange={this.handleChecked}
-                value={role.amount}
-                id={i}
-              />
-            </label>
-          ))}
-
-          {missionArray.map(mission => (
-            <label key={mission}>
-              Mission : {mission}
-              <input
-                type="number"
-                name="numberOfPlayers"
-                min="1"
-                max="10"
-                value={this.state.missions[mission].numberOfPlayers}
-                onChange={this.handleMissionChange}
-                id={mission}
-              />
-              <input
-                type="number"
-                name="failsRequired"
-                min="1"
-                max="10"
-                value={this.state.missions[mission].failsRequired}
-                onChange={this.handleMissionChange}
-                id={mission}
-              />
-            </label>
-          ))}
-        </form>
-        <button type="submit" onClick={this.handleSubmit}>
+        <div className="game-form">
+          <form>
+            <div className="game-input">
+              <label>
+                <p>Game Name:</p>
+                <input
+                  type="text"
+                  name="gameName"
+                  value={this.state.gameName}
+                  onChange={this.handleChange}
+                />
+              </label>
+            </div>
+            <div className="mission-input">
+              {missionArray.map(mission => (
+                <label key={mission} className="mission-form-detail">
+                  <p>Mission : {mission + 1}</p>
+                  <label>
+                    <p>Nominees</p>
+                    <input
+                      type="number"
+                      name="numberOfPlayers"
+                      min="1"
+                      max="10"
+                      value={this.state.missions[mission].numberOfPlayers}
+                      onChange={this.handleMissionChange}
+                      id={mission}
+                    />
+                  </label>
+                  <br />
+                  <label>
+                    <p>Fails Req.</p>
+                    <input
+                      type="number"
+                      name="failsRequired"
+                      min="1"
+                      max="10"
+                      value={this.state.missions[mission].failsRequired}
+                      onChange={this.handleMissionChange}
+                      id={mission}
+                    />
+                  </label>
+                </label>
+              ))}
+            </div>
+            <div className="role-input">
+              {roleArray.map((role, i) => (
+                <label key={i}>
+                  <p>{role.name}</p>
+                  <input
+                    name={role.name}
+                    type="number"
+                    min={0}
+                    max={10}
+                    onChange={this.handleChecked}
+                    value={role.amount}
+                    id={i}
+                  />
+                </label>
+              ))}
+            </div>
+          </form>
+        </div>
+        <div className="game-button" onClick={this.handleSubmit}>
           CREATE NEW GAME
-        </button>
+        </div>
       </div>
     )
   }

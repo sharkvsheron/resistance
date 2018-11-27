@@ -28,12 +28,12 @@ class UserHome extends React.Component {
     const {email} = this.props
     const {openForm} = this.state
     return (
-      <div>
+      <div className="user-home">
         <h3>Welcome, {email}</h3>
         {!openForm ? (
-          <button type="submit" onClick={() => this.openForm()}>
+          <div className="game-button" onClick={() => this.openForm()}>
             CREATE GAME
-          </button>
+          </div>
         ) : (
           <NewGameForm openForm={this.openForm} />
         )}

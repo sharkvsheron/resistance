@@ -7,13 +7,13 @@ export default class Game extends Component {
   }
   render() {
     return (
-      <div className="game-card" img="/images/space-background.jpg">
-        <Link to={`/game/${this.props.id}`} key={this.props.id}>
-          <button className="game-button">
+      <Link to={`/game/${this.props.id}`} key={this.props.id}>
+        <div className="game-card">
+          <h3 className="card-title">
             Enter Game {this.props.name} #{this.props.id}
-          </button>
-        </Link>
-      </div>
+          </h3>
+        </div>
+      </Link>
     )
   }
 }
