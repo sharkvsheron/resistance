@@ -166,7 +166,9 @@ module.exports = io => {
     socket.on('submitMissionVote', async (userId, missionResult) => {
       const gameRoom = await joinGameRoom(socket)
       const nominees = await getCurrentNominees(userId)
+      console.log('NOMINEES', nominees)
       if (nominees.includes(userId)) {
+        console.log('    sdadssadad')
         const voteResult = await submitMissionVote(userId, missionResult)
         // console.log('VOTE RESULT', voteResult)
         if (voteResult !== null) {
@@ -183,10 +185,9 @@ module.exports = io => {
           if (gameResult === 'good') {
             const assassin = getAssassin(userId)
             io.in(gameRoom).emit('assassinationActive', {
-                assassinationStatus: 'active',
-                assassinId: assassin.id
-              })
-
+              assassinationStatus: 'active',
+              assassinId: assassin.id
+            })
           }
           io.in(gameRoom).emit('getGameResult', gameResult)
         }

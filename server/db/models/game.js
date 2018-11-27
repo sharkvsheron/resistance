@@ -12,10 +12,9 @@ const Game = db.define('game', {
   }
 })
 
-module.exports = Game
-
 //methods:
 // how many players associated to this game.
+
 Game.prototype.gameResult = async function() {
   const missionResults = await Nomination.findAll({
     where: {gameId: this.id, missionStatus: {[Op.ne]: null}}
@@ -30,3 +29,5 @@ Game.prototype.gameResult = async function() {
   if (fails >= 3) return 'bad'
   else return 'none'
 }
+
+module.exports = Game
