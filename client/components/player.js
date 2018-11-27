@@ -40,6 +40,7 @@ class Player extends Component {
     return (
       <div
         className={`player-card ${this.isNominated(playerId, nominatedPlayers)}
+        ${this.isNominated(playerId, this.props.selectedPlayers)}
         nominator-${this.isPlayerNominator(Number(playerId))}`}
         id={`player${id}`}
       >

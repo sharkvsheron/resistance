@@ -157,9 +157,10 @@ export class GameRoom extends React.Component {
 
   isNominationReady() {
     const latestNomination = Math.max(...Object.keys(this.props.nominations))
-    const playersRequiredForMission = this.props.missions[
-      this.props.nominations[latestNomination].missionTypeId
-    ].playersRequired
+    const playersRequiredForMission =
+      this.props.missions[
+        this.props.nominations[latestNomination].missionTypeId
+      ].playersRequired || 0
     // the num 2 in 105 needs to be taken from mission type
     if (
       this.state.selectedPlayers.length === playersRequiredForMission &&
@@ -222,6 +223,7 @@ export class GameRoom extends React.Component {
                     ? this.getCurrentNomination().nominees
                     : this.state.selectedPlayers
                 }
+                selectedPlayers={this.state.selectedPlayers}
                 handleSelect={this.handleSelect}
                 isNominator={this.amINominator()}
               />

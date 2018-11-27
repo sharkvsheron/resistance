@@ -20,16 +20,8 @@ const NominationVote = require('./nominationVote')
  * for example, we can say: const {User} = require('../db/models')
  * instead of: const User = require('../db/models/user')
  */
-module.exports = {
-  User,
-  Game,
-  GameType,
-  Nomination,
-  MissionType,
-  MissionVote,
-  Role,
-  NominationVote
-}
+
+//cannot place in game, creates circular dependency
 
 Game.hasMany(Nomination)
 Game.hasMany(Nomination)
@@ -47,3 +39,14 @@ NominationVote.belongsTo(User)
 
 MissionVote.belongsTo(Nomination)
 MissionVote.belongsTo(User)
+
+module.exports = {
+  User,
+  Game,
+  GameType,
+  Nomination,
+  MissionType,
+  MissionVote,
+  Role,
+  NominationVote
+}
