@@ -17,13 +17,13 @@ async function seed() {
   const roles = await Promise.all([
     Role.bulkCreate([
       {visible: [], name: 'goodguy'},
-      {visible: [2], name: 'badguy'},
+      {visible: [2, 4, 6, 7], name: 'badguy'},
       {visible: [1, 2, 3, 4, 5, 6, 8], name: 'merlin'},
-      {visible: [2], name: 'assasin'},
-      {visible: [3, 6], name: 'percival'},
-      {visible: [2], name: 'morgana'},
-      {visible: [2], name: 'mordred'},
-      {visible: [1], name: 'oberon'}
+      {visible: [2, 4, 7, 8], name: 'assasin'},
+      {visible: [3, 6, 5], name: 'percival'},
+      {visible: [2, 4, 7, 6], name: 'morgana'},
+      {visible: [2, 4, 7, 6], name: 'mordred'},
+      {visible: [2, 4, 7, 8, 6], name: 'oberon'}
     ])
   ])
 

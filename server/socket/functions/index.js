@@ -63,12 +63,12 @@ const getUsersInGame = async userId => {
   return users
 }
 
-const broadcastVisibility = async (io, users) => {
-  users.forEach(async user => {
-    let visibility = await getVisibility(user.id)
-    io.to(`${user.socketId}`).emit('getVisibility', visibility)
-  })
-}
+// const broadcastVisibility = async (io, users) => {
+//   users.forEach(async user => {
+//     let visibility = await getVisibility(user.id)
+//     io.to(`${user.socketId}`).emit('getVisibility', visibility)
+//   })
+// }
 
 /*
     Params: userId
@@ -83,7 +83,7 @@ const startGame = async userId => {
   const users = await User.findAll({where: {gameId}})
   const game = await GameType.findById(gameTypeId)
   const missionTypeId = game.missions[0]
-  const isNewGame = !(await hasBlankNomination(gameId))
+  const isNewGame = !await hasBlankNomination(gameId)
   if (users.length === game.numberOfPlayers && isNewGame) {
     await Nomination.create({
       nominees: [],
@@ -229,10 +229,16 @@ const getMissions = async userId => {
   const missions = {}
   const game = await getGamewithUserId(userId)
   const gameType = await GameType.findById(game.gameTypeId)
-  const missionsInGame = await MissionType.findAll({where: {id: {[Op.in]: gameType.missions}}})
+  const missionsInGame = await MissionType.findAll({
+    where: {id: {[Op.in]: gameType.missions}}
+  })
   for (let i = 0; i < missionsInGame.length; i++) {
     const mission = missionsInGame[i].dataValues
-    missions[mission.id] = {status: 'null', fails: 0, playersRequired: mission.numberOfPlayers}
+    missions[mission.id] = {
+      status: 'null',
+      fails: 0,
+      playersRequired: mission.numberOfPlayers
+    }
   }
   const nominationsInGame = await Nomination.findAll({
     where: {
@@ -266,10 +272,19 @@ const getVisibility = async userId => {
   // const hasStarted = await hasBlankNomination(gameId)
   players.forEach(player => {
     if (visibleRoles.includes(player.roleId))
-      playerVisibility[player.id] = player.roleId
+      if (roleId === 5 && player.roleId === 6) playerVisibility[player.id] = 3
+      else playerVisibility[player.id] = player.roleId
     else playerVisibility[player.id] = 1
   })
+  console.log('THIS IS THE VISINBITLH', playerVisibility)
   return playerVisibility
+}
+
+const broadcastVisibility = async (io, users) => {
+  users.forEach(async user => {
+    let visibility = await getVisibility(user.id)
+    io.to(`${user.socketId}`).emit('getVisibility', visibility)
+  })
 }
 
 /**
@@ -372,7 +387,7 @@ const voteOnNomination = async (userId, vote) => {
   }
 }
 
-const getAssassin = async (userId) => {
+const getAssassin = async userId => {
   const game = await getGamewithUserId(userId)
   const assassin = await User.findOne({where: {gameId: game.id, roleId: 4}})
   return assassin
@@ -382,12 +397,9 @@ const submitAssassination = async (assassinId, targetId) => {
   const game = await getGamewithUserId(assassinId)
   const assassin = await User.findOne({where: {gameId: game.id, roleId: 4}})
   const merlin = await User.findOne({where: {gameId: game.id, roleId: 3}})
-  if (assassin.id !== assassinId)
-    return null
-  if (merlin.id !== targetId)
-    return 'good'
-  else
-    return 'bad'
+  if (assassin.id !== assassinId) return null
+  if (merlin.id !== targetId) return 'good'
+  else return 'bad'
 }
 
 module.exports = {
