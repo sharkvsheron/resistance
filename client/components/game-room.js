@@ -27,6 +27,10 @@ export class GameRoom extends React.Component {
     this.isWaitingOnNominator = this.isWaitingOnNominator.bind(this)
     this.amINominator = this.amINominator.bind(this)
     this.isNominationReady = this.isNominationReady.bind(this)
+    this.getCurrentNomination = this.getCurrentNomination.bind(this)
+    this.isNominationStage = this.isNominationStage.bind(this)
+    this.isVotingStage = this.isVotingStage.bind(this)
+    this.isMissionStage = this.isMissionStage.bind(this)
   }
 
   async componentDidMount() {
@@ -53,17 +57,25 @@ export class GameRoom extends React.Component {
 
   isNominationStage() {
     const currentNomination = this.getCurrentNomination()
+    if (!currentNomination) return
     return currentNomination.nominees.length === 0
+    // Nominees have not yet been selected, Nominator is in nomination selection process.
   }
 
   isVotingStage() {
     const currentNomination = this.getCurrentNomination()
-    return !this.isNominationStage() && currentNomination.nominationStatus === null
+    if (!currentNomination) return
+
+    return (
+      !this.isNominationStage() && currentNomination.nominationStatus === null
+    )
+    // nominees have been selected, all users should see the currently selected nominees and Approve/Reject buttons
   }
 
   isMissionStage() {
     const currentNomination = this.getCurrentNomination()
     return !this.isVotingStage() && currentNomination.missionStatus === null
+    // Nominees should see succeed/fail buttons. Non-nominated players should see 'waiting for succeed/fail' and should still see nomination status borders.
   }
 
   handleSelect(playerId) {
@@ -203,11 +215,9 @@ export class GameRoom extends React.Component {
             START Game
           </div>
         )}
-        {latestNomination &&
-          latestNomination.nominees.length > 0 &&
-          latestNomination.nominationStatus === null && (
-            <NominationVoteButtons id={this.props.user.id} />
-          )}
+        {this.isVotingStage() && (
+          <NominationVoteButtons id={this.props.user.id} />
+        )}
         <MissionVoteButtons id={this.props.user.id} />
         {//comment out up till === 'active' for testing purposes
         this.props.assassination.assassinationStatus === 'active' && (

@@ -5,9 +5,11 @@ import {connect} from 'react-redux'
 class Player extends Component {
   constructor(props) {
     super(props)
+    this.getCurrentNomination = this.getCurrentNomination.bind(this)
   }
 
   isNominated = (userId, array) => {
+    if (!array) return
     return array.includes(userId) ? 'nominated' : ''
   }
 
@@ -17,6 +19,13 @@ class Player extends Component {
     if (nominationKeys.length) {
       return userId === this.props.nominations[latestNomination].userId
     }
+  }
+
+  getCurrentNomination() {
+    const maxKey = Math.max(...Object.keys(this.props.nominations))
+    const currentNomination = this.props.nominations[maxKey]
+    if (!currentNomination) return
+    return currentNomination
   }
 
   render() {
@@ -29,13 +38,13 @@ class Player extends Component {
     } = this.props
     const {userName, roleId, sessionKey} = this.props.player
 
-    console.log(this.props)
     return (
       <div
-        className={`player-card ${this.isNominated(
+        className={`player-card local${this.isNominated(
           playerId,
           nominatedPlayers
-        )} nominator-${this.isPlayerNominator(parseInt(playerId))}`}
+        )} 
+        nominator-${this.isPlayerNominator(parseInt(playerId))}`}
         id={`player${id}`}
       >
         <div className="video-wrapper" id={`role${roleId}`} />
