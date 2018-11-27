@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import MissionTracker from './missionTracker'
+import NominationVoteButtons from './nomination-vote-buttons'
+import MissionVoteButtons from './mission-vote-buttons'
 import Player from './player'
 import Video from './video'
 import {connect} from 'react-redux'
@@ -46,17 +48,24 @@ export class GameRoom extends React.Component {
   handleSelect(playerId) {
     // # of players can only go up to # of players in mission type
     //
+    const latestNomination = Math.max(...Object.keys(this.props.nominations))
+
     if (this.state.selectedPlayers.includes(playerId)) {
-      const newSelectedPlayers = [...this.state.selectedPlayers].filter(
-        id => id !== playerId
-      )
-      if (newSelectedPlayers.length <= 2) {
-        this.setState({selectedPlayers: newSelectedPlayers})
-      }
-    } else {
+      const newSelectedPlayers = [...this.state.selectedPlayers].filter(id => {
+        return id !== playerId
+      })
+      this.setState({selectedPlayers: newSelectedPlayers})
+    }
+    if (
+      this.state.selectedPlayers.length <
+      this.props.missions[
+        this.props.nominations[latestNomination].missionTypeId
+      ].playersRequired
+    ) {
       this.setState({
         selectedPlayers: [...this.state.selectedPlayers, playerId]
       })
+      console.log('hit else', this.state.selectedPlayers)
     }
   }
 
@@ -92,7 +101,15 @@ export class GameRoom extends React.Component {
   }
 
   isNominationReady() {
-    if (this.state.selectedPlayers.length >= 2 && this.amINominator()) {
+    const latestNomination = Math.max(...Object.keys(this.props.nominations))
+    const playersRequiredForMission = this.props.missions[
+      this.props.nominations[latestNomination].missionTypeId
+    ].playersRequired
+    // the num 2 in 105 needs to be taken from mission type
+    if (
+      this.state.selectedPlayers.length === playersRequiredForMission &&
+      this.amINominator()
+    ) {
       return 'ready'
     } else {
       return 'not-ready'
@@ -112,12 +129,10 @@ export class GameRoom extends React.Component {
       ...Object.keys(this.props.nominations)
     )
     const latestNomination = this.props.nominations[latestNominationNumber]
-    console.log('latest nomination ', latestNomination)
+
+    console.log('props in game-room ', this.props)
     return (
       <div>
-        {/* {this.props.gameResult !== '' && (
-          <div>Game Result: {this.props.gameResult}</div>
-        )} */}
         <div className="video-container">
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
@@ -167,51 +182,21 @@ export class GameRoom extends React.Component {
             START Game
           </div>
         )}
-
-        <div className="nomination-vote-container">
+        {latestNomination &&
+          latestNomination.nominees.length > 0 &&
+          latestNomination.nominationStatus === null && (
+            <NominationVoteButtons id={this.props.user.id} />
+          )}
+        <MissionVoteButtons id={this.props.user.id} />
+        {//comment out up till === 'active' for testing purposes
+        this.props.assassination.assassinationStatus === 'active' && (
           <div
-            className="game-button"
-            onClick={async () =>
-              socket.emit('submitNominationVote', this.props.user.id, 'approve')
-            }
+            className="game-button submit-assassination"
+            onClick={() => this.submitAssassination()}
           >
-            APPROVE
+            SUBMIT ASSASSINATION
           </div>
-          <div
-            className="game-button"
-            onClick={async () =>
-              socket.emit('submitNominationVote', this.props.user.id, 'reject')
-            }
-          >
-            REJECT
-          </div>
-        </div>
-        <div className="mission-vote-container">
-          <div
-            className="game-button"
-            onClick={async () =>
-              socket.emit('submitMissionVote', this.props.user.id, 'success')
-            }
-          >
-            SUCCESS
-          </div>
-          <div
-            className="game-button"
-            onClick={async () =>
-              socket.emit('submitMissionVote', this.props.user.id, 'fail')
-            }
-          >
-            FAIL
-          </div>
-        </div>
-        {
-          //comment out up till === 'active' for testing purposes
-          this.props.assassination.assassinationStatus === 'active' && <div
-          className="game-button submit-assassination"
-          onClick={() => this.submitAssassination()}
-        >
-          SUBMIT ASSASSINATION
-        </div>}
+        )}
       </div>
     )
   }

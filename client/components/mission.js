@@ -4,14 +4,14 @@ export default class Mission extends Component {
     super(props)
   }
   render() {
-    // console.log(`props in mission`, this.props)
+    console.log(`props in mission`, this.props)
     return (
       <div className="mission">
         <div
           className={
-            this.props.missions.status
-              ? `${this.props.missions.status}`
-              : 'pending'
+            this.props.status.status === 'null'
+              ? 'pending'
+              : `${this.props.status.status}`
           }
           id={`mission${this.props.number}`}
         />

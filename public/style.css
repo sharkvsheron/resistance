@@ -144,19 +144,19 @@ form div {
   background-size: cover;
 }
 
-.mission .good {
+/* .mission .succeed {
   background-image: url('images/goodspaceman.png');
   width: 100px;
   height: 130px;
   background-size: cover;
 }
 
-.mission .bad {
+.mission .fail {
   background-image: url('images/badspaceman.png');
   width: 100px;
   height: 130px;
   background-size: cover;
-}
+} */
 
 .mission .succeed {
   background-image: url('images/mission-success.png');
@@ -259,9 +259,15 @@ input:not([type='submit']):not([type='file']) {
   justify-content: center;
 }
 
-.mission-vote-container {
+.mission-vote-buttons {
   display: flex;
   justify-content: center;
+  /* position: relative;
+  top: -430px; */
+}
+
+.mission-vote {
   position: relative;
   top: -430px;
+  text-align: center;
 }
