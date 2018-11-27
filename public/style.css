@@ -270,4 +270,11 @@ input:not([type='submit']):not([type='file']) {
   position: relative;
   top: -430px;
   text-align: center;
+
+.game-card {
+  display: flex;
+  width: 50%;
+  justify-content: right;
+  position: relative;
+
 }
