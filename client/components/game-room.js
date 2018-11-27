@@ -82,13 +82,6 @@ export class GameRoom extends React.Component {
     // # of players can only go up to # of players in mission type
     //
     const latestNomination = Math.max(...Object.keys(this.props.nominations))
-
-    if (this.state.selectedPlayers.includes(playerId)) {
-      const newSelectedPlayers = [...this.state.selectedPlayers].filter(id => {
-        return id !== playerId
-      })
-      this.setState({selectedPlayers: newSelectedPlayers})
-    }
     if (
       this.state.selectedPlayers.length <
       this.props.missions[
@@ -98,12 +91,16 @@ export class GameRoom extends React.Component {
       this.setState({
         selectedPlayers: [...this.state.selectedPlayers, playerId]
       })
-      console.log('hit else', this.state.selectedPlayers)
+    }
+    if (this.state.selectedPlayers.includes(playerId)) {
+      const newSelectedPlayers = [...this.state.selectedPlayers].filter(id => {
+        return id !== playerId
+      })
+      this.setState({selectedPlayers: newSelectedPlayers})
     }
   }
 
   handleNominationSubmit() {
-    console.log('clicc')
     socket.emit(
       'submitNomination',
       this.props.user.id,
@@ -162,8 +159,6 @@ export class GameRoom extends React.Component {
       ...Object.keys(this.props.nominations)
     )
     const latestNomination = this.props.nominations[latestNominationNumber]
-
-    console.log('props in game-room ', this.props)
     return (
       <div>
         <div className="video-container">
@@ -173,8 +168,8 @@ export class GameRoom extends React.Component {
         {this.amINominator() && (
           <div className="nominator-info">
             <p>
-              You are the nominator. Nominate 2 players to go on a mission.
-              Don't eff this up
+              You are the nominator. Nominate players to go on a mission. Don't
+              eff this up
             </p>
           </div>
         )}
@@ -185,17 +180,23 @@ export class GameRoom extends React.Component {
             </div>
           )}
         <div className="player-container">
-          {userIds.map((playerId, i) => (
-            <Player
-              key={i}
-              player={this.props.players[playerId]}
-              id={i}
-              playerId={playerId}
-              nominatedPlayers={this.state.selectedPlayers}
-              handleSelect={this.handleSelect}
-              isNominator={this.amINominator()}
-            />
-          ))}
+          {userIds.map((playerId, i) => {
+            return (
+              <Player
+                key={i}
+                player={this.props.players[playerId]}
+                id={i}
+                playerId={playerId}
+                nominatedPlayers={
+                  this.getCurrentNomination().nominees.length
+                    ? this.getCurrentNomination().nominees
+                    : this.state.selectedPlayers
+                }
+                handleSelect={this.handleSelect}
+                isNominator={this.amINominator()}
+              />
+            )
+          })}
         </div>
         {this.amINominator() && (
           <div
@@ -245,4 +246,7 @@ const mapState = state => ({
   assassination: state.assassination
 })
 
-export default connect(mapState, null)(GameRoom)
+export default connect(
+  mapState,
+  null
+)(GameRoom)

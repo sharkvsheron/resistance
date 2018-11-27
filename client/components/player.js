@@ -9,8 +9,7 @@ class Player extends Component {
   }
 
   isNominated = (userId, array) => {
-    if (!array) return
-    return array.includes(userId) ? 'nominated' : ''
+    return array.includes(Number(userId)) ? 'nominated' : ''
   }
 
   isPlayerNominator(userId) {
@@ -37,13 +36,12 @@ class Player extends Component {
       isNominator
     } = this.props
     const {userName, roleId, sessionKey} = this.props.player
-
     return (
       <div
-        className={`player-card local${this.isNominated(
+        className={`player-card local ${this.isNominated(
           playerId,
           nominatedPlayers
-        )} 
+        )}
         nominator-${this.isPlayerNominator(parseInt(playerId))}`}
         id={`player${id}`}
       >
