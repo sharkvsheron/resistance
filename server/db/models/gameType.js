@@ -4,7 +4,11 @@ const User = require('./user')
 
 const GameType = db.define('gameTypes', {
   numberOfPlayers: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
+    validate: {
+      min: 5,
+      max: 12
+    }
   },
   rolesAvailable: {
     type: Sequelize.ARRAY(Sequelize.INTEGER)

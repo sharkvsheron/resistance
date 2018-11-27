@@ -246,3 +246,9 @@ input:not([type='submit']):not([type='file']) {
   color: transparent;
   z-index: -1000;
 }
+.game-card {
+  display: flex;
+  width: 50%;
+  justify-content: right;
+  position: relative;
+}

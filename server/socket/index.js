@@ -17,7 +17,7 @@ const {
   getAssassin,
   submitAssassination
 } = require('./functions')
-const {User, Game} = require('../db/models')
+const {User, Game, GameType, MissionType} = require('../db/models')
 const OpenTok = require('opentok')
 /*
   Params: socket
@@ -46,25 +46,38 @@ module.exports = io => {
       io.to(`${socket.id}`).emit('getGames', allGames)
     })
 
-    socket.on('createGame', async userId => {
-      let sessionId
+    socket.on(
+      'createGame',
+      async (gameName, numberOfPlayers, roles, missions) => {
+        let sessionId
 
-      await opentok.createSession({mediaMode: 'routed'}, async function(
-        err,
-        session
-      ) {
-        if (err) {
-          console.log(err)
-          return
-        }
-        sessionId = session.sessionId
-        // let sessionKey = opentok.generateToken(sessionId)
-        // await User.update({sessionKey}, {where: {id: userId}})
-        await Game.create({sessionId, gameTypeId: 1})
-        const allGames = await Game.findAll()
-        socket.emit('createdNewGame', allGames)
-      })
-    })
+        console.log('THESE ARE THE ROLES AVAILABLE', roles)
+        await opentok.createSession({mediaMode: 'routed'}, async function(
+          err,
+          session
+        ) {
+          if (err) {
+            console.log(err)
+            return
+          }
+          sessionId = session.sessionId
+
+          const missionIds = []
+          for (let i = 0; i < missions.length; i++) {
+            const newMission = await MissionType.create(missions[i])
+            missionIds.push(newMission.id)
+          }
+          const newGameType = await GameType.create({
+            numberOfPlayers,
+            rolesAvailable: roles,
+            missions: missionIds
+          })
+          await Game.create({sessionId, gameName, gameTypeId: newGameType.id})
+          const allGames = await Game.findAll()
+          socket.emit('createdNewGame', allGames)
+        })
+      }
+    )
 
     socket.on('joinGame', async (userId, gameId) => {
       const game = await Game.findById(gameId)
@@ -128,11 +141,9 @@ module.exports = io => {
         const gameRoom = await joinGameRoom(socket)
         const nominations = await getNominations(nominatorId)
         const nominationVotes = await getNominationVotes(nominatorId)
-        io.in(gameRoom).emit(
-          'nominationSubmitted',
-          nominations,
-          nominationVotes
-        )
+        io
+          .in(gameRoom)
+          .emit('nominationSubmitted', nominations, nominationVotes)
       }
     })
 
@@ -142,11 +153,9 @@ module.exports = io => {
         const gameRoom = await joinGameRoom(socket)
         const nominations = await getNominations(userId)
         const nominationVotes = await getNominationVotes(userId)
-        io.in(gameRoom).emit(
-          'nominationSubmitted',
-          nominations,
-          nominationVotes
-        )
+        io
+          .in(gameRoom)
+          .emit('nominationSubmitted', nominations, nominationVotes)
       }
     })
 
