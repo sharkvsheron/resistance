@@ -6,32 +6,32 @@ export default class NewGameForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      gameName: '',
+      gameName: 'The Ulysses Mission',
       numberOfPlayers: 5,
       missions: [1, 2, 3, 4, 5],
       roles: [
         {
-          name: 'Merlin',
+          name: 'Commander / Merlin',
           selected: false,
           id: 3
         },
         {
-          name: 'Percival',
+          name: 'HAL 9000 / Percival',
           selected: false,
           id: 5
         },
         {
-          name: 'Morgana',
+          name: 'Symbiote / Morgana',
           selected: false,
           id: 6
         },
         {
-          name: 'Mordred',
+          name: ' Mangalord / Mordred',
           selected: false,
           id: 7
         },
         {
-          name: 'Oberon',
+          name: 'Doppelganger / Oberon',
           selected: false,
           id: 8
         }
