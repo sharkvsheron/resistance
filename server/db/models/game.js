@@ -7,7 +7,7 @@ const Game = db.define('game', {
   sessionId: {
     type: Sequelize.TEXT
   },
-  name: {
+  gameName: {
     type: Sequelize.STRING
   }
 })

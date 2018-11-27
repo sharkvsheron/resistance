@@ -43,7 +43,7 @@ class UserHome extends React.Component {
         {this.props.games.map(game => {
           return (
             <Link to={`/game/${game.id}`} key={game.id}>
-              Click to enter game #{game.id}
+              Click to Enter {game.gameName} #{game.id}
             </Link>
           )
         })}

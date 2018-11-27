@@ -63,7 +63,7 @@ module.exports = io => {
             rolesAvailable,
             missions
           })
-          await Game.create({sessionId, gameTypeId: newGameType.id})
+          await Game.create({sessionId, gameName, gameTypeId: newGameType.id})
           const allGames = await Game.findAll()
           socket.emit('createdNewGame', allGames)
         })
