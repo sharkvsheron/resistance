@@ -7,6 +7,7 @@ export default class NewGameForm extends Component {
     this.state = {
       gameName: 'The Ulysses Mission',
       numberOfPlayers: 5,
+      roleArray: [],
       missions: [
         {
           numberOfPlayers: 2,
@@ -83,6 +84,7 @@ export default class NewGameForm extends Component {
       .map(role => role.amount)
       .reduce((a, b) => Number(a) + Number(b))
     this.setState({newState})
+
     this.setState({numberOfPlayers: numberOfPlayers})
   }
   handleChange(event) {
@@ -103,14 +105,13 @@ export default class NewGameForm extends Component {
 
   handleSubmit() {
     const {gameName, numberOfPlayers, roles, missions} = this.state
-    const additionalRoles = roles.filter(role => role.selected)
-    socket.emit(
-      'createGame',
-      gameName,
-      numberOfPlayers,
-      additionalRoles,
-      missions
-    )
+    const roleArray = []
+    roles.forEach(role => {
+      for (let i = Number(role.amount); i > 0; i--) {
+        roleArray.push(role.id)
+      }
+    })
+    socket.emit('createGame', gameName, numberOfPlayers, roleArray, missions)
     this.props.openForm()
   }
 
@@ -119,7 +120,6 @@ export default class NewGameForm extends Component {
   render() {
     const roleArray = Object.values(this.state.roles)
     const missionArray = [0, 1, 2, 3, 4]
-    console.log('THESE ARE THE ROLES', this.state.numberOfPlayers)
     return (
       <div>
         <h2>Custom Game </h2>

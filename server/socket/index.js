@@ -48,7 +48,8 @@ module.exports = io => {
       'createGame',
       async (gameName, numberOfPlayers, roles, missions) => {
         let sessionId
-        const rolesAvailable = roles.map(role => role.id)
+
+        console.log('THESE ARE THE ROLES AVAILABLE', roles)
         await opentok.createSession({mediaMode: 'routed'}, async function(
           err,
           session
@@ -66,7 +67,7 @@ module.exports = io => {
           }
           const newGameType = await GameType.create({
             numberOfPlayers,
-            rolesAvailable,
+            rolesAvailable: roles,
             missions: missionIds
           })
           await Game.create({sessionId, gameName, gameTypeId: newGameType.id})
