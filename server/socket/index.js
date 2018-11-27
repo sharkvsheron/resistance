@@ -51,7 +51,6 @@ module.exports = io => {
       async (gameName, numberOfPlayers, roles, missions) => {
         let sessionId
 
-        console.log('THESE ARE THE ROLES AVAILABLE', roles)
         await opentok.createSession({mediaMode: 'routed'}, async function(
           err,
           session
@@ -173,9 +172,10 @@ module.exports = io => {
           if (gameResult === 'good') {
             const assassin = getAssassin(userId)
             io.in(gameRoom).emit('assassinationActive', {
-              assassinationStatus: 'active',
-              assassinId: assassin.id
-            })
+                assassinationStatus: 'active',
+                assassinId: assassin.id
+              })
+
           }
           io.in(gameRoom).emit('getGameResult', gameResult)
         }
