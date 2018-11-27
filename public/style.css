@@ -144,19 +144,19 @@ form div {
   background-size: cover;
 }
 
-.mission .good {
+/* .mission .succeed {
   background-image: url('images/goodspaceman.png');
   width: 100px;
   height: 130px;
   background-size: cover;
 }
 
-.mission .bad {
+.mission .fail {
   background-image: url('images/badspaceman.png');
   width: 100px;
   height: 130px;
   background-size: cover;
-}
+} */
 
 .mission .succeed {
   background-image: url('images/mission-success.png');
@@ -235,10 +235,15 @@ input:not([type='submit']):not([type='file']) {
 .submit-nomination {
   transition: all 0.5s ease;
   display: block;
-
   position: relative;
   margin: 0 auto;
   top: -200px;
+}
+
+#startgame-button {
+  position: relative;
+  top: -425px;
+  margin: 0 auto;
 }
 
 .not-ready {
@@ -246,9 +251,30 @@ input:not([type='submit']):not([type='file']) {
   color: transparent;
   z-index: -1000;
 }
+
+.nomination-vote-container {
+  display: flex;
+  position: relative;
+  top: -440px;
+  justify-content: center;
+}
+
+.mission-vote-buttons {
+  display: flex;
+  justify-content: center;
+  /* position: relative;
+  top: -430px; */
+}
+
+.mission-vote {
+  position: relative;
+  top: -430px;
+  text-align: center;
+
 .game-card {
   display: flex;
   width: 50%;
   justify-content: right;
   position: relative;
+
 }

@@ -5,7 +5,16 @@ export const getNominations = nominations => ({
   nominations
 })
 
-const initialState = {}
+const initialState = {
+  0: {
+    id: 0,
+    missionStatus: null,
+    missionTypeId: 0,
+    nominationStatus: null,
+    nominees: [],
+    userId: 0
+  }
+}
 /**
  * REDUCER
  */
