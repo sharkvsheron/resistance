@@ -140,9 +140,11 @@ module.exports = io => {
         const gameRoom = await joinGameRoom(socket)
         const nominations = await getNominations(nominatorId)
         const nominationVotes = await getNominationVotes(nominatorId)
-        io
-          .in(gameRoom)
-          .emit('nominationSubmitted', nominations, nominationVotes)
+        io.in(gameRoom).emit(
+          'nominationSubmitted',
+          nominations,
+          nominationVotes
+        )
       }
     })
 
@@ -152,9 +154,11 @@ module.exports = io => {
         const gameRoom = await joinGameRoom(socket)
         const nominations = await getNominations(userId)
         const nominationVotes = await getNominationVotes(userId)
-        io
-          .in(gameRoom)
-          .emit('nominationSubmitted', nominations, nominationVotes)
+        io.in(gameRoom).emit(
+          'nominationSubmitted',
+          nominations,
+          nominationVotes
+        )
       }
     })
 
@@ -168,6 +172,13 @@ module.exports = io => {
         if (voteResult !== null) {
           const missions = await getMissions(userId)
           io.in(gameRoom).emit('getMissions', missions)
+          const nominations = await getNominations(userId)
+          const nominationVotes = await getNominationVotes(userId)
+          io.in(gameRoom).emit(
+            'nominationSubmitted',
+            nominations,
+            nominationVotes
+          )
           const gameResult = await getGameResult(userId)
           if (gameResult === 'good') {
             const assassin = getAssassin(userId)
