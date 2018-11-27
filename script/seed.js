@@ -17,8 +17,13 @@ async function seed() {
   const roles = await Promise.all([
     Role.bulkCreate([
       {visible: [], name: 'goodguy'},
-      {visible: [2], name: 'badguy'},
-      {visible: [1, 2, 3], name: 'merlin'}
+      {visible: [2, 4, 6, 7], name: 'badguy'},
+      {visible: [1, 2, 3, 4, 5, 6, 8], name: 'merlin'},
+      {visible: [2, 4, 7, 8], name: 'assasin'},
+      {visible: [3, 6, 5], name: 'percival'},
+      {visible: [2, 4, 7, 6], name: 'morgana'},
+      {visible: [2, 4, 7, 6], name: 'mordred'},
+      {visible: [2, 4, 7, 8, 6], name: 'oberon'}
     ])
   ])
 
@@ -26,8 +31,33 @@ async function seed() {
     GameType.bulkCreate([
       {
         numberOfPlayers: 5,
-        rolesAvailable: [1, 2, 3, 1, 2],
+        rolesAvailable: [1, 2, 3, 1, 4],
         missions: [1, 2, 3, 4, 5]
+      },
+      {
+        numberOfPlayers: 6,
+        rolesAvailable: [1, 2, 3, 1, 4, 5],
+        missions: [6, 7, 8, 9, 10]
+      },
+      {
+        numberOfPlayers: 7,
+        rolesAvailable: [1, 2, 3, 1, 4, 6, 5],
+        missions: [11, 12, 13, 14, 15]
+      },
+      {
+        numberOfPlayers: 8,
+        rolesAvailable: [1, 2, 3, 1, 4, 6, 5, 1],
+        missions: [16, 17, 18, 19, 20]
+      },
+      {
+        numberOfPlayers: 9,
+        rolesAvailable: [1, 7, 3, 1, 4, 5, 6, 1, 1],
+        missions: [16, 17, 18, 19, 20]
+      },
+      {
+        numberOfPlayers: 10,
+        rolesAvailable: [1, 3, 1, 4, 5, 6, 7, 8, 1],
+        missions: [16, 17, 18, 19, 20]
       }
     ])
   ])
@@ -38,7 +68,22 @@ async function seed() {
       {numberOfPlayers: 3, failsRequired: 1},
       {numberOfPlayers: 2, failsRequired: 1},
       {numberOfPlayers: 3, failsRequired: 1},
-      {numberOfPlayers: 3, failsRequired: 1}
+      {numberOfPlayers: 3, failsRequired: 1},
+      {numberOfPlayers: 2, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1},
+      {numberOfPlayers: 4, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1},
+      {numberOfPlayers: 4, failsRequired: 1},
+      {numberOfPlayers: 2, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1},
+      {numberOfPlayers: 4, failsRequired: 2},
+      {numberOfPlayers: 4, failsRequired: 1},
+      {numberOfPlayers: 3, failsRequired: 1},
+      {numberOfPlayers: 4, failsRequired: 1},
+      {numberOfPlayers: 4, failsRequired: 1},
+      {numberOfPlayers: 5, failsRequired: 2},
+      {numberOfPlayers: 5, failsRequired: 1}
     ])
   ])
   const game = await Promise.all([Game.create({gameTypeId: 1})])

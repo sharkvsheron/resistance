@@ -4,15 +4,20 @@ import {connect} from 'react-redux'
 import socket from '../socket'
 import {Link} from 'react-router-dom'
 import store, {me} from '../store'
+import NewGameForm from './new-game-form'
+import Game from './game'
 
-/**
- * COMPONENT
- */
 class UserHome extends React.Component {
   constructor(props) {
     super(props)
+    this.openForm = this.openForm.bind(this)
+    this.state = {
+      openForm: false
+    }
   }
-
+  openForm() {
+    this.setState({openForm: !this.state.openForm})
+  }
   async componentDidMount() {
     await store.dispatch(me())
     socket.emit('getGames')
@@ -21,23 +26,20 @@ class UserHome extends React.Component {
 
   render() {
     const {email} = this.props
+    const {openForm} = this.state
     return (
       <div>
         <h3>Welcome, {email}</h3>
-        <button
-          type="submit"
-          onClick={() => socket.emit('createGame', this.props.user.id)}
-        >
-          CREATE GAME
-        </button>
-
-        {this.props.games.map(game => {
-          return (
-            <Link to={`/game/${game.id}`} key={game.id}>
-              Click to enter game #{game.id}
-            </Link>
-          )
-        })}
+        {!openForm ? (
+          <button type="submit" onClick={() => this.openForm()}>
+            CREATE GAME
+          </button>
+        ) : (
+          <NewGameForm openForm={this.openForm} />
+        )}
+        {this.props.games.map((game, i) => (
+          <Game name={game.gameName} id={game.id} key={i} />
+        ))}
       </div>
     )
   }
@@ -55,10 +57,3 @@ const mapState = state => {
 }
 
 export default connect(mapState, null)(UserHome)
-
-/**
- * PROP TYPES
- */
-UserHome.propTypes = {
-  email: PropTypes.string
-}
