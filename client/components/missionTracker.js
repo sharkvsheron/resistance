@@ -16,6 +16,7 @@ class MissionTracker extends Component {
   }
   render() {
     const indexs = Object.keys(this.props.missions)
+    // console.log('Props in mission tracker', this.props)
     return (
       <div className="mission-container">
         {indexs.map((number, i) => {

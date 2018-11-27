@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import MissionTracker from './missionTracker'
+import NominationVoteButtons from './nomination-vote-buttons'
+import MissionVoteButtons from './mission-vote-buttons'
 import Player from './player'
 import Video from './video'
 import {connect} from 'react-redux'
@@ -25,6 +27,10 @@ export class GameRoom extends React.Component {
     this.isWaitingOnNominator = this.isWaitingOnNominator.bind(this)
     this.amINominator = this.amINominator.bind(this)
     this.isNominationReady = this.isNominationReady.bind(this)
+    this.getCurrentNomination = this.getCurrentNomination.bind(this)
+    this.isNominationStage = this.isNominationStage.bind(this)
+    this.isVotingStage = this.isVotingStage.bind(this)
+    this.isMissionStage = this.isMissionStage.bind(this)
   }
 
   async componentDidMount() {
@@ -51,38 +57,50 @@ export class GameRoom extends React.Component {
 
   isNominationStage() {
     const currentNomination = this.getCurrentNomination()
+    if (!currentNomination) return false
     return currentNomination.nominees.length === 0
+    // Nominees have not yet been selected, Nominator is in nomination selection process.
   }
 
   isVotingStage() {
     const currentNomination = this.getCurrentNomination()
-    return !this.isNominationStage() && currentNomination.nominationStatus === null
+    if (!currentNomination) return false
+
+    return (
+      !this.isNominationStage() && currentNomination.nominationStatus === null
+    )
+    // nominees have been selected, all users should see the currently selected nominees and Approve/Reject buttons
   }
 
   isMissionStage() {
     const currentNomination = this.getCurrentNomination()
     return !this.isVotingStage() && currentNomination.missionStatus === null
+    // Nominees should see succeed/fail buttons. Non-nominated players should see 'waiting for succeed/fail' and should still see nomination status borders.
   }
 
   handleSelect(playerId) {
     // # of players can only go up to # of players in mission type
     //
-    if (this.state.selectedPlayers.includes(playerId)) {
-      const newSelectedPlayers = [...this.state.selectedPlayers].filter(
-        id => id !== playerId
-      )
-      if (newSelectedPlayers.length <= 2) {
-        this.setState({selectedPlayers: newSelectedPlayers})
-      }
-    } else {
+    const latestNomination = Math.max(...Object.keys(this.props.nominations))
+    if (
+      this.state.selectedPlayers.length <
+      this.props.missions[
+        this.props.nominations[latestNomination].missionTypeId
+      ].playersRequired
+    ) {
       this.setState({
         selectedPlayers: [...this.state.selectedPlayers, playerId]
       })
     }
+    if (this.state.selectedPlayers.includes(playerId)) {
+      const newSelectedPlayers = [...this.state.selectedPlayers].filter(id => {
+        return id !== playerId
+      })
+      this.setState({selectedPlayers: newSelectedPlayers})
+    }
   }
 
   handleNominationSubmit() {
-    console.log('clicc')
     socket.emit(
       'submitNomination',
       this.props.user.id,
@@ -113,7 +131,15 @@ export class GameRoom extends React.Component {
   }
 
   isNominationReady() {
-    if (this.state.selectedPlayers.length >= 2 && this.amINominator()) {
+    const latestNomination = Math.max(...Object.keys(this.props.nominations))
+    const playersRequiredForMission = this.props.missions[
+      this.props.nominations[latestNomination].missionTypeId
+    ].playersRequired
+    // the num 2 in 105 needs to be taken from mission type
+    if (
+      this.state.selectedPlayers.length === playersRequiredForMission &&
+      this.amINominator()
+    ) {
       return 'ready'
     } else {
       return 'not-ready'
@@ -128,13 +154,13 @@ export class GameRoom extends React.Component {
 
   render() {
     const userIds = Object.keys(this.props.players)
-    // ************ Change line 73 from 1 to whatever the current nom userId is
     const nominationKeys = Object.keys(this.props.nominations)
+    const latestNominationNumber = Math.max(
+      ...Object.keys(this.props.nominations)
+    )
+    const latestNomination = this.props.nominations[latestNominationNumber]
     return (
       <div>
-        {/* {this.props.gameResult !== '' && (
-          <div>Game Result: {this.props.gameResult}</div>
-        )} */}
         <div className="video-container">
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
@@ -142,8 +168,8 @@ export class GameRoom extends React.Component {
         {this.amINominator() && (
           <div className="nominator-info">
             <p>
-              You are the nominator. Nominate 2 players to go on a mission.
-              Don't eff this up
+              You are the nominator. Nominate players to go on a mission. Don't
+              eff this up
             </p>
           </div>
         )}
@@ -154,17 +180,23 @@ export class GameRoom extends React.Component {
             </div>
           )}
         <div className="player-container">
-          {userIds.map((playerId, i) => (
-            <Player
-              key={i}
-              player={this.props.players[playerId]}
-              id={i}
-              playerId={playerId}
-              nominatedPlayers={this.state.selectedPlayers}
-              handleSelect={this.handleSelect}
-              isNominator={this.amINominator()}
-            />
-          ))}
+          {userIds.map((playerId, i) => {
+            return (
+              <Player
+                key={i}
+                player={this.props.players[playerId]}
+                id={i}
+                playerId={playerId}
+                nominatedPlayers={
+                  this.getCurrentNomination().nominees.length
+                    ? this.getCurrentNomination().nominees
+                    : this.state.selectedPlayers
+                }
+                handleSelect={this.handleSelect}
+                isNominator={this.amINominator()}
+              />
+            )
+          })}
         </div>
         {this.amINominator() && (
           <div
@@ -175,61 +207,28 @@ export class GameRoom extends React.Component {
           </div>
         )}
         <MissionTracker {...this.props} />
-        <button onClick={() => this.startGame(this.props.user.id)}>
-          START Game
-        </button>
-
-        <div className="nomination-vote-container">
-          <button
-            type="submit"
-            onClick={async () =>
-              socket.emit('submitNominationVote', this.props.user.id, 'approve')
-            }
+        {!this.props.nominations[1] && (
+          <div
+            className="game-button"
+            id="startgame-button"
+            onClick={() => this.startGame(this.props.user.id)}
           >
-            Approve
-          </button>
-          <button
-            type="submit"
-            onClick={async () =>
-              socket.emit('submitNominationVote', this.props.user.id, 'reject')
-            }
+            START Game
+          </div>
+        )}
+        {this.isVotingStage() && (
+          <NominationVoteButtons id={this.props.user.id} />
+        )}
+        <MissionVoteButtons id={this.props.user.id} />
+        {//comment out up till === 'active' for testing purposes
+        this.props.assassination.assassinationStatus === 'active' && (
+          <div
+            className="game-button submit-assassination"
+            onClick={() => this.submitAssassination()}
           >
-            Reject
-          </button>
-        </div>
-        <div className="nominate-form">
-          <NominatorForm players={this.props.players} />
-        </div>
-        <button
-          type="submit"
-          onClick={async () =>
-            socket.emit('submitMissionVote', this.props.user.id, 'success')
-          }
-        >
-          SUCCESS
-        </button>
-        <button
-          type="submit"
-          onClick={async () =>
-            socket.emit('submitMissionVote', this.props.user.id, 'fail')
-          }
-        >
-          FAIL
-        </button>
-        <div
-          className="game-button submit-nomination"
-          onClick={() => this.handleNominationSubmit()}
-        >
-          SUBMIT NOMINATION
-        </div>
-        {
-          //comment out up till === 'active' for testing purposes
-          this.props.assassination.assassinationStatus === 'active' && <div
-          className="game-button submit-assassination"
-          onClick={() => this.submitAssassination()}
-        >
-          SUBMIT ASSASSINATION
-        </div>}
+            SUBMIT ASSASSINATION
+          </div>
+        )}
       </div>
     )
   }
@@ -247,4 +246,7 @@ const mapState = state => ({
   assassination: state.assassination
 })
 
-export default connect(mapState, null)(GameRoom)
+export default connect(
+  mapState,
+  null
+)(GameRoom)

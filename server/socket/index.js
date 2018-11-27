@@ -171,12 +171,11 @@ module.exports = io => {
           const gameResult = await getGameResult(userId)
           if (gameResult === 'good') {
             const assassin = getAssassin(userId)
-            io
-              .in(gameRoom)
-              .emit('assassinationActive', {
+            io.in(gameRoom).emit('assassinationActive', {
                 assassinationStatus: 'active',
                 assassinId: assassin.id
               })
+
           }
           io.in(gameRoom).emit('getGameResult', gameResult)
         }

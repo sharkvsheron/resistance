@@ -9,9 +9,9 @@ export default class Mission extends Component {
       <div className="mission">
         <div
           className={
-            this.props.missions.status
-              ? `${this.props.missions.status}`
-              : 'pending'
+            this.props.status.status === 'null'
+              ? 'pending'
+              : `${this.props.status.status}`
           }
           id={`mission${this.props.number}`}
         />
