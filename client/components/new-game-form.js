@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
 import socket from '../socket'
 
 export default class NewGameForm extends Component {
@@ -8,31 +7,62 @@ export default class NewGameForm extends Component {
     this.state = {
       gameName: 'The Ulysses Mission',
       numberOfPlayers: 5,
-      missions: [1, 2, 3, 4, 5],
+      missions: [
+        {
+          numberOfPlayers: 2,
+          failsRequired: 1
+        },
+        {
+          numberOfPlayers: 3,
+          failsRequired: 1
+        },
+        {
+          numberOfPlayers: 2,
+          failsRequired: 1
+        },
+        {
+          numberOfPlayers: 3,
+          failsRequired: 1
+        },
+        {
+          numberOfPlayers: 3,
+          failsRequired: 1
+        }
+      ],
       roles: [
         {
+          name: 'Troopers / Good Guys',
+          amount: 2,
+          id: 1
+        },
+        {
+          name: 'Baddies / Bad Guys',
+          amount: 2,
+          id: 2
+        },
+        {
           name: 'Commander / Merlin',
-          selected: false,
+          amount: 1,
           id: 3
         },
         {
           name: 'HAL 9000 / Percival',
-          selected: false,
+          amount: 0,
           id: 5
         },
         {
           name: 'Symbiote / Morgana',
-          selected: false,
+          amount: 0,
           id: 6
         },
         {
-          name: ' Mangalord / Mordred',
-          selected: false,
+          name: 'Mangalord / Mordred',
+          amount: 0,
           id: 7
         },
         {
           name: 'Doppelganger / Oberon',
-          selected: false,
+          amount: 0,
           id: 8
         }
       ]
@@ -41,13 +71,19 @@ export default class NewGameForm extends Component {
     this.handleChecked = this.handleChecked.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleMissionChange = this.handleMissionChange.bind(this)
   }
   handleChecked(event) {
     const target = event.target
     const id = target.id
+    const value = target.value
     const newState = {...this.state}
-    newState.roles[id].selected = !newState.roles[id].selected
+    newState.roles[id].amount = value
+    const numberOfPlayers = newState.roles
+      .map(role => role.amount)
+      .reduce((a, b) => Number(a) + Number(b))
     this.setState({newState})
+    this.setState({numberOfPlayers: numberOfPlayers})
   }
   handleChange(event) {
     const target = event.target
@@ -55,6 +91,16 @@ export default class NewGameForm extends Component {
     const name = target.name
     this.setState({[name]: value})
   }
+  handleMissionChange(event) {
+    const target = event.target
+    const name = target.name
+    const id = target.id
+    const value = target.value
+    const newState = {...this.state}
+    newState.missions[id][name] = value
+    this.setState({newState})
+  }
+
   handleSubmit() {
     const {gameName, numberOfPlayers, roles, missions} = this.state
     const additionalRoles = roles.filter(role => role.selected)
@@ -72,9 +118,13 @@ export default class NewGameForm extends Component {
 
   render() {
     const roleArray = Object.values(this.state.roles)
+    const missionArray = [0, 1, 2, 3, 4]
+    console.log('THESE ARE THE ROLES', this.state.numberOfPlayers)
     return (
       <div>
         <h2>Custom Game </h2>
+        <h2>Number of Players: {this.state.numberOfPlayers}</h2>
+
         <br />
         <br />
         <br />
@@ -88,25 +138,41 @@ export default class NewGameForm extends Component {
               onChange={this.handleChange}
             />
           </label>
-          <label>
-            Number of PLayers:
-            <input
-              type="number"
-              name="numberOfPlayers"
-              min="5"
-              max="12"
-              value={this.state.numberOfPlayers}
-              onChange={this.handleChange}
-            />
-          </label>
           {roleArray.map((role, i) => (
             <label key={i}>
               {role.name}
               <input
                 name={role.name}
-                type="checkbox"
+                type="number"
+                min={0}
+                max={10}
                 onChange={this.handleChecked}
+                value={role.amount}
                 id={i}
+              />
+            </label>
+          ))}
+
+          {missionArray.map(mission => (
+            <label key={mission}>
+              Mission : {mission}
+              <input
+                type="number"
+                name="numberOfPlayers"
+                min="1"
+                max="10"
+                value={this.state.missions[mission].numberOfPlayers}
+                onChange={this.handleMissionChange}
+                id={mission}
+              />
+              <input
+                type="number"
+                name="failsRequired"
+                min="1"
+                max="10"
+                value={this.state.missions[mission].failsRequired}
+                onChange={this.handleMissionChange}
+                id={mission}
               />
             </label>
           ))}

@@ -15,7 +15,7 @@ const {
   getMissions,
   getGameResult
 } = require('./functions')
-const {User, Game, GameType} = require('../db/models')
+const {User, Game, GameType, MissionType} = require('../db/models')
 const OpenTok = require('opentok')
 /*
   Params: socket
@@ -58,10 +58,16 @@ module.exports = io => {
             return
           }
           sessionId = session.sessionId
+
+          const missionIds = []
+          for (let i = 0; i < missions.length; i++) {
+            const newMission = await MissionType.create(missions[i])
+            missionIds.push(newMission.id)
+          }
           const newGameType = await GameType.create({
             numberOfPlayers,
             rolesAvailable,
-            missions
+            missions: missionIds
           })
           await Game.create({sessionId, gameName, gameTypeId: newGameType.id})
           const allGames = await Game.findAll()
