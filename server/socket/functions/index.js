@@ -252,7 +252,7 @@ const getMissions = async userId => {
     const fails = await MissionVote.findAll({
       where: {nominationId: nomination.id, vote: 'fail'}
     })
-    missions[nomination.id] = {
+    missions[nomination.missionTypeId] = {
       status: `${nomination.missionStatus}`,
       fails: Number(fails.length)
     }
