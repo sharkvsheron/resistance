@@ -278,4 +278,7 @@ const mapState = state => ({
   assassination: state.assassination
 })
 
-export default connect(mapState, null)(GameRoom)
+export default connect(
+  mapState,
+  null
+)(GameRoom)
