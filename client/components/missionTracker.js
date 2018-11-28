@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Mission from './mission'
 import {connect} from 'react-redux'
 import socket from '../socket'
+import {missionDescriptions} from '../lore'
 
 // const missionInfo = [
 //   { mission: 1, numberOfPlayers: 2, failsRequired: 1 },
@@ -30,7 +31,9 @@ class MissionTracker extends Component {
             <Mission
               key={i}
               number={number}
+              index={i}
               status={this.props.missions[number]}
+              description={(missionDescriptions[i + 1] || {}).description}
               // numberOfPlayers={single.numberOfPlayers}
               // failsRequired={single.failsRequired}
               {...this.props}

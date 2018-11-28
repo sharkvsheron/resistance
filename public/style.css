@@ -176,11 +176,21 @@ form div {
   align-items: center;
 }
 
+.mission-number {
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  margin: 10px 0px;
+}
+
 .mission .pending {
   background-image: url('images/mission-pending.png');
   width: 100px;
   height: 130px;
   background-size: cover;
+}
+
+.other-info {
+  display: none;
 }
 
 /* .mission .succeed {

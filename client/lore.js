@@ -11,23 +11,18 @@ export const roleNames = {
 
 export const missionDescriptions = {
   1: {
-    fails: 1,
-    description: 'This is mission 1'
+    description: 'Set Up Camp'
   },
   2: {
-    fails: 1,
-    description: 'This is mission 2'
+    description: 'Set Up Solar Station'
   },
   3: {
-    fails: 2,
-    description: 'This is mission 3'
+    description: 'Collect Samples'
   },
   4: {
-    fails: 1,
-    description: 'This is mission 4'
+    description: 'Find Water'
   },
   5: {
-    fails: 2,
-    description: 'This is mission 5'
+    description: 'Depart Moon'
   }
 }
