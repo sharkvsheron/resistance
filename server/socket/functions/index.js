@@ -274,40 +274,56 @@ const getVisibility = async userId => {
   const role = await Role.findById(roleId)
   const visibleRoles = role.visible
   const players = await User.findAll({where: {gameId}})
-  const playerVisibility = {}
+  let playerVisibility = {}
   // const hasStarted = await hasBlankNomination(gameId)
-  players.forEach(player => {
+  for (let i = 0; i<players.length; i++) {
+    let player = players[i]
+    console.log('VISIBLE ROLES', visibleRoles, 'PLAYER ROLEID', player.roleId)
     if (visibleRoles.includes(player.roleId)) {
-      // Baddies Vision
-      if (roleId === 2 && [4, 6, 8].includes(player.roleId)) {
-        playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
-      // Commanders Vision
-      if (roleId === 3 && [2, 4, 6, 8].includes(player.roleId)) {
-        playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
-      // Assissin Vision
-      if (roleId === 4 && [2, 6, 7].includes(player.roleId)) {
-        playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
-      // Percivals Vision
-      if (roleId === 5 && player.roleId === 6) {
-        playerVisibility[player.id] = 3
-      } else playerVisibility[player.id] = player.roleId
-      // Morganas Vision
-      if (roleId === 6 && [2, 4, 6, 7].includes(player.roleId)) {
-        playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
-      // Mordred Vision
-      if (roleId === 7 && [2, 4, 6].includes(player.roleId)) {
-        playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
-      // Oberon Vision
-      if (roleId === 8 && [2, 4, 6, 7].includes(player.roleId)) {
-        playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
+      switch(roleId) {
+        // Baddies Vision
+        case 2: 
+          if ([4, 6, 8].includes(player.roleId))
+            playerVisibility[player.id] = 2
+          else playerVisibility[player.id] = 1
+          break;
+        // Commanders Vision
+        case 3:
+          if ([2, 4, 6, 8].includes(player.roleId))
+            playerVisibility[player.id] = 2
+          else playerVisibility[player.id] = 1
+          break;
+        // Assissin Vision
+        case 4:
+          if ([2, 6, 7].includes(player.roleId))
+            playerVisibility[player.id] = 2
+          else playerVisibility[player.id] = 1
+          break;
+        //Percival's Vision
+        case 5:
+          if (player.roleId === 6)
+            playerVisibility[player.id] = 3
+          else playerVisibility[player.id] = 1
+        //Morgana's Vision
+        case 6:
+          if ([2, 4, 6, 7].includes(player.roleId))
+            playerVisibility[player.id] = 2
+          else playerVisibility[player.id] = 1
+        //Mordred's Vision
+        case 7:
+          if ([2, 4, 6].includes(player.roleId))
+            playerVisibility[player.id] = 2
+          else playerVisibility[player.id] = 1
+        //Oberon's Vision
+        case 8:
+          if ([2, 4, 6, 7].includes(player.roleId))
+            playerVisibility[player.id] = 2
+          else playerVisibility[player.id] = 1
+        default:
+          break;
+      }
     } else playerVisibility[player.id] = 1
-  })
+  }
   console.log('THIS IS THE VISINBITLH', playerVisibility)
   return playerVisibility
 }
