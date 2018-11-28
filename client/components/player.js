@@ -1,17 +1,8 @@
 import React, {Component} from 'react'
 import Video from './video'
 import {connect} from 'react-redux'
+import {roleNames} from '../lore'
 
-const roleNames = {
-  1: 'Crew Member',
-  2: 'Saboteur',
-  3: 'Commander',
-  4: 'Bounty Hunter',
-  5: 'Lieutenant',
-  6: 'Morgana',
-  7: 'Mordred',
-  8: 'Oberon'
-}
 class Player extends Component {
   constructor(props) {
     super(props)

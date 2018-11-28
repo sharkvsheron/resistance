@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
+import missionDescriptions from '../lore'
 export default class Mission extends Component {
   constructor(props) {
     super(props)
   }
   render() {
-    // console.log(`props in mission`, this.props)
+    console.log(`props in mission`, this.props)
     return (
       <div className="mission">
         <div

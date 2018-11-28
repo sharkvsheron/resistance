@@ -279,17 +279,18 @@ const getVisibility = async userId => {
   players.forEach(player => {
     if (visibleRoles.includes(player.roleId)) {
       // Baddies Vision
+      console.log('********', roleId === 3)
       if (roleId === 2 && [4, 6, 8].includes(player.roleId)) {
         playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
+      } else playerVisibility[player.id] = player.roleId
       // Commanders Vision
       if (roleId === 3 && [2, 4, 6, 8].includes(player.roleId)) {
         playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
+      } else playerVisibility[player.id] = player.roleId
       // Assissin Vision
       if (roleId === 4 && [2, 6, 7].includes(player.roleId)) {
         playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
+      } else playerVisibility[player.id] = player.roleId
       // Percivals Vision
       if (roleId === 5 && player.roleId === 6) {
         playerVisibility[player.id] = 3
@@ -297,15 +298,15 @@ const getVisibility = async userId => {
       // Morganas Vision
       if (roleId === 6 && [2, 4, 6, 7].includes(player.roleId)) {
         playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
+      } else playerVisibility[player.id] = player.roleId
       // Mordred Vision
       if (roleId === 7 && [2, 4, 6].includes(player.roleId)) {
         playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
+      } else playerVisibility[player.id] = player.roleId
       // Oberon Vision
       if (roleId === 8 && [2, 4, 6, 7].includes(player.roleId)) {
         playerVisibility[player.id] = 2
-      } else playerVisibility[player.id] = 1
+      } else playerVisibility[player.id] = player.roleId
     } else playerVisibility[player.id] = 1
   })
   console.log('THIS IS THE VISINBITLH', playerVisibility)

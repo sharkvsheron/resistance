@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Mission from './mission'
 import {connect} from 'react-redux'
+import socket from '../socket'
 
 // const missionInfo = [
 //   { mission: 1, numberOfPlayers: 2, failsRequired: 1 },
@@ -13,6 +14,11 @@ import {connect} from 'react-redux'
 class MissionTracker extends Component {
   constructor(props) {
     super(props)
+  }
+
+  leaveGame(userId) {
+    socket.emit('leaveGame', userId)
+    this.props.history.push('/home')
   }
   render() {
     const indexs = Object.keys(this.props.missions)
@@ -31,13 +37,20 @@ class MissionTracker extends Component {
             />
           )
         })}
+        <div
+          className="game-button leave-game"
+          onClick={() => this.leaveGame(this.props.user.id)}
+        >
+          LEAVE GAME
+        </div>
       </div>
     )
   }
 }
 
 const mapToState = state => ({
-  missions: state.missions
+  missions: state.missions,
+  user: state.user
 })
 
 export default connect(mapToState)(MissionTracker)
