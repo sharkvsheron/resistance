@@ -15,7 +15,8 @@ const {
   getMissions,
   getGameResult,
   getAssassin,
-  submitAssassination
+  submitAssassination,
+  leaveGame
 } = require('./functions')
 const {User, Game, GameType, MissionType} = require('../db/models')
 const OpenTok = require('opentok')
@@ -102,6 +103,16 @@ module.exports = io => {
       io.to(`${socket.id}`).emit('gameStarted', nominations, nominationVotes)
 
       io.to(`${socket.id}`).emit('getSessionIdAndKey', {sessionId, sessionKey})
+    })
+
+    socket.on('leaveGame', async userId => {
+      const user = await User.findById(userId)
+      await leaveGame(userId)
+      const gameRoom = await joinGameRoom(socket)
+      const players = await getPlayersWithUserId(userId)
+      io.in(gameRoom).emit('getPlayers', players)
+      const users = await User.findAll({where: {gameId: user.gameId}})
+      broadcastVisibility(io, users)
     })
 
     socket.on('getPlayers', async userId => {

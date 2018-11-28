@@ -49,6 +49,11 @@ export class GameRoom extends React.Component {
     // await socket.emit('getVisibility', userId)
   }
 
+  leaveGame(userId) {
+    socket.emit('leaveGame', userId)
+    this.props.history.push('/home')
+  }
+
   getCurrentNomination() {
     const maxKey = Math.max(...Object.keys(this.props.nominations))
     const currentNomination = this.props.nominations[maxKey]
@@ -262,6 +267,7 @@ export class GameRoom extends React.Component {
             SUBMIT ASSASSINATION
           </div>
         )}
+        <div className="game-button leave-game" onClick={() => this.leaveGame(this.props.user.id)}>LEAVE GAME</div>
       </div>
     )
   }
