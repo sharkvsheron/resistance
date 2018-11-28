@@ -83,7 +83,7 @@ const startGame = async userId => {
   const users = await User.findAll({where: {gameId}})
   const game = await GameType.findById(gameTypeId)
   const missionTypeId = game.missions[0]
-  const isNewGame = !(await hasBlankNomination(gameId))
+  const isNewGame = !await hasBlankNomination(gameId)
   if (users.length === game.numberOfPlayers && isNewGame) {
     await Nomination.create({
       nominees: [],
@@ -272,10 +272,36 @@ const getVisibility = async userId => {
   const playerVisibility = {}
   // const hasStarted = await hasBlankNomination(gameId)
   players.forEach(player => {
-    if (visibleRoles.includes(player.roleId))
-      if (roleId === 5 && player.roleId === 6) playerVisibility[player.id] = 3
-      else playerVisibility[player.id] = player.roleId
-    else playerVisibility[player.id] = 1
+    if (visibleRoles.includes(player.roleId)) {
+      // Baddies Vision
+      if (roleId === 2 && [4, 6, 8].includes(player.roleId)) {
+        playerVisibility[player.id] = 2
+      } else playerVisibility[player.id] = 1
+      // Commanders Vision
+      if (roleId === 3 && [2, 4, 6, 8].includes(player.roleId)) {
+        playerVisibility[player.id] = 2
+      } else playerVisibility[player.id] = 1
+      // Assissin Vision
+      if (roleId === 4 && [2, 6, 7].includes(player.roleId)) {
+        playerVisibility[player.id] = 2
+      } else playerVisibility[player.id] = 1
+      // Percivals Vision
+      if (roleId === 5 && player.roleId === 6) {
+        playerVisibility[player.id] = 3
+      } else playerVisibility[player.id] = player.roleId
+      // Morganas Vision
+      if (roleId === 6 && [2, 4, 6, 7].includes(player.roleId)) {
+        playerVisibility[player.id] = 2
+      } else playerVisibility[player.id] = 1
+      // Mordred Vision
+      if (roleId === 7 && [2, 4, 6].includes(player.roleId)) {
+        playerVisibility[player.id] = 2
+      } else playerVisibility[player.id] = 1
+      // Oberon Vision
+      if (roleId === 8 && [2, 4, 6, 7].includes(player.roleId)) {
+        playerVisibility[player.id] = 2
+      } else playerVisibility[player.id] = 1
+    } else playerVisibility[player.id] = 1
   })
   console.log('THIS IS THE VISINBITLH', playerVisibility)
   return playerVisibility
