@@ -61,7 +61,7 @@ form div {
 
 .player-container {
   display: flex;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   height: 600px;
   justify-content: space-evenly;
   width: 100vw;
@@ -173,6 +173,13 @@ form div {
   margin: 0 auto;
   position: relative;
   top: -100px;
+  align-items: center;
+}
+
+.mission-number {
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  margin: 10px 0px;
 }
 
 .mission .pending {
@@ -180,6 +187,10 @@ form div {
   width: 100px;
   height: 130px;
   background-size: cover;
+}
+
+.other-info {
+  display: none;
 }
 
 /* .mission .succeed {
@@ -307,12 +318,17 @@ input:not([type='submit']):not([type='file']) {
   position: relative;
   top: -440px;
   justify-content: center;
+  text-align: center;
 }
 .mission-vote-buttons {
   display: flex;
   justify-content: center;
   /* position: relative;
   top: -430px; */
+}
+.nomination-vote-buttons {
+  display: flex;
+  justify-content: center;
 }
 
 .mission-vote {
@@ -390,6 +406,33 @@ label.mission-form-detail {
 }
 
 .goodwin {
+  font-size: 20vw;
+  height: 100vw;
+  width: 100vw;
+  position: absolute;
+  z-index: 1000;
+  /* background-color: rgba(255,255,255,.5); */
+  text-align: center;
+  /* background-image: url(/images/game-image-04.jpg); */
+  background-size: contain;
+  /* opacity: 0.4; */
+  color: green;
 }
+
 .badwin {
+  font-size: 20vw;
+  height: 100vw;
+  width: 100vw;
+  position: absolute;
+  z-index: 1000;
+  /* background-color: rgba(255,255,255,.5); */
+  text-align: center;
+  /* background-image: url(/images/game-image-04.jpg); */
+  background-size: contain;
+  /* opacity: 0.4; */
+  color: red;
+}
+
+.game-button.leave-game {
+  height: 13px;
 }

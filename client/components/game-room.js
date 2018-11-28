@@ -287,7 +287,9 @@ export class GameRoom extends React.Component {
             SUBMIT NOMINATION
           </div>
         )}
-        <MissionTracker {...this.props} />
+        <div className="missions-leavegame">
+          <MissionTracker {...this.props} />
+        </div>
         {(this.props.nominations[0] ||
           Object.keys(this.props.nominations).length === 0) && (
           <div
@@ -311,7 +313,6 @@ export class GameRoom extends React.Component {
             SUBMIT ASSASSINATION
           </div>
         )}
-        <div className="game-button leave-game" onClick={() => this.leaveGame(this.props.user.id)}>LEAVE GAME</div>
       </div>
     )
   }

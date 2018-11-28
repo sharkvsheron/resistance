@@ -4,7 +4,6 @@ export default class Mission extends Component {
     super(props)
   }
   render() {
-    // console.log(`props in mission`, this.props)
     return (
       <div className="mission">
         <div
@@ -15,12 +14,11 @@ export default class Mission extends Component {
           }
           id={`mission${this.props.number}`}
         />
-        <div className="mission-number">Mission #{this.props.mission}</div>
+        <div className="mission-number">Mission #{this.props.index + 1}</div>
         <div className="number-players">
           People Required {this.props.numberOfPlayers}
         </div>
-        <div className="mission-status">Mission Pass/Fail</div>
-        <div className="other-info">OTHER INFO</div>
+        <div className="other-info">{this.props.description}</div>
       </div>
     )
   }
