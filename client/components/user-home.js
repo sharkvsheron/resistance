@@ -37,9 +37,9 @@ class UserHome extends React.Component {
         ) : (
           <NewGameForm openForm={this.openForm} />
         )}
-        {this.props.games.map((game, i) => (
-          <Game name={game.gameName} id={game.id} key={i} />
-        ))}
+        {this.props.games
+          .reverse()
+          .map((game, i) => <Game name={game.gameName} id={game.id} key={i} />)}
       </div>
     )
   }
@@ -56,4 +56,7 @@ const mapState = state => {
   }
 }
 
-export default connect(mapState, null)(UserHome)
+export default connect(
+  mapState,
+  null
+)(UserHome)
