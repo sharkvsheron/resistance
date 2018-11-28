@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
+import socket from '../socket'
 
 const Navbar = ({handleClick, isLoggedIn, user}) => (
   <div className="nav-container">
@@ -22,6 +23,18 @@ const Navbar = ({handleClick, isLoggedIn, user}) => (
           <h3>
             Welcome {user.userName}! You are user: {user.id}
           </h3>
+          {user.gameId !== 1 && (
+            <h3>
+              <Link
+                onClick={() => {
+                  socket.emit('leaveGame', user.id)
+                }}
+                to="/home"
+              >
+                leave game
+              </Link>
+            </h3>
+          )}
         </div>
       ) : (
         <div>

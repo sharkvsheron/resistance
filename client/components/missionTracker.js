@@ -42,6 +42,7 @@ class MissionTracker extends Component {
         })}
         <div
           className="game-button leave-game"
+          id="leave"
           onClick={() => this.leaveGame(this.props.user.id)}
         >
           LEAVE GAME
