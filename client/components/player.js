@@ -30,7 +30,7 @@ class Player extends Component {
   }
 
   amIAssassin() {
-    return this.props.user.roleId === 4
+    return this.props.players[this.props.user.id].roleId === 4
   }
 
   render() {
