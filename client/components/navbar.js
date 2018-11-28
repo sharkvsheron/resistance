@@ -23,7 +23,7 @@ const Navbar = ({handleClick, isLoggedIn, user}) => (
           <h3>
             Welcome {user.userName}! You are user: {user.id}
           </h3>
-          {user.gameId !== 1 && (
+          {/* {user.gameId !== 1 && (
             <h3>
               <Link
                 onClick={() => {
@@ -34,7 +34,7 @@ const Navbar = ({handleClick, isLoggedIn, user}) => (
                 leave game
               </Link>
             </h3>
-          )}
+          )} */}
         </div>
       ) : (
         <div>
