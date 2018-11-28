@@ -239,7 +239,8 @@ export class GameRoom extends React.Component {
           </div>
         )}
         <MissionTracker {...this.props} />
-        {!this.props.nominations[1] && (
+        {(this.props.nominations[0] ||
+          Object.keys(this.props.nominations).length === 0) && (
           <div
             className="game-button"
             id="startgame-button"
