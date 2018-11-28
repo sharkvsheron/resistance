@@ -5,6 +5,7 @@ const NominationVoteButtons = props => {
   const id = props.id
   return (
     <div className="nomination-vote-container">
+      <p>Approve or reject the nominated team. (highlighted players)</p>
       <div
         className="game-button"
         onClick={async () => socket.emit('submitNominationVote', id, 'approve')}

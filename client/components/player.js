@@ -2,6 +2,16 @@ import React, {Component} from 'react'
 import Video from './video'
 import {connect} from 'react-redux'
 
+const roleNames = {
+  1: 'Crew Member',
+  2: 'Saboteur',
+  3: 'Commander',
+  4: 'Bounty Hunter',
+  5: 'Lieutenant',
+  6: 'Morgana',
+  7: 'Mordred',
+  8: 'Oberon'
+}
 class Player extends Component {
   constructor(props) {
     super(props)
@@ -34,7 +44,8 @@ class Player extends Component {
       playerId,
       handleSelect,
       nominatedPlayers,
-      isNominator
+      isNominator,
+      user
     } = this.props
     const {userName, roleId, sessionKey} = this.props.players[playerId]
     return (
@@ -47,6 +58,8 @@ class Player extends Component {
         <div className="video-wrapper" id={`role${roleId}`} />
         <h3>
           {userName} <br />UserId = {playerId}
+          <br />
+          {Number(playerId) === user.id && roleNames[roleId]}
         </h3>
         {isNominator && (
           <div
@@ -67,6 +80,7 @@ const mapState = state => ({
   nominations: state.nominations,
   players: state.players,
   missions: state.missions,
-  visibility: state.visible
+  visibility: state.visible,
+  user: state.user
 })
 export default connect(mapState)(Player)

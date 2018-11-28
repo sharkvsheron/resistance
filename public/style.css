@@ -278,6 +278,12 @@ input:not([type='submit']):not([type='file']) {
   top: -200px;
 }
 
+.nominator-info {
+  position: relative;
+  top: -200px;
+  text-align: center;
+}
+
 #startgame-button {
   position: relative;
   top: -425px;
@@ -297,6 +303,11 @@ input:not([type='submit']):not([type='file']) {
   justify-content: center;
 }
 
+.nomination-vote {
+  position: relative;
+  top: -440px;
+  justify-content: center;
+}
 .mission-vote-buttons {
   display: flex;
   justify-content: center;

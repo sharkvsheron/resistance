@@ -76,6 +76,7 @@ export class GameRoom extends React.Component {
   isNominationStage() {
     const currentNomination = this.getCurrentNomination()
     if (!currentNomination) return false
+    console.log('isNominationStage, ', currentNomination.nominees.length === 0)
     return currentNomination.nominees.length === 0
     // Nominees have not yet been selected, Nominator is in nomination selection process.
   }
@@ -84,6 +85,10 @@ export class GameRoom extends React.Component {
     const currentNomination = this.getCurrentNomination()
     if (!currentNomination) return false
 
+    console.log(
+      'isVotingStage, ',
+      !this.isNominationStage() && currentNomination.nominationStatus === null
+    )
     return (
       !this.isNominationStage() && currentNomination.nominationStatus === null
     )
@@ -92,7 +97,15 @@ export class GameRoom extends React.Component {
 
   isMissionStage() {
     const currentNomination = this.getCurrentNomination()
-    if (!!currentNomination) return false
+    console.log('currentNomination in isMissionStage(): ', currentNomination)
+    if (currentNomination.nominees.length === 0) {
+      console.log('isMissionStage, ', false)
+      return false
+    }
+    console.log(
+      'isMissionStage, ',
+      !this.isVotingStage() && currentNomination.missionStatus === null
+    )
     return !this.isVotingStage() && currentNomination.missionStatus === null
     // Nominees should see succeed/fail buttons. Non-nominated players should see 'waiting for succeed/fail' and should still see nomination status borders.
   }
@@ -131,6 +144,11 @@ export class GameRoom extends React.Component {
   isWaitingOnNominator() {
     const latestNomination = Math.max(...Object.keys(this.props.nominations))
     const currentNomination = this.props.nominations[latestNomination]
+    console.log(
+      'isWaitingOnNominator, ',
+      currentNomination.nominees.length === 0 &&
+        currentNomination.missionStatus === null
+    )
     return (
       currentNomination.nominees.length === 0 &&
       currentNomination.missionStatus === null
@@ -141,18 +159,34 @@ export class GameRoom extends React.Component {
     const nominationKeys = Object.keys(this.props.nominations)
     if (nominationKeys.length) {
       const latestNomination = Math.max(...Object.keys(this.props.nominations))
+      console.log(
+        'amINominator, ',
+        this.props.user.id === this.props.nominations[latestNomination].userId
+      )
       return (
         this.props.user.id === this.props.nominations[latestNomination].userId
       )
     }
+    console.log('amINominator, ', false)
     return false
   }
 
   amIOnMission() {
     const currentNomination = this.getCurrentNomination()
-    if (currentNomination === undefined) return false
-    if (Object.keys(currentNomination).length === 0) return false
-    else {
+    if (currentNomination === undefined) {
+      console.log('amIOnMission, ', false)
+      return false
+    }
+    if (Object.keys(currentNomination).length === 0) {
+      console.log('amIOnMission, ', false)
+      return false
+    } else {
+      console.log(
+        'amIOnMission, ',
+        this.getCurrentNomination().nominees.includes(this.props.user.id) &&
+          this.isMissionStage()
+      )
+
       return (
         this.getCurrentNomination().nominees.includes(this.props.user.id) &&
         this.isMissionStage()
@@ -171,8 +205,10 @@ export class GameRoom extends React.Component {
       this.state.selectedPlayers.length === playersRequiredForMission &&
       this.amINominator()
     ) {
+      console.log('isNominationReady, ', 'ready')
       return 'ready'
     } else {
+      console.log('isNominationReady, ', 'not-ready')
       return 'not-ready'
     }
   }
@@ -199,16 +235,6 @@ export class GameRoom extends React.Component {
         {this.amIOnMission() && (
           <div className="nominator-info">You're on the mission, glhf.</div>
         )}
-        {this.amINominator() &&
-          this.isNominationStage() && (
-            <div className="nominator-info">
-              <p>
-                You are the nominator. Nominate
-                {this.getNumPlayersRequiredForMission()} players to go on a
-                mission. Don't eff this up
-              </p>
-            </div>
-          )}
         {nominationKeys.length &&
           this.isWaitingOnNominator() && (
             <div className="nominator-info">
@@ -235,6 +261,16 @@ export class GameRoom extends React.Component {
             )
           })}
         </div>
+        {this.amINominator() &&
+          this.isNominationStage() && (
+            <div className="nominator-info">
+              <p>
+                You are the nominator. <br />
+                Nominate {`${this.getNumPlayersRequiredForMission()}`} players
+                to go on a mission.
+              </p>
+            </div>
+          )}
         {this.amINominator() && (
           <div
             className={`game-button submit-nomination ${this.isNominationReady()}`}
@@ -257,7 +293,7 @@ export class GameRoom extends React.Component {
         {this.isVotingStage() && (
           <NominationVoteButtons id={this.props.user.id} />
         )}
-        <MissionVoteButtons id={this.props.user.id} />
+        {this.amIOnMission() && <MissionVoteButtons id={this.props.user.id} />}
         {//comment out up till === 'active' for testing purposes
         this.props.assassination.assassinationStatus === 'active' && (
           <div
@@ -285,7 +321,4 @@ const mapState = state => ({
   assassination: state.assassination
 })
 
-export default connect(
-  mapState,
-  null
-)(GameRoom)
+export default connect(mapState, null)(GameRoom)
