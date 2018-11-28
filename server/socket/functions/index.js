@@ -373,7 +373,7 @@ const voteOnNomination = async (userId, vote) => {
           where: {gameId, missionTypeId}
         })
         if (nominationsForMission.length === 5) {
-          return {gameEndResult: 'bad'}
+          return 'bad'
         } else {
           await currentNomination.update({nominationStatus: 'reject'})
           await Nomination.create({
@@ -385,7 +385,7 @@ const voteOnNomination = async (userId, vote) => {
         }
       }
     } else return null
-  }
+  } else return null
 }
 
 const getAssassin = async userId => {

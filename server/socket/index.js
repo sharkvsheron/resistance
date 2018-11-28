@@ -150,15 +150,20 @@ module.exports = io => {
 
     socket.on('submitNominationVote', async (userId, vote) => {
       const voteResult = await voteOnNomination(userId, vote)
-      if (voteResult !== null) {
+      if (voteResult === undefined) {
         const gameRoom = await joinGameRoom(socket)
         const nominations = await getNominations(userId)
         const nominationVotes = await getNominationVotes(userId)
+        console.log('voteresult', voteResult)
         io.in(gameRoom).emit(
           'nominationSubmitted',
           nominations,
           nominationVotes
         )
+      }
+      if (voteResult === 'bad') {
+        const gameRoom = await joinGameRoom(socket)
+        io.in(gameRoom).emit('getGameResult', 'bad')
       }
     })
 
