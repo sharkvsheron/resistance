@@ -230,16 +230,6 @@ export class GameRoom extends React.Component {
         {this.amIOnMission() && (
           <div className="nominator-info">You're on the mission, glhf.</div>
         )}
-        {this.amINominator() &&
-          this.isNominationStage() && (
-            <div className="nominator-info">
-              <p>
-                You are the nominator. Nominate
-                {this.getNumPlayersRequiredForMission()} players to go on a
-                mission. Don't eff this up
-              </p>
-            </div>
-          )}
         {nominationKeys.length &&
           this.isWaitingOnNominator() && (
             <div className="nominator-info">
@@ -266,6 +256,16 @@ export class GameRoom extends React.Component {
             )
           })}
         </div>
+        {this.amINominator() &&
+          this.isNominationStage() && (
+            <div className="nominator-info">
+              <p>
+                You are the nominator. <br />
+                Nominate {`${this.getNumPlayersRequiredForMission()}`} players
+                to go on a mission.
+              </p>
+            </div>
+          )}
         {this.amINominator() && (
           <div
             className={`game-button submit-nomination ${this.isNominationReady()}`}
