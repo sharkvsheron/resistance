@@ -413,9 +413,9 @@ label.mission-form-detail {
   z-index: 1000;
   /* background-color: rgba(255,255,255,.5); */
   text-align: center;
-  /* background-image: url(/images/game-image-04.jpg); */
+  background-image: url(/images/goodwin.jpg);
   background-size: contain;
-  /* opacity: 0.4; */
+  opacity: 0.8;
   color: green;
 }
 
@@ -427,9 +427,9 @@ label.mission-form-detail {
   z-index: 1000;
   /* background-color: rgba(255,255,255,.5); */
   text-align: center;
-  /* background-image: url(/images/game-image-04.jpg); */
+  background-image: url(/images/badwin.jpg);
   background-size: contain;
-  /* opacity: 0.4; */
+  opacity: 0.8;
   color: red;
 }
 
