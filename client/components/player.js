@@ -39,8 +39,6 @@ class Player extends Component {
   }
 
   render() {
-    console.log('user in player.js ', this.props.user.id)
-    console.log('playerId in player.js ', this.props.playerId)
     const {
       id,
       playerId,
