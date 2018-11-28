@@ -151,11 +151,9 @@ module.exports = io => {
         const gameRoom = await joinGameRoom(socket)
         const nominations = await getNominations(nominatorId)
         const nominationVotes = await getNominationVotes(nominatorId)
-        io.in(gameRoom).emit(
-          'nominationSubmitted',
-          nominations,
-          nominationVotes
-        )
+        io
+          .in(gameRoom)
+          .emit('nominationSubmitted', nominations, nominationVotes)
       }
     })
 
@@ -166,11 +164,9 @@ module.exports = io => {
         const nominations = await getNominations(userId)
         const nominationVotes = await getNominationVotes(userId)
         console.log('voteresult', voteResult)
-        io.in(gameRoom).emit(
-          'nominationSubmitted',
-          nominations,
-          nominationVotes
-        )
+        io
+          .in(gameRoom)
+          .emit('nominationSubmitted', nominations, nominationVotes)
       }
       if (voteResult === 'bad') {
         const gameRoom = await joinGameRoom(socket)
@@ -192,11 +188,9 @@ module.exports = io => {
           io.in(gameRoom).emit('getMissions', missions)
           const nominations = await getNominations(userId)
           const nominationVotes = await getNominationVotes(userId)
-          io.in(gameRoom).emit(
-            'nominationSubmitted',
-            nominations,
-            nominationVotes
-          )
+          io
+            .in(gameRoom)
+            .emit('nominationSubmitted', nominations, nominationVotes)
           const gameResult = await getGameResult(userId)
           if (gameResult === 'good') {
             const assassin = getAssassin(userId)
@@ -215,8 +209,14 @@ module.exports = io => {
       const gameResult = await submitAssassination(assassinId, targetId)
       if (gameResult !== null) {
         io.in(gameRoom).emit('getGameResult', gameResult)
+        const assassin = getAssassin(assassinId)
+        io.in(gameRoom).emit('assassinationActive', {
+          assassinationStatus: 'inactive',
+          assassinId: assassin.id
+        })
       }
     })
+
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
     })
