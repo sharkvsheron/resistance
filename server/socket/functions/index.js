@@ -455,9 +455,9 @@ const submitAssassination = async (assassinId, targetId) => {
   const game = await getGamewithUserId(assassinId)
   const assassin = await User.findOne({where: {gameId: game.id, roleId: 4}})
   const merlin = await User.findOne({where: {gameId: game.id, roleId: 3}})
-  if (assassin.id !== assassinId) return null
-  if (merlin.id !== targetId) return 'good'
-  else return 'bad'
+  if (assassin.id !== assassinId) return 'null'
+  if (merlin.id === Number(targetId)) return 'bad'
+  else return 'good'
 }
 
 module.exports = {
