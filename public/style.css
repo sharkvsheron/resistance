@@ -436,3 +436,7 @@ label.mission-form-detail {
 .game-button.leave-game {
   height: 13px;
 }
+
+#leave {
+  z-index: 1500;
+}
