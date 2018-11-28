@@ -131,6 +131,41 @@ form div {
   height: 273px; */
 }
 
+#role4 {
+  background-image: url('images/assassin.png');
+  background-size: cover;
+  /* width: 220px;
+  height: 273px; */
+}
+
+#role5 {
+  background-image: url('images/percival.png');
+  background-size: cover;
+  /* width: 220px;
+  height: 273px; */
+}
+
+#role6 {
+  background-image: url('images/morgana.png');
+  background-size: cover;
+  /* width: 220px;
+  height: 273px; */
+}
+
+#role7 {
+  background-image: url('images/mordred.png');
+  background-size: cover;
+  /* width: 220px;
+  height: 273px; */
+}
+
+#role8 {
+  background-image: url('images/oberon.png');
+  background-size: cover;
+  /* width: 220px;
+  height: 273px; */
+}
+
 .mission-container {
   display: flex;
   justify-content: space-evenly;
