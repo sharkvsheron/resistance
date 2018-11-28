@@ -36,7 +36,7 @@ class Player extends Component {
       nominatedPlayers,
       isNominator
     } = this.props
-    const {userName, roleId, sessionKey} = this.props.player
+    const {userName, roleId, sessionKey} = this.props.players[playerId]
     return (
       <div
         className={`player-card ${this.isNominated(playerId, nominatedPlayers)}
@@ -64,6 +64,9 @@ class Player extends Component {
   }
 }
 const mapState = state => ({
-  nominations: state.nominations
+  nominations: state.nominations,
+  players: state.players,
+  missions: state.missions,
+  visibility: state.visible
 })
 export default connect(mapState)(Player)
