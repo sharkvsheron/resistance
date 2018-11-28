@@ -32,37 +32,42 @@ export default class NewGameForm extends Component {
       ],
       roles: [
         {
-          name: 'Troopers / Good Guys',
+          name: 'CrewMember',
           amount: 2,
           id: 1
         },
         {
-          name: 'Baddies / Bad Guys',
-          amount: 2,
+          name: 'Saboteur',
+          amount: 1,
           id: 2
         },
         {
-          name: 'Commander / Merlin',
+          name: 'Commander',
           amount: 1,
           id: 3
         },
         {
-          name: 'HAL 9000 / Percival',
+          name: 'Assassin',
+          amount: 1,
+          id: 4
+        },
+        {
+          name: 'Lieutenant',
           amount: 0,
           id: 5
         },
         {
-          name: 'Symbiote / Morgana',
+          name: 'Morgana',
           amount: 0,
           id: 6
         },
         {
-          name: 'Mangalord / Mordred',
+          name: 'Mordred',
           amount: 0,
           id: 7
         },
         {
-          name: 'Doppelganger / Oberon',
+          name: 'Oberon',
           amount: 0,
           id: 8
         }

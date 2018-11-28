@@ -83,7 +83,7 @@ const startGame = async userId => {
   const users = await User.findAll({where: {gameId}})
   const game = await GameType.findById(gameTypeId)
   const missionTypeId = game.missions[0]
-  const isNewGame = !await hasBlankNomination(gameId)
+  const isNewGame = !(await hasBlankNomination(gameId))
   if (users.length === game.numberOfPlayers && isNewGame) {
     await Nomination.create({
       nominees: [],
@@ -276,51 +276,62 @@ const getVisibility = async userId => {
   const players = await User.findAll({where: {gameId}})
   let playerVisibility = {}
   // const hasStarted = await hasBlankNomination(gameId)
-  for (let i = 0; i<players.length; i++) {
+  for (let i = 0; i < players.length; i++) {
     let player = players[i]
     console.log('VISIBLE ROLES', visibleRoles, 'PLAYER ROLEID', player.roleId)
     if (visibleRoles.includes(player.roleId)) {
-      switch(roleId) {
+      switch (roleId) {
         // Baddies Vision
-        case 2: 
-          if ([4, 6, 8].includes(player.roleId))
-            playerVisibility[player.id] = 2
-          else playerVisibility[player.id] = 1
-          break;
-        // Commanders Vision
-        case 3:
+        case 2:
           if ([2, 4, 6, 8].includes(player.roleId))
             playerVisibility[player.id] = 2
           else playerVisibility[player.id] = 1
-          break;
+          break
+        // Commanders Vision
+        case 3:
+          if (player.roleId === 3) playerVisibility[player.id] = 3
+          else if ([2, 4, 6, 8].includes(player.roleId))
+            playerVisibility[player.id] = 2
+          else playerVisibility[player.id] = 1
+          break
         // Assissin Vision
         case 4:
-          if ([2, 6, 7].includes(player.roleId))
-            playerVisibility[player.id] = 2
-          else playerVisibility[player.id] = 1
-          break;
+          if (player.roleId === 4) playerVisibility[player.id] = 4
+          else if (player.roleId === 4)
+            if ([2, 6, 7].includes(player.roleId))
+              playerVisibility[player.id] = 2
+            else playerVisibility[player.id] = 1
+          break
         //Percival's Vision
         case 5:
-          if (player.roleId === 6)
+          if (player.roleId === 5) playerVisibility[player.id] = 5
+          else if (player.roleId === 6 || player.roleId === 3)
             playerVisibility[player.id] = 3
           else playerVisibility[player.id] = 1
+          break
         //Morgana's Vision
         case 6:
-          if ([2, 4, 6, 7].includes(player.roleId))
+          if (player.roleId === 6) playerVisibility[player.id] = 6
+          else if ([2, 4, 6, 7].includes(player.roleId))
             playerVisibility[player.id] = 2
           else playerVisibility[player.id] = 1
+          break
         //Mordred's Vision
         case 7:
-          if ([2, 4, 6].includes(player.roleId))
+          if (player.roleId === 7) playerVisibility[player.id] = 7
+          else if ([2, 4, 6].includes(player.roleId))
             playerVisibility[player.id] = 2
           else playerVisibility[player.id] = 1
+          break
         //Oberon's Vision
         case 8:
-          if ([2, 4, 6, 7].includes(player.roleId))
+          if (player.roleId === 8) playerVisibility[player.id] = 8
+          else if ([2, 4, 6, 7].includes(player.roleId))
             playerVisibility[player.id] = 2
           else playerVisibility[player.id] = 1
+          break
         default:
-          break;
+          break
       }
     } else playerVisibility[player.id] = 1
   }
