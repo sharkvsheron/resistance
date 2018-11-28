@@ -297,10 +297,9 @@ const getVisibility = async userId => {
         // Assissin Vision
         case 4:
           if (player.roleId === 4) playerVisibility[player.id] = 4
-          else if (player.roleId === 4)
-            if ([2, 6, 7].includes(player.roleId))
-              playerVisibility[player.id] = 2
-            else playerVisibility[player.id] = 1
+          else if ([2, 6, 7].includes(player.roleId))
+            playerVisibility[player.id] = 2
+          else playerVisibility[player.id] = 1
           break
         //Percival's Vision
         case 5:

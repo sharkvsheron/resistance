@@ -29,7 +29,12 @@ class Player extends Component {
     return currentNomination
   }
 
+  amIAssassin() {
+    return this.props.user.roleId === 4
+  }
+
   render() {
+    console.log('am I assassin? ', this.amIAssassin())
     const {
       id,
       playerId,
@@ -60,6 +65,15 @@ class Player extends Component {
             Nominate
           </div>
         )}
+        {this.amIAssassin() &&
+          this.props.assassination.assassinationStatus === 'active' && (
+            <div
+              className="game-button submit-assassination"
+              onClick={() => this.props.submitAssassination(playerId)}
+            >
+              SUBMIT ASSASSINATION
+            </div>
+          )}
         <br />
         {/* <div className="game-button">waiting for others...</div>
         <div className="game-button">Add Bot</div> */}
@@ -72,6 +86,7 @@ const mapState = state => ({
   players: state.players,
   missions: state.missions,
   visibility: state.visible,
-  user: state.user
+  user: state.user,
+  assassination: state.assassination
 })
 export default connect(mapState)(Player)

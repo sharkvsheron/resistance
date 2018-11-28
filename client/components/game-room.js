@@ -31,6 +31,7 @@ export class GameRoom extends React.Component {
     this.isNominationStage = this.isNominationStage.bind(this)
     this.isVotingStage = this.isVotingStage.bind(this)
     this.isMissionStage = this.isMissionStage.bind(this)
+    this.submitAssassination = this.submitAssassination.bind(this)
   }
 
   async componentDidMount() {
@@ -213,10 +214,10 @@ export class GameRoom extends React.Component {
     }
   }
 
-  submitAssassination() {
-    const targetId = Number(this.state.selectedPlayers[0])
-    socket.emit('submitAssassination', this.props.user.id, targetId)
-    this.setState({selectedPlayers: []})
+  submitAssassination(id) {
+    // const targetId = Number(this.state.selectedPlayers[0])
+    socket.emit('submitAssassination', this.props.user.id, id)
+    // this.setState({selectedPlayers: []})
   }
 
   render() {
@@ -229,7 +230,8 @@ export class GameRoom extends React.Component {
     const {gameResult} = this.props
     return (
       <div>
-        {gameResult === 'good' ? (
+        {gameResult === 'good' &&
+        this.props.assassination.assassinationStatus !== 'active' ? (
           <div className="goodwin">GOODIES</div>
         ) : gameResult === 'bad' ? (
           <div className="badwin">BADDIES</div>
@@ -265,6 +267,7 @@ export class GameRoom extends React.Component {
                 selectedPlayers={this.state.selectedPlayers}
                 handleSelect={this.handleSelect}
                 isNominator={this.amINominator()}
+                submitAssassination={this.submitAssassination}
               />
             )
           })}
