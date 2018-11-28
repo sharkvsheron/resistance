@@ -37,7 +37,7 @@ class UserHome extends React.Component {
         ) : (
           <NewGameForm openForm={this.openForm} />
         )}
-        {this.props.games
+        {this.props.games.slice(1)
           .reverse()
           .map((game, i) => <Game name={game.gameName} id={game.id} key={i} />)}
       </div>

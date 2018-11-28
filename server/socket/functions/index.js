@@ -95,6 +95,11 @@ const startGame = async userId => {
   }
 }
 
+const leaveGame = async userId => {
+  const user = await User.findById(userId)
+  console.log('here')
+  await user.update({gameId: 1, roleId: 1})
+}
 /*
     Params: userId
     Return:
@@ -447,5 +452,6 @@ module.exports = {
   getMissions,
   getGameResult,
   getAssassin,
-  submitAssassination
+  submitAssassination,
+  leaveGame
 }
