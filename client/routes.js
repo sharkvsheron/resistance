@@ -15,13 +15,24 @@ class Routes extends Component {
 
   render() {
     const {isLoggedIn} = this.props
-
+    const {gameResult} = this.props
+    console.log('THIS IS GAME RESULT', gameResult)
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/game/:id" component={GameRoom} />
+        {gameResult === 'bad' && (
+          <Switch>
+            <Route path="/game/:id" component={UserHome} />
+          </Switch>
+        )}
+        {gameResult === 'good' && (
+          <Switch>
+            <Route path="/game/:id" component={UserHome} />
+          </Switch>
+        )}
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
@@ -42,7 +53,8 @@ const mapState = state => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    gameResult: state.gameResult
   }
 }
 
@@ -56,12 +68,7 @@ const mapDispatch = dispatch => {
 
 // The `withRouter` wrapper makes sure that updates are not blocked
 // when the url changes
-export default withRouter(
-  connect(
-    mapState,
-    mapDispatch
-  )(Routes)
-)
+export default withRouter(connect(mapState, mapDispatch)(Routes))
 
 /**
  * PROP TYPES

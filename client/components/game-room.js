@@ -185,8 +185,16 @@ export class GameRoom extends React.Component {
       ...Object.keys(this.props.nominations)
     )
     const latestNomination = this.props.nominations[latestNominationNumber]
+    const {gameResult} = this.props
     return (
       <div>
+        {gameResult === 'good' ? (
+          <div className="goodwin">GOODIES</div>
+        ) : gameResult === 'bad' ? (
+          <div className="badwin">BADDIES</div>
+        ) : (
+          <div />
+        )}
         <div className="video-container">
           {this.props.video.sessionId.length &&
             this.props.video.sessionKey.length && <Video />}
@@ -279,7 +287,4 @@ const mapState = state => ({
   assassination: state.assassination
 })
 
-export default connect(
-  mapState,
-  null
-)(GameRoom)
+export default connect(mapState, null)(GameRoom)

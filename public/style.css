@@ -106,7 +106,7 @@ form div {
 }
 
 #player5 {
-  
+
   top: 200px;
 } */
 #role1,
@@ -376,4 +376,9 @@ label.mission-form-detail {
 
 .user-home {
   padding: 10px;
+}
+
+.goodwin {
+}
+.badwin {
 }
