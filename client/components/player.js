@@ -8,6 +8,7 @@ class Player extends Component {
     super(props)
     this.getCurrentNomination = this.getCurrentNomination.bind(this)
     this.state = {}
+    this.isSelected = this.isSelected.bind(this)
   }
 
   isNominated = (userId, array) => {
@@ -29,6 +30,11 @@ class Player extends Component {
     return currentNomination
   }
 
+  isSelected(bool) {
+    if (bool) return 'nominated'
+    return 'notnominated'
+  }
+
   amIAssassin() {
     return this.props.players[this.props.user.id].roleId === 4
   }
@@ -41,13 +47,14 @@ class Player extends Component {
       handleSelect,
       nominatedPlayers,
       isNominator,
+      selected,
       user
     } = this.props
     const {userName, roleId, sessionKey} = this.props.players[playerId]
     return (
       <div
         className={`player-card ${this.isNominated(playerId, nominatedPlayers)}
-        ${this.isNominated(playerId, this.props.selectedPlayers)}
+        ${this.isSelected(selected)}
         nominator-${this.isPlayerNominator(Number(playerId))}`}
         id={`player${id}`}
       >
