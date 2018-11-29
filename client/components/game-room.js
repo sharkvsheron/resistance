@@ -32,6 +32,9 @@ export class GameRoom extends React.Component {
     this.isVotingStage = this.isVotingStage.bind(this)
     this.isMissionStage = this.isMissionStage.bind(this)
     this.submitAssassination = this.submitAssassination.bind(this)
+    this.getCurrentNominatorUsername = this.getCurrentNominatorUsername.bind(
+      this
+    )
   }
 
   async componentDidMount() {
@@ -62,6 +65,15 @@ export class GameRoom extends React.Component {
     return currentNomination
   }
 
+  getCurrentNominatorUsername() {
+    const currentNomination = this.getCurrentNomination()
+    if (!currentNomination || !Object.keys(this.props.nominations).length)
+      return false
+    const userId = currentNomination.userId
+    console.log('UNIQUE1234', userId)
+    if (this.props.players[userId]) return this.props.players[userId].userName
+  }
+
   getNumPlayersRequiredForMission() {
     let playersReq
     for (let prop in this.props.missions) {
@@ -76,7 +88,8 @@ export class GameRoom extends React.Component {
 
   isNominationStage() {
     const currentNomination = this.getCurrentNomination()
-    if (!currentNomination) return false
+    if (!currentNomination || !Object.keys(this.props.nominations).length)
+      return false
     console.log('isNominationStage, ', currentNomination.nominees.length === 0)
     return currentNomination.nominees.length === 0
     // Nominees have not yet been selected, Nominator is in nomination selection process.
@@ -245,10 +258,16 @@ export class GameRoom extends React.Component {
         {this.amIOnMission() && (
           <div className="nominator-info">You're on the mission, glhf.</div>
         )}
-        {nominationKeys.length &&
-          this.isWaitingOnNominator() && (
-            <div className="nominator-info">
-              We are waiting on the nominator:
+        {!this.amINominator() &&
+          this.isNominationStage() && (
+            <div>
+              <p>
+                Waiting on player
+                {`${this.getCurrentNominatorUsername()}`}
+                to select {`${this.getNumPlayersRequiredForMission()}`} players
+                to go on the mission.
+                <br />
+              </p>
             </div>
           )}
         <div className="player-container">
@@ -333,4 +352,7 @@ const mapState = state => ({
   assassination: state.assassination
 })
 
-export default connect(mapState, null)(GameRoom)
+export default connect(
+  mapState,
+  null
+)(GameRoom)
