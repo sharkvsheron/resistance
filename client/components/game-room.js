@@ -283,7 +283,7 @@ export class GameRoom extends React.Component {
                     ? this.getCurrentNomination().nominees
                     : this.state.selectedPlayers
                 }
-                selectedPlayers={this.state.selectedPlayers}
+                selected={this.state.selectedPlayers.includes(playerId)}
                 handleSelect={this.handleSelect}
                 isNominator={this.amINominator()}
                 submitAssassination={this.submitAssassination}
