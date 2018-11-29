@@ -301,14 +301,15 @@ export class GameRoom extends React.Component {
               </p>
             </div>
           )}
-        {this.amINominator() && (
-          <div
-            className={`game-button submit-nomination ${this.isNominationReady()}`}
-            onClick={() => this.handleNominationSubmit()}
-          >
-            SUBMIT NOMINATION
-          </div>
-        )}
+        {this.amINominator() &&
+          this.isNominationStage() && (
+            <div
+              className={`game-button submit-nomination ${this.isNominationReady()}`}
+              onClick={() => this.handleNominationSubmit()}
+            >
+              SUBMIT NOMINATION
+            </div>
+          )}
         <div className="missions-leavegame">
           <MissionTracker {...this.props} />
         </div>
