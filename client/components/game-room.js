@@ -258,18 +258,6 @@ export class GameRoom extends React.Component {
         {this.amIOnMission() && (
           <div className="nominator-info">You're on the mission, glhf.</div>
         )}
-        {!this.amINominator() &&
-          this.isNominationStage() && (
-            <div>
-              <p>
-                Waiting on player
-                {`${this.getCurrentNominatorUsername()}`}
-                to select {`${this.getNumPlayersRequiredForMission()}`} players
-                to go on the mission.
-                <br />
-              </p>
-            </div>
-          )}
         <div className="player-container">
           {userIds.map((playerId, i) => {
             return (
@@ -291,14 +279,26 @@ export class GameRoom extends React.Component {
             )
           })}
         </div>
+        {!this.amINominator() &&
+          this.isNominationStage() && (
+            <div className="waiting-on-nom">
+              <h3>
+                Waiting for
+                {` ${this.getCurrentNominatorUsername()} `}
+                to select {`${this.getNumPlayersRequiredForMission()}`} players
+                to go on the mission.
+                <br />
+              </h3>
+            </div>
+          )}
         {this.amINominator() &&
           this.isNominationStage() && (
             <div className="nominator-info">
-              <p>
+              <h3>
                 You are the nominator. <br />
                 Nominate {`${this.getNumPlayersRequiredForMission()}`} players
                 to go on a mission.
-              </p>
+              </h3>
             </div>
           )}
         {this.amINominator() &&
@@ -353,7 +353,4 @@ const mapState = state => ({
   assassination: state.assassination
 })
 
-export default connect(
-  mapState,
-  null
-)(GameRoom)
+export default connect(mapState, null)(GameRoom)

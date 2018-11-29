@@ -5,7 +5,7 @@ const NominationVoteButtons = props => {
   const id = props.id
   return (
     <div className="nomination-vote">
-      <p>Approve or reject the nominated team. (highlighted players)</p>
+      <h3>Approve or reject the nominated team. (highlighted players)</h3>
       <div className="nomination-vote-buttons">
         <div
           className="game-button"

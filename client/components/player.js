@@ -59,10 +59,17 @@ class Player extends Component {
         id={`player${id}`}
       >
         <div className="video-wrapper" id={`role${roleId}`} />
-        <h3>
-          {userName} <br />UserId = {playerId}
+        <h3 className="badge-username">
+          {userName}
           <br />
-          {Number(playerId) === user.id && roleNames[roleId]}
+          <span>
+            {Number(playerId) === user.id && (
+              <div>
+                Your role: <br />
+                {roleNames[roleId]}
+              </div>
+            )}
+          </span>
         </h3>
         {isNominator && (
           <div
