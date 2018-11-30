@@ -128,6 +128,46 @@ async function seed() {
       password: '123',
       gameId: 1,
       roleId: 1
+    },
+    {
+      socketId: 56789,
+      userName: 'james',
+      email: 'james@james.com',
+      password: '123',
+      gameId: 1,
+      roleId: 1
+    },
+    {
+      socketId: 56789,
+      userName: 'john',
+      email: 'john@john.com',
+      password: '123',
+      gameId: 1,
+      roleId: 1
+    },
+    {
+      socketId: 56789,
+      userName: 'eric',
+      email: 'eric@eric.com',
+      password: '123',
+      gameId: 1,
+      roleId: 1
+    },
+    {
+      socketId: 56789,
+      userName: 'alex',
+      email: 'alex@alex.com',
+      password: '123',
+      gameId: 1,
+      roleId: 1
+    },
+    {
+      socketId: 56789,
+      userName: 'harry',
+      email: 'harry@harry.com',
+      password: '123',
+      gameId: 1,
+      roleId: 1
     }
   ]
 
