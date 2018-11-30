@@ -53,8 +53,7 @@ class Video extends Component {
                 subscribeToAudio: true,
                 subscribeToVideo: true,
                 width: 150,
-                height: 150,
-                name: this.props.user.userName
+                height: 150
               }}
               onSubscribe={() => console.log('SUCCESSFULLY SUBSCRIBED')}
               onSubscribeError={() =>
@@ -73,7 +72,4 @@ const mapState = state => ({
   game: state.game,
   video: state.video
 })
-export default connect(
-  mapState,
-  null
-)(Video)
+export default connect(mapState, null)(Video)
