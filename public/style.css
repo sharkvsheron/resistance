@@ -307,7 +307,7 @@ input:not([type='submit']):not([type='file']) {
 
 .nomination-vote {
   position: relative;
-  top: -440px;
+  top: -475px;
   justify-content: center;
   text-align: center;
 }
@@ -324,7 +324,7 @@ input:not([type='submit']):not([type='file']) {
 
 .mission-vote {
   position: relative;
-  top: -430px;
+  top: -470px;
   text-align: center;
 }
 
@@ -430,7 +430,7 @@ label.mission-form-detail {
 
 .waiting-on-nom {
   position: relative;
-  top: -30vh;
+  top: -160px;
   text-align: center;
 }
 
