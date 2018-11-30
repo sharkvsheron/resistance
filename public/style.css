@@ -182,8 +182,13 @@ form div {
   margin: 10px 0px;
 }
 
+.mission {
+  width: 100px;
+  text-align: center;
+}
+
 .mission .pending {
-  background-image: url('images/mission-pending.png');
+  background-image: url(images/mission-pending.png);
   width: 100px;
   height: 130px;
   background-size: cover;
@@ -192,20 +197,6 @@ form div {
 .other-info {
   display: none;
 }
-
-/* .mission .succeed {
-  background-image: url('images/goodspaceman.png');
-  width: 100px;
-  height: 130px;
-  background-size: cover;
-}
-
-.mission .fail {
-  background-image: url('images/badspaceman.png');
-  width: 100px;
-  height: 130px;
-  background-size: cover;
-} */
 
 .mission .succeed {
   background-image: url('images/mission-success.png');
@@ -433,10 +424,24 @@ label.mission-form-detail {
   color: red;
 }
 
-.game-button.leave-game {
-  height: 13px;
-}
-
 #leave {
   z-index: 1500;
+}
+
+.waiting-on-nom {
+  position: relative;
+  top: -30vh;
+  text-align: center;
+}
+
+.badge-username {
+  margin-top: 25px;
+}
+
+.tips-text .true {
+  display: block;
+}
+
+.tips-text {
+  display: none;
 }

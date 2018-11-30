@@ -6,7 +6,7 @@ const MissionVoteButtons = props => {
   console.log('props in missionvotebuttons', props)
   return (
     <div className="mission-vote">
-      <p>Throw Success or Fail if you are bad. Success if you are good.</p>
+      <h3>Throw Success or Fail if you are bad. Success if you are good.</h3>
       <div className="mission-vote-buttons">
         <br />
         <div

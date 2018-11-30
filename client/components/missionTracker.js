@@ -34,8 +34,7 @@ class MissionTracker extends Component {
               index={i}
               status={this.props.missions[number]}
               description={(missionDescriptions[i + 1] || {}).description}
-              // numberOfPlayers={single.numberOfPlayers}
-              // failsRequired={single.failsRequired}
+              playersRequired={this.props.missions[number].playersRequired}
               {...this.props}
             />
           )
@@ -58,3 +57,12 @@ const mapToState = state => ({
 })
 
 export default connect(mapToState)(MissionTracker)
+
+// missions: {
+// 21: {
+//  playersRequired: 2
+// }
+// 22: {
+// playersRequired: 3
+// }
+// }

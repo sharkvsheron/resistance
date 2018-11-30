@@ -20,21 +20,7 @@ const Navbar = ({handleClick, isLoggedIn, user}) => (
               logout
             </a>
           </h3>
-          <h3>
-            Welcome {user.userName}! You are user: {user.id}
-          </h3>
-          {/* {user.gameId !== 1 && (
-            <h3>
-              <Link
-                onClick={() => {
-                  socket.emit('leaveGame', user.id)
-                }}
-                to="/home"
-              >
-                leave game
-              </Link>
-            </h3>
-          )} */}
+          <h3>Welcome {user.userName}!</h3>
         </div>
       ) : (
         <div>
