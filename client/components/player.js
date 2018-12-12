@@ -36,11 +36,13 @@ class Player extends Component {
   }
 
   amIAssassin() {
-    return this.props.players[this.props.user.id].roleId === 4
+    if (this.props.players[this.props.user.id] !== undefined) {
+      return this.props.players[this.props.user.id].roleId === 4
+    }
+    return false
   }
 
   render() {
-    console.log('am I assassin? ', this.amIAssassin())
     const {
       id,
       playerId,
