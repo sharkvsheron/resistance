@@ -28,11 +28,11 @@ const Navbar = ({handleClick, isLoggedIn, user}) => (
             settings are for a standard 5 player game. <br />
             Once all players have entered the game room, you may start the game.
             At the start of the game, you will receive a role and a nominator
-            will be designated at random. <br />Each turn, the nominator
-            designates a certain quantity of players to go on a mission, all
-            players must then vote to approve or reject the nominated team. If
-            the nominated team is approved, the nominated players must then
-            choose to succeed or fail the mission <br />
+            will be designated at random (highlighted in orange).<br />Each
+            turn, the nominator designates a certain quantity of players to go
+            on a mission, all players must then vote to approve or reject the
+            nominated team. If the nominated team is approved, the nominated
+            players must then choose to succeed or fail the mission <br />
             <br />
             Good guys win condition: Three missions succeed AND the assassin
             incorrectly guesses who the Commander (Merlin) is. <br />
