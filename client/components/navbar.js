@@ -23,38 +23,69 @@ const Navbar = ({handleClick, isLoggedIn, user}) => (
           <h2>How To Play:</h2>
         </div>
         <div class="modal-body">
-          <p id="rulestext">
-            Create a game and specify the roles you want to include. The default
-            settings are for a standard 5 player game. <br />
-            Once all players have entered the game room, you may start the game.
-            At the start of the game, you will receive a role and a nominator
-            will be designated at random (highlighted in orange).<br />Each
-            turn, the nominator designates a certain quantity of players to go
-            on a mission, all players must then vote to approve or reject the
-            nominated team. If the nominated team is approved, the nominated
-            players must then choose to succeed or fail the mission <br />
-            <br />
-            Good guys win condition: Three missions succeed AND the assassin
-            incorrectly guesses who the Commander (Merlin) is. <br />
-            Bad guys win condition: Three missions fail OR your team's assassin
-            correctly guesses who the Commander (Merlin) is. <br />
-            <br />
-            Role Information: <br />
-            <br />
-            Crew Member: You are a good guy. You have to deduce who the bad guys
-            are and do your best to prevent them from going on missions. <br />
-            <br />
-            Saboteur: You are a bad guy. You can see the other bad guys on your
-            team. You want to convince other players that you are good so that
-            you can be nominated to go on missions and secretly fail them<br />
-            <br />
-            Commander: You are a good guy. You see all the good guys and bad
-            guys. You must discretely guide the nominators into selecting good
-            guys for missions<br />
-            <br />
-            Assassin: You are a bad guy. You must choose who to assasinate
-            should three missions succeed.<br />
-          </p>
+          <div id="rulestext">
+            <p>
+              Create a game and specify the roles you want to include. The
+              default settings are for a standard 5 player game.
+            </p>
+            <p>
+              Once all players have entered the game room, you may start the
+              game. At the start of the game, you will receive a role and a
+              nominator will be designated at random (highlighted in orange).
+            </p>
+            <p>
+              Each turn, the nominator designates a certain quantity of players
+              to go on a mission, all players must then vote to approve or
+              reject the nominated team. If the nominated team is approved, the
+              nominated players must then choose to succeed or fail the mission
+            </p>
+            <p>
+              <b>Good guys win condition: </b>Three missions succeed AND the
+              assassin incorrectly guesses who the Commander (Merlin) is.
+            </p>
+            <p>
+              <b>Bad guys win condition:</b> Three missions fail OR your team's
+              assassin correctly guesses who the Commander (Merlin) is.
+            </p>
+            <h3>Role Information:</h3>
+
+            <div className="roles-rules good-rules">
+              <img
+                src="../images/goodspaceman.png"
+                height="50"
+                align="middle"
+              />
+              <p>
+                <b>Crew Member:</b> You are a good guy. You have to deduce who
+                the bad guys are and do your best to prevent them from going on
+                missions.
+              </p>
+            </div>
+            <div className="roles-rules bad-rules">
+              <img src="../images/badspaceman.png" height="50" align="middle" />
+              <p>
+                <b>Saboteur:</b> You are a bad guy. You can see the other bad
+                guys on your team. You want to convince other players that you
+                are good so that you can be nominated to go on missions and
+                secretly fail them.
+              </p>
+            </div>
+            <div className="roles-rules good-rules">
+              <img src="../images/commander.png" height="50" align="middle" />
+              <p>
+                <b>Commander:</b> You are a good guy. You see all the good guys
+                and bad guys. You must discretely guide the nominators into
+                selecting good guys for missions.
+              </p>
+            </div>
+            <div className="roles-rules bad-rules">
+              <img src="../images/assassin.png" height="50" align="middle" />
+              <p>
+                <b>Assassin:</b> You are a bad guy. You must choose who to
+                assasinate should three missions succeed.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -107,10 +138,7 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(
-  mapState,
-  mapDispatch
-)(Navbar)
+export default connect(mapState, mapDispatch)(Navbar)
 
 /**
  * PROP TYPES
