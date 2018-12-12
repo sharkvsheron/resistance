@@ -464,7 +464,7 @@ label.mission-form-detail {
 /* Modal Content */
 .modal-content {
   position: relative;
-  background-color: #fefefe;
+  /* background-color: #fefefe; */
   margin: auto;
   padding: 0;
   border: 1px solid #888;
@@ -483,8 +483,9 @@ label.mission-form-detail {
 }
 
 .modal-body {
-  background-color: #fefefe;
+  background-color: rgba(0, 0, 0, 0.6);
   padding: 2px 16px;
+  line-height: 1.4em;
 }
 
 .modal-footer {
@@ -504,10 +505,32 @@ label.mission-form-detail {
   }
 }
 
+#rulestext ul {
+  list-style-type: none;
+}
+
 #rulestext {
   align-content: center;
   color: black;
 }
+.roles-rules {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 10px;
+}
+.roles-rules p {
+  margin-left: 15px;
+}
+
+.good-rules {
+  border: 1px solid #6eebbd;
+}
+
+.bad-rules {
+  border: 1px solid #e96a95;
+}
+
 @keyframes animatetop {
   from {
     top: -300px;
