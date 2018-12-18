@@ -34,8 +34,8 @@ const joinGameRoom = async socket => {
   return gameId
 }
 let opentok = new OpenTok(
-  '46225662',
-  '2ce7562d0d4a766d9cd55c246ddcd8d35aa4ab85'
+  '46239402',
+  '68576607f158337f095b75db135bebcb5b6eef0e'
 )
 
 module.exports = io => {
@@ -151,9 +151,11 @@ module.exports = io => {
         const gameRoom = await joinGameRoom(socket)
         const nominations = await getNominations(nominatorId)
         const nominationVotes = await getNominationVotes(nominatorId)
-        io
-          .in(gameRoom)
-          .emit('nominationSubmitted', nominations, nominationVotes)
+        io.in(gameRoom).emit(
+          'nominationSubmitted',
+          nominations,
+          nominationVotes
+        )
       }
     })
 
@@ -164,9 +166,11 @@ module.exports = io => {
         const nominations = await getNominations(userId)
         const nominationVotes = await getNominationVotes(userId)
         console.log('voteresult', voteResult)
-        io
-          .in(gameRoom)
-          .emit('nominationSubmitted', nominations, nominationVotes)
+        io.in(gameRoom).emit(
+          'nominationSubmitted',
+          nominations,
+          nominationVotes
+        )
       }
       if (voteResult === 'bad') {
         const gameRoom = await joinGameRoom(socket)
@@ -188,9 +192,11 @@ module.exports = io => {
           io.in(gameRoom).emit('getMissions', missions)
           const nominations = await getNominations(userId)
           const nominationVotes = await getNominationVotes(userId)
-          io
-            .in(gameRoom)
-            .emit('nominationSubmitted', nominations, nominationVotes)
+          io.in(gameRoom).emit(
+            'nominationSubmitted',
+            nominations,
+            nominationVotes
+          )
           const gameResult = await getGameResult(userId)
           if (gameResult === 'good') {
             const assassin = getAssassin(userId)
