@@ -10,4 +10,6 @@ The feature that we are most proud if is our games ability to scale. A player ca
 
 Our game's stack is built on Sequelize and Express for the back end, and React-Redux for the front end. We utilized the socket.io library to manage the live stream of data between players. We also incorporated OpenTok for video conferencing which we believe is essential to gameplay.
 
-Checkout the deployed game at https://moonmarauders.herokuapp.com
+Checkout the deployed game at https://moonmarauders.herokuapp.com and to learn a bit more about how we made it check out this video:
+https://www.youtube.com/watch?v=va3JcazNZG8
+
